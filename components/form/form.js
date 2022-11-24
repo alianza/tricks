@@ -41,8 +41,8 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
 
       const { data } = await res.json()
 
-      mutate(`/api/pets/${id}`, data, false) // Update the local data without a revalidation
-      router.push('/')
+      await mutate(`/api/pets/${id}`, data, false) // Update the local data without a revalidation
+      await router.push('/')
     } catch (error) {
       setMessage('Failed to update pet')
     }
@@ -65,7 +65,7 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
         throw new Error(res.status)
       }
 
-      router.push('/')
+      await router.push('/')
     } catch (error) {
       setMessage('Failed to add pet')
     }
@@ -99,7 +99,15 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
     if (Object.keys(errs).length === 0) {
       forNewPet ? postData(form) : putData(form)
     } else {
-      setErrors({ errs })
+      setErrors({ ...errs })
+
+      console.log(`errors`, errors)
+
+      console.log(`Object.keys(errors)`, Object.keys(errors))
+
+      Object.keys(errors).map((err, index) => (
+        console.log(err)
+      ))
     }
   }
 
@@ -184,17 +192,17 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
           value={form.dislikes}
           onChange={handleChange}
         />
+        <p>{message}</p>
+        <div className="text-red-500">
+          {Object.keys(errors).map((key, index) => (
+            <li key={index}>{errors[key]}</li>
+          ))}
+        </div>
 
         <button type="submit" className="btn">
           Submit
         </button>
       </form>
-      <p>{message}</p>
-      <div>
-        {Object.keys(errors).map((err, index) => (
-          <li key={index}>{err}</li>
-        ))}
-      </div>
     </>
   )
 }

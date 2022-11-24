@@ -11,7 +11,9 @@ const Index = ({ pets }) => (
           <img src={pet.image_url} />
           <h5 className="pet-name">{pet.name}</h5>
           <div className="main-content">
-            <p className="pet-name">{pet.name}</p>
+            <Link href="/[id]" as={`/${pet._id}`}>
+              <p className="pet-name hover:underline">{pet.name}</p>
+            </Link>
             <p className="owner">Owner: {pet.owner_name}</p>
 
             {/* Extra Pet Info: Likes and Dislikes */}
@@ -33,10 +35,10 @@ const Index = ({ pets }) => (
             </div>
 
             <div className="btn-container">
-              <Link href="/[id]/edit" as={`/${pet._id}/edit`} legacyBehavior>
+              <Link href="/[id]/edit" as={`/${pet._id}/edit`}>
                 <button className="btn edit">Edit</button>
               </Link>
-              <Link href="/[id]" as={`/${pet._id}`} legacyBehavior>
+              <Link href="/[id]" as={`/${pet._id}`}>
                 <button className="btn view">View</button>
               </Link>
             </div>

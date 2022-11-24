@@ -4,6 +4,15 @@ import Link from 'next/link'
 import dbConnect from '../../lib/dbConnect'
 import Pet from '../../models/Pet'
 
+export async function getServerSideProps({ params }) {
+  await dbConnect()
+
+  const pet = await Pet.findById(params.id).lean()
+  pet._id = pet._id.toString()
+
+  return { props: { pet } }
+}
+
 /* Allows you to view pet card info and delete pet card*/
 const PetPage = ({ pet }) => {
   const router = useRouter()
@@ -15,7 +24,7 @@ const PetPage = ({ pet }) => {
       await fetch(`/api/pets/${petID}`, {
         method: 'Delete',
       })
-      router.push('/')
+      await router.push('/')
     } catch (error) {
       setMessage('Failed to delete the pet.')
     }
@@ -49,7 +58,7 @@ const PetPage = ({ pet }) => {
           </div>
 
           <div className="btn-container">
-            <Link href="/[id]/edit" as={`/${pet._id}/edit`} legacyBehavior>
+            <Link href="/[id]/edit" as={`/${pet._id}/edit`}>
               <button className="btn edit">Edit</button>
             </Link>
             <button className="btn delete" onClick={handleDelete}>
@@ -61,15 +70,6 @@ const PetPage = ({ pet }) => {
       {message && <p>{message}</p>}
     </div>
   )
-}
-
-export async function getServerSideProps({ params }) {
-  await dbConnect()
-
-  const pet = await Pet.findById(params.id).lean()
-  pet._id = pet._id.toString()
-
-  return { props: { pet } }
 }
 
 export default PetPage
