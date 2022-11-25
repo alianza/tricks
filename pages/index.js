@@ -4,6 +4,7 @@ import findAndSerializeMongoDoc from "../lib/util";
 import Pet from "../models/Pet";
 import FlatGroundTrick from "../models/FlatGroundTrick";
 import { Model } from "mongoose";
+import PetCard from "../components/cards/pet/petCard";
 
 export async function getServerSideProps() {
   await dbConnect();
@@ -20,57 +21,48 @@ const Index = ({ pets, flatGroundTricks }) => {
     <>
       <div id="pets" className="flex flex-wrap gap-2">
         {pets.map((pet) => (
-          <div key={pet._id} className="relative max-w-xs rounded-3xl overflow-hidden group">
-            <img className="object-cover w-full h-full" src={pet.image_url} />
-            <h5 className="absolute p-4 bottom-0 text-light text-xl shadow-dark text-shadow transition-opacity group-hover:opacity-0">
-              {pet.name}
-            </h5>
-            <div className="absolute p-8 top-0 left-0 bg-white/90 w-full h-full duration-300 transition-opacity opacity-0 pointer-events-none group-hover:pointer-events-auto group-hover:opacity-100">
-              <Link href="/[_id]" as={`/${pet._id}`}>
-                <p className="font-bold text-xl hover:underline">{pet.name}</p>
-              </Link>
-            </div>
-          </div>
+          <PetCard key={pet._id} pet={pet} mode="view" />
         ))}
-        {pets.map((pet) => (
-          <div key={pet._id}>
-            <div className="card">
-              <img src={pet.image_url} />
-              <h5 className="pet-name">{pet.name}</h5>
-              <div className="main-content">
-                <Link href="/[_id]" as={`/${pet._id}`}>
-                  <p className="pet-name hover:underline">{pet.name}</p>
-                </Link>
-                <p className="owner">Owner: {pet.owner_name}</p>
-                <div className="likes info">
-                  <p className="label">Likes</p>
-                  <ul>
-                    {pet.likes.map((data, index) => (
-                      <li key={index}>{data} </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="dislikes info">
-                  <p className="label">Dislikes</p>
-                  <ul>
-                    {pet.dislikes.map((data, index) => (
-                      <li key={index}>{data} </li>
-                    ))}
-                  </ul>
-                </div>
 
-                <div className="btn-container">
-                  <Link href="/[_id]/edit" as={`/${pet._id}/edit`}>
-                    <button className="btn edit">Edit</button>
-                  </Link>
-                  <Link href="/[_id]" as={`/${pet._id}`}>
-                    <button className="btn view">View</button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+        {/*{pets.map((pet) => (*/}
+        {/*  <div key={pet._id}>*/}
+        {/*    <div className="card">*/}
+        {/*      <img src={pet.image_url} />*/}
+        {/*      <h5 className="pet-name">{pet.name}</h5>*/}
+        {/*      <div className="main-content">*/}
+        {/*        <Link href="/[_id]" as={`/${pet._id}`}>*/}
+        {/*          <p className="pet-name hover:underline">{pet.name}</p>*/}
+        {/*        </Link>*/}
+        {/*        <p className="owner">Owner: {pet.owner_name}</p>*/}
+        {/*        <div className="likes info">*/}
+        {/*          <p className="label">Likes</p>*/}
+        {/*          <ul>*/}
+        {/*            {pet.likes.map((data, index) => (*/}
+        {/*              <li key={index}>{data} </li>*/}
+        {/*            ))}*/}
+        {/*          </ul>*/}
+        {/*        </div>*/}
+        {/*        <div className="dislikes info">*/}
+        {/*          <p className="label">Dislikes</p>*/}
+        {/*          <ul>*/}
+        {/*            {pet.dislikes.map((data, index) => (*/}
+        {/*              <li key={index}>{data} </li>*/}
+        {/*            ))}*/}
+        {/*          </ul>*/}
+        {/*        </div>*/}
+
+        {/*        <div className="btn-container">*/}
+        {/*          <Link href="/[_id]/edit" as={`/${pet._id}/edit`}>*/}
+        {/*            <button className="btn edit">Edit</button>*/}
+        {/*          </Link>*/}
+        {/*          <Link href="/[_id]" as={`/${pet._id}`}>*/}
+        {/*            <button className="btn view">View</button>*/}
+        {/*          </Link>*/}
+        {/*        </div>*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*))}*/}
       </div>
 
       <div id="flat-ground-tricks" className="flex flex-wrap gap-2">
