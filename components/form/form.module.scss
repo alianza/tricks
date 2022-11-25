@@ -1,0 +1,12 @@
+.form {
+  @apply text-dark dark:text-light;
+
+  input,
+  textarea {
+    @apply text-light dark:text-dark px-2;
+  }
+
+  textarea {
+    @apply p-2;
+  }
+}
