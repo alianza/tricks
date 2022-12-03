@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Nav() {
   return (
     <div className="top-bar">
-      <div className="nav text-dark decoration-dark dark:text-light dark:decoration-light">
+      <div className="nav text-neutral-900 decoration-neutral-900 dark:text-neutral-100 dark:decoration-neutral-100">
         <NavLink label="Home" href="/" exact />
         <NavLink label="New Pet" href="/new-pet" />
       </div>

@@ -3,7 +3,7 @@ import Nav from "./nav";
 
 export default function Layout({ children }) {
   return (
-    <div id="app" className="bg-light dark:bg-dark min-h-screen">
+    <div id="app" className="bg-neutral-100 dark:bg-neutral-900 min-h-screen">
       <Head>
         <title>Pet Care App</title>
       </Head>

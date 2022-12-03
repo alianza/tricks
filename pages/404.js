@@ -1,3 +1,3 @@
 export default function Custom404() {
-  return <h1 className="text-dark dark:text-light">404 - Page Not Found</h1>;
+  return <h1 className="text-neutral-500 dark:text-neutral-100">404 - Page Not Found</h1>;
 }

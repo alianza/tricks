@@ -1,9 +1,9 @@
 .form {
-  @apply text-dark dark:text-light;
+  @apply text-neutral-900 dark:text-neutral-50;
 
   input,
   textarea {
-    @apply text-light dark:text-dark px-2;
+    @apply text-neutral-50 dark:text-neutral-900 px-2;
   }
 
   textarea {

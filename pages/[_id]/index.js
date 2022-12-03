@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import dbConnect from "../../lib/dbConnect";
 import Pet from "../../models/Pet";
-import findAndSerializeMongoDoc from "../../lib/util";
+import findAndSerializeDoc from "../../lib/util";
 import mongoose, { Model } from "mongoose";
 import PetCard from "../../components/cards/pet/petCard";
 
@@ -14,7 +14,7 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: "Not a valid pet id" } };
   }
 
-  const pet = await findAndSerializeMongoDoc(Pet, Model.findById, { _id });
+  const pet = await findAndSerializeDoc(Pet, Model.findById, { _id });
 
   if (!pet) {
     return { notFound: true };
