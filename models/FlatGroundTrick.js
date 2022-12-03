@@ -10,33 +10,29 @@ const FlatGroundTrickSchema = new mongoose.Schema(
     preferred_stance: {
       type: String,
       required: [true, "Please provide your preferred stance"],
-      enum: ["Regular", "Goofy"],
+      enum: ["regular", "goofy"],
     },
     stance: {
       type: String,
       required: [true, "Please provide the tricks' stance"],
-      enum: ["Regular", "Fakie", "Switch", "Nollie"],
+      enum: ["regular", "fakie", "switch", "nollie"],
     },
-    direction: {
-      type: String,
-      required: [false, "Please specify the direction of your trick"],
-      enum: ["Frontside", "Backside"],
-    },
+    direction: { type: String, enum: ["none", "frontside", "backside"] },
     date: { type: Date, default: Date.now },
     link: {
       type: String,
       required: [true, "Please provide an image/video url for this trick"],
     },
+    image_url: { type: String },
     description: {
       type: String,
       maxlength: [250, "Description cannot be more than 250 characters"],
     },
-    location: {
-      longitude: { type: Number },
-      latitude: { type: Number },
-    },
+    location: { longitude: { type: Number }, latitude: { type: Number } },
+    landed: { type: Boolean, default: false, required: true },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.FlatGroundTrick || mongoose.model("FlatGroundTrick", FlatGroundTrickSchema);
+export default mongoose.models.FlatGroundTrick ||
+  mongoose.model("FlatGroundTrick", FlatGroundTrickSchema);
