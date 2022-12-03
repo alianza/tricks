@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "./variables";
-
 @layer utilities {
   .text-shadow-xs {
     text-shadow: 0 0 2px var(--tw-shadow-color);
