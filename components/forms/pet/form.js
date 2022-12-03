@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
-import styles from "./form.module.scss";
+import styles from "../form.module.scss";
+import ColoredButton from "../../util/coloredButton/coloredButton";
 
 const Form = ({ formId, petForm, forNewPet = true }) => {
   const router = useRouter();
@@ -34,8 +35,6 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
         },
         body: JSON.stringify(form),
       });
-
-      console.log(`JSON.stringify(form)`, JSON.stringify(form));
 
       // Throw error with status code in case Fetch API req failed
       if (!res.ok) {
@@ -85,15 +84,11 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
     }
 
     const name = target.name;
-    console.log(`name`, name);
-    console.log(`value`, value);
 
     setForm({
       ...form,
       [name]: value,
     });
-
-    console.log(`form`, form);
   };
 
   /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
@@ -119,32 +114,82 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
   return (
     <>
       <form id={formId} onSubmit={handleSubmit} className={styles.form}>
-        <label htmlFor="name">Name</label>
-        <input type="text" maxLength="20" name="name" value={form.name} onChange={handleChange} required />
+        <label>
+          Name
+          <input
+            type="text"
+            maxLength="20"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-        <label htmlFor="owner_name">Owner</label>
-        <input type="text" maxLength="20" name="owner_name" value={form.owner_name} onChange={handleChange} required />
+        <label>
+          Owner
+          <input
+            type="text"
+            maxLength="20"
+            name="owner_name"
+            value={form.owner_name}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-        <label htmlFor="species">Species</label>
-        <input type="text" maxLength="30" name="species" value={form.species} onChange={handleChange} required />
+        <label>
+          Species
+          <input
+            type="text"
+            maxLength="30"
+            name="species"
+            value={form.species}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-        <label htmlFor="birthdate">Age</label>
-        <input type="date" name="birthdate" value={form.birthdate} onChange={handleChange} />
+        <label>
+          Age
+          <input type="date" name="birthdate" value={form.birthdate} onChange={handleChange} />
+        </label>
 
-        <label htmlFor="potty_trained">Potty Trained</label>
-        <input type="checkbox" name="potty_trained" checked={form.potty_trained} onChange={handleChange} />
+        <label>
+          Potty Trained
+          <input
+            type="checkbox"
+            name="potty_trained"
+            checked={form.potty_trained}
+            onChange={handleChange}
+          />
+        </label>
 
-        <label htmlFor="diet">Diet</label>
-        <textarea name="diet" maxLength="60" value={form.diet} onChange={handleChange} />
+        <label>
+          Diet
+          <textarea name="diet" maxLength="60" value={form.diet} onChange={handleChange} />
+        </label>
 
-        <label htmlFor="image_url">Image URL</label>
-        <input type="url" name="image_url" value={form.image_url} onChange={handleChange} required />
+        <label>
+          Image URL
+          <input
+            type="url"
+            name="image_url"
+            value={form.image_url}
+            onChange={handleChange}
+            required
+          />
+        </label>
 
-        <label htmlFor="likes">Likes</label>
-        <textarea name="likes" maxLength="60" value={form.likes} onChange={handleChange} />
+        <label>
+          Likes
+          <textarea name="likes" maxLength="60" value={form.likes} onChange={handleChange} />
+        </label>
 
-        <label htmlFor="dislikes">Dislikes</label>
-        <textarea name="dislikes" maxLength="60" value={form.dislikes} onChange={handleChange} />
+        <label>
+          Dislikes
+          <textarea name="dislikes" maxLength="60" value={form.dislikes} onChange={handleChange} />
+        </label>
 
         <p>{message}</p>
 
@@ -154,9 +199,11 @@ const Form = ({ formId, petForm, forNewPet = true }) => {
           ))}
         </div>
 
-        <button type="submit" className="btn">
-          Submit
-        </button>
+        <ColoredButton
+          type="submit"
+          className={"bg-green-500 focus:ring-green-600/50 hover:bg-green-600"}
+          text="Submit"
+        />
       </form>
     </>
   );
