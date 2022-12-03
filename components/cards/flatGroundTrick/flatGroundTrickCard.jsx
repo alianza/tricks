@@ -3,14 +3,14 @@ import ColoredButton from "../../util/coloredButton/coloredButton";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function FlatGroundTrickCard({ flatGroundTrick, mode = "view" || "delete" }) {
+export default function FlatGroundTrickCard({ flatGroundTrick: trick, mode = "view" || "delete" }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
 
   const handleDelete = async () => {
     console.log(`'delete'`, "delete");
     try {
-      await fetch(`/api/flatGroundTricks/${router.query._id}`, {
+      await fetch(`/api/flatgroundtricks/${router.query._id}`, {
         method: "Delete",
       });
       await router.push("/");
@@ -20,23 +20,52 @@ export default function FlatGroundTrickCard({ flatGroundTrick, mode = "view" || 
   };
 
   return (
-    <div
-      key={flatGroundTrick._id}
-      className="relative w-80 h-[28rem] rounded-3xl overflow-hidden group"
-    >
+    <div key={trick._id} className="group relative h-[28rem] w-80 overflow-hidden rounded-3xl">
       <img
-        alt={`Image of ${flatGroundTrick.name}`}
-        className="object-cover w-full h-full"
-        src={flatGroundTrick.image_url || "/placeholder.webp"}
+        alt={`Image of ${trick.name}`}
+        className="h-full w-full object-cover"
+        src={trick.image_url || "/placeholder.webp"}
       />
-      <h5 className="absolute p-4 bottom-0 text-neutral-100 text-xl shadow-neutral-500 text-shadow transition-opacity group-hover:opacity-0">
-        {flatGroundTrick.name}
+      <h5 className="text-shadow absolute bottom-0 p-4 text-2xl text-neutral-50 shadow-neutral-900 transition-opacity group-hover:opacity-0">
+        {trick.name}
       </h5>
-      <div className="absolute p-8 top-0 left-0 bg-white/90 w-full h-full duration-300 transition-opacity opacity-0 pointer-events-none group-hover:pointer-events-auto group-hover:opacity-100">
-        <Link href="/[_id]" as={`/${flatGroundTrick._id}`}>
-          <p className="font-bold text-xl hover:underline">{flatGroundTrick.name}</p>
-        </Link>
+
+      <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+        <div className="max-h-[24rem] overflow-y-auto p-6 pr-7 overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-400">
+          <Link href={`/flatgroundtricks/${trick._id}`}>
+            <h1 className="text-2xl font-bold text-neutral-900 hover:underline">{trick.name}</h1>
+          </Link>
+          <p className="text-xl text-gray-600">Stance: {trick.stance}</p>
+          {trick.direction && <p className="text-md text-gray-600">Direction: {trick.direction}</p>}
+          <p className="text-md mt-4 text-gray-600">{trick.description}</p>
+        </div>
+
+        <div className="absolute bottom-4 right-4 flex gap-2">
+          <Link href="/flatgroundtrick/[_id]/edit" as={`/flatgroundtrick/${trick._id}/edit`}>
+            <ColoredButton
+              className={"bg-green-500 focus:ring-green-600/50 hover:bg-green-600"}
+              text="Edit"
+            />
+          </Link>
+          {mode === "view" && (
+            <Link href="/flatgroundtrick/[_id]" as={`/flatgroundtrick/${trick._id}`}>
+              <ColoredButton
+                className={"bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600"}
+                text="View"
+              />
+            </Link>
+          )}
+          {mode === "delete" && (
+            <div onClick={handleDelete}>
+              <ColoredButton
+                className={"bg-red-500 focus:ring-red-600/50 hover:bg-red-600"}
+                text="Delete"
+              />
+            </div>
+          )}
+        </div>
       </div>
+      {message && <p>{message}</p>}
     </div>
   );
 }
