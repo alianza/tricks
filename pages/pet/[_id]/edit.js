@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import Form from "../../components/form/form";
+import Form from "../../../components/forms/pet/form";
 
 const fetcher = (url) =>
   fetch(url)

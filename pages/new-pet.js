@@ -1,4 +1,4 @@
-import Form from "../components/form/form";
+import Form from "../components/forms/pet/form";
 
 const NewPet = () => {
   const petForm = {

@@ -1,5 +1,3 @@
-import "../styles/style.scss";
-import "../styles/form.scss";
 import "../styles/globals.scss";
 import Layout from "../components/layout/layout";
 

@@ -1,8 +1,8 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html>
+    <Html className="scrollbar-thin scrollbar-thumb-neutral-500">
       <Head>
         <link
           href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
@@ -14,5 +14,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }

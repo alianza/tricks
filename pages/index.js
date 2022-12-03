@@ -17,15 +17,16 @@ export async function getServerSideProps() {
 }
 
 const Index = ({ pets, flatGroundTricks }) => {
-  console.log(`flatGroundTricks`, flatGroundTricks);
   return (
-    <>
+    <div className="flex flex-col items-center gap-16">
+      <h1 className="-mb-12 text-4xl">Pet List</h1>
       <div id="pets" className="flex flex-wrap gap-2">
         {pets.map((pet) => (
           <PetCard key={pet._id} pet={pet} mode="view" />
         ))}
       </div>
 
+      <h1 className="-mb-12 text-4xl">Flat Ground Tricks</h1>
       <div id="flat-ground-tricks" className="flex flex-wrap gap-2">
         {flatGroundTricks.map((flatGroundTrick) => (
           <FlatGroundTrickCard
@@ -35,7 +36,7 @@ const Index = ({ pets, flatGroundTricks }) => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };
 

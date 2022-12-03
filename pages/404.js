@@ -1,3 +1,7 @@
 export default function Custom404() {
-  return <h1 className="text-neutral-500 dark:text-neutral-100">404 - Page Not Found</h1>;
+  return (
+    <div className="flex justify-center">
+      <h1>404 - Page Not Found</h1>
+    </div>
+  );
 }
