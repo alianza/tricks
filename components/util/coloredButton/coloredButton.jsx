@@ -1,7 +1,8 @@
-export default function ColoredButton({ className, text }) {
+export default function ColoredButton({ className, text, type }) {
   return (
     <button
-      className={`focus:outline-none text-neutral-100 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 ${className}`}
+      type={type}
+      className={`rounded-lg px-5 py-2.5 text-sm font-medium text-neutral-100 focus:outline-none focus:ring-4 ${className}`}
     >
       {text}
     </button>
