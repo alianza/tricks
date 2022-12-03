@@ -9,10 +9,6 @@ export default async function handler(req, res) {
 
   await dbConnect();
 
-  console.log(`_id`, _id);
-
-  console.log(`method`, method);
-
   switch (method) {
     case "GET" /* Get a model by its ID */:
       try {
@@ -37,7 +33,6 @@ export default async function handler(req, res) {
         }
         res.status(200).json({ success: true, data: flatGroundTrick });
       } catch (error) {
-        console.log(`error`, error);
         res.status(400).json({ success: false });
       }
       break;
