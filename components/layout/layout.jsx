@@ -3,14 +3,17 @@ import Nav from "./nav";
 
 export default function Layout({ children }) {
   return (
-    <div id="app" className="bg-neutral-100 dark:bg-neutral-900 min-h-screen">
+    <div
+      id="app"
+      className="min-h-screen bg-neutral-100 text-neutral-900 decoration-neutral-900 dark:bg-neutral-900 dark:text-neutral-100"
+    >
       <Head>
-        <title>Pet Care App</title>
+        <title>MongoDB Mongoose w/ Next.js - J.W. van Bremens</title>
       </Head>
 
       <Nav />
 
-      <main className="flex flex-col items-center gap-4">{children}</main>
+      <main className="p-2 pb-12 ">{children}</main>
     </div>
   );
 }
