@@ -5,7 +5,7 @@ const NewFlatFlatGroundTrick = () => {
     name: "",
     preferred_stance: "regular",
     stance: "regular",
-    direction: "",
+    direction: "none",
     date: new Date().toISOString().substring(0, 10),
     link: "",
     image_url: "",

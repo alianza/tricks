@@ -18,6 +18,7 @@ export default async function handler(req, res) {
         }
         res.status(200).json({ success: true, data: flatgroundTrick });
       } catch (error) {
+        console.error(error);
         res.status(400).json({ success: false });
       }
       break;
@@ -33,6 +34,7 @@ export default async function handler(req, res) {
         }
         res.status(200).json({ success: true, data: flatgroundTrick });
       } catch (error) {
+        console.error(error);
         res.status(400).json({ success: false });
       }
       break;
@@ -45,11 +47,13 @@ export default async function handler(req, res) {
         }
         res.status(200).json({ success: true, data: {} });
       } catch (error) {
+        console.error(error);
         res.status(400).json({ success: false });
       }
       break;
 
     default:
+      console.error("Unhandled method: ", method);
       res.status(400).json({ success: false });
       break;
   }

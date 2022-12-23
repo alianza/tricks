@@ -10,12 +10,9 @@ const fetcher = (url) =>
 const EditFlatGroundTrick = () => {
   const router = useRouter();
   const { _id } = router.query;
-  const { data: flatgroundTrick, error } = useSWR(
-    _id ? `/api/flatgroundtricks/${_id}` : null,
-    fetcher
-  );
+  const { data: flatgroundTrick, error } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
 
-  if (error) return <p>Failed to load</p>;
+  if (error) return <p>Failed to load FlatgroundTrick</p>;
   if (!flatgroundTrick) return <p>Loading...</p>;
 
   const flatgroundTrickForm = {
@@ -31,11 +28,7 @@ const EditFlatGroundTrick = () => {
   };
 
   return (
-    <Form
-      formId="edit-flatground-trick-form"
-      flatgroundTrickForm={flatgroundTrickForm}
-      forNewFlatGroundTrick={false}
-    />
+    <Form formId="edit-flatground-trick-form" flatgroundTrickForm={flatgroundTrickForm} forNewFlatgroundTrick={false} />
   );
 };
 

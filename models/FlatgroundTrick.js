@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const FlatGroundTrickSchema = new mongoose.Schema(
+const FlatgroundTrickSchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -34,5 +34,4 @@ const FlatGroundTrickSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.FlatGroundTrick ||
-  mongoose.model("FlatGroundTrick", FlatGroundTrickSchema);
+export default mongoose.models.FlatgroundTrick || mongoose.model("FlatgroundTrick", FlatgroundTrickSchema);

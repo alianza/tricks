@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { mutate } from "swr";
 import styles from "../form.module.scss";
-import ColoredButton from "../../util/coloredButton/coloredButton";
+import { VN } from "../../../lib/util";
+import utilStyles from "../../../styles/utils.module.scss";
 
-const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => {
+const Form = ({ formId, flatgroundTrickForm, forNewFlatgroundTrick = true }) => {
   const router = useRouter();
   const contentType = "application/json";
   const [errors, setErrors] = useState({});
@@ -21,6 +22,8 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
     image_url: flatgroundTrickForm.image_url,
     landed: !!flatgroundTrickForm.landed,
   });
+
+  const { name, preferred_stance, stance, direction, link, description, date, image_url, landed } = form;
 
   /* The PUT method edits an existing entry in the mongodb database. */
   const putData = async (form) => {
@@ -69,7 +72,7 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
 
       await router.push("/");
     } catch (error) {
-      setMessage("Failed to add platGroundTrick");
+      setMessage("Failed to add flatgroundTrick");
     }
   };
 
@@ -79,8 +82,6 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
 
     if (target.type === "checkbox") {
       value = target.checked;
-    } else if (target.type === "textarea") {
-      value = value.split(",");
     }
 
     setForm({
@@ -103,7 +104,7 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
     e.preventDefault();
     // const errs = formValidate();
     // if (Object.keys(errs).length === 0) {
-    forNewFlatGroundTrick ? postData(form) : putData(form);
+    forNewFlatgroundTrick ? postData(form) : putData(form);
     // } else {
     //   setErrors({ ...errs });
     // }
@@ -114,24 +115,12 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
       <form id={formId} onSubmit={handleSubmit} className={styles.form}>
         <label>
           Name
-          <input
-            type="text"
-            maxLength="20"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
+          <input type="text" maxLength="20" name={VN({ name })} value={name} onChange={handleChange} required />
         </label>
 
         <label>
           Preferred stance
-          <select
-            name="preferred_stance"
-            value={form.preferred_stance}
-            onChange={handleChange}
-            required
-          >
+          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
             <option value="regular">Regular</option>
             <option value="goofy">Goofy</option>
           </select>
@@ -139,7 +128,7 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
 
         <label>
           Stance
-          <select name="stance" value={form.stance} onChange={handleChange} required>
+          <select name={VN({ stance })} value={stance} onChange={handleChange} required>
             <option value="regular">Regular</option>
             <option value="fakie">Fakie</option>
             <option value="switch">Switch</option>
@@ -149,7 +138,7 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
 
         <label>
           Direction
-          <select name="direction" value={form.direction} onChange={handleChange}>
+          <select name={VN({ direction })} value={direction} onChange={handleChange}>
             <option selected value="none">
               None
             </option>
@@ -159,23 +148,28 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
         </label>
 
         <label>
+          Description
+          <textarea name={VN({ description })} value={description} onChange={handleChange} />
+        </label>
+
+        <label>
           Date
-          <input type="date" name="date" value={form.date} onChange={handleChange} />
+          <input type="date" name={VN({ date })} value={date} onChange={handleChange} />
         </label>
 
         <label>
           Landed
-          <input type="checkbox" name="landed" checked={!!form.landed} onChange={handleChange} />
+          <input type="checkbox" name={VN({ landed })} checked={!!landed} onChange={handleChange} />
         </label>
 
         <label>
           Image URL
-          <input type="url" name="image_url" value={form.image_url} onChange={handleChange} />
+          <input type="url" name={VN({ image_url })} value={image_url} onChange={handleChange} />
         </label>
 
         <label>
           Link
-          <input type="url" name="link" value={form.link} onChange={handleChange} required />
+          <input type="url" name={VN({ link })} value={link} onChange={handleChange} required />
         </label>
 
         <p className="my-4">{message}</p>
@@ -186,11 +180,12 @@ const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => 
           ))}
         </div>
 
-        <ColoredButton
+        <button
           type="submit"
-          className={"bg-green-500 focus:ring-green-600/50 hover:bg-green-600"}
-          text="Submit"
-        />
+          className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}
+        >
+          Submit
+        </button>
       </form>
     </>
   );

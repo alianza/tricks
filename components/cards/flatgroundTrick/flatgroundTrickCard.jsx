@@ -1,7 +1,7 @@
 import Link from "next/link";
-import ColoredButton from "../../util/coloredButton/coloredButton";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import utilStyles from "../../../styles/utils.module.scss";
 
 export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = "view" || "delete" }) {
   const router = useRouter();
@@ -41,25 +41,22 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = "vi
 
         <div className="absolute bottom-4 right-4 flex gap-2">
           <Link href="/flatgroundtrick/[_id]/edit" as={`/flatgroundtrick/${trick._id}/edit`}>
-            <ColoredButton
-              className={"bg-green-500 focus:ring-green-600/50 hover:bg-green-600"}
-              text="Edit"
-            />
+            <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
+              Edit
+            </button>
           </Link>
           {mode === "view" && (
             <Link href="/flatgroundtrick/[_id]" as={`/flatgroundtrick/${trick._id}`}>
-              <ColoredButton
-                className={"bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600"}
-                text="View"
-              />
+              <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
+                View
+              </button>
             </Link>
           )}
           {mode === "delete" && (
             <div onClick={handleDelete}>
-              <ColoredButton
-                className={"bg-red-500 focus:ring-red-600/50 hover:bg-red-600"}
-                text="Delete"
-              />
+              <button className={`${utilStyles.button} bg-red-500 focus:ring-red-600/50 hover:bg-red-600`}>
+                Delete
+              </button>
             </div>
           )}
         </div>
