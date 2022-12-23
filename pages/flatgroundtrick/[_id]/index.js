@@ -11,26 +11,26 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: "Not a valid flatground trick id" } };
   }
 
-  const flatGroundTrick = await findAndSerializeDoc(FlatGroundTrick, Model.findById, { _id });
+  const flatgroundTrick = await findAndSerializeDoc(FlatGroundTrick, Model.findById, { _id });
 
-  if (!flatGroundTrick) {
+  if (!flatgroundTrick) {
     return { notFound: true };
   }
 
-  return { props: { flatGroundTrick } };
+  return { props: { flatgroundTrick } };
 }
 
 /* Allows you to view trick card info and delete trick card*/
-const flatGroundTrickPage = ({ flatGroundTrick, error }) => {
+const flatgroundTrickPage = ({ flatgroundTrick, error }) => {
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
   }
 
   return (
     <div className="flex w-full justify-center">
-      <FlatgroundTrickCard flatGroundTrick={flatGroundTrick} mode="delete" />
+      <FlatgroundTrickCard flatgroundTrick={flatgroundTrick} mode="delete" />
     </div>
   );
 };
 
-export default flatGroundTrickPage;
+export default flatgroundTrickPage;

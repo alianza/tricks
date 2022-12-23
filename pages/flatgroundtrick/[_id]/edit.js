@@ -10,30 +10,30 @@ const fetcher = (url) =>
 const EditFlatGroundTrick = () => {
   const router = useRouter();
   const { _id } = router.query;
-  const { data: flatGroundTrick, error } = useSWR(
+  const { data: flatgroundTrick, error } = useSWR(
     _id ? `/api/flatgroundtricks/${_id}` : null,
     fetcher
   );
 
   if (error) return <p>Failed to load</p>;
-  if (!flatGroundTrick) return <p>Loading...</p>;
+  if (!flatgroundTrick) return <p>Loading...</p>;
 
-  const flatGroundTrickForm = {
-    name: flatGroundTrick.name,
-    preferred_stance: flatGroundTrick.preferred_stance,
-    stance: flatGroundTrick.stance,
-    direction: flatGroundTrick.direction,
-    link: flatGroundTrick.link,
-    description: flatGroundTrick.likes,
-    date: new Date(flatGroundTrick.date).toISOString().substring(0, 10),
-    image_url: flatGroundTrick.image_url,
-    landed: flatGroundTrick.landed,
+  const flatgroundTrickForm = {
+    name: flatgroundTrick.name,
+    preferred_stance: flatgroundTrick.preferred_stance,
+    stance: flatgroundTrick.stance,
+    direction: flatgroundTrick.direction,
+    link: flatgroundTrick.link,
+    description: flatgroundTrick.description,
+    date: new Date(flatgroundTrick.date).toISOString().substring(0, 10),
+    image_url: flatgroundTrick.image_url,
+    landed: flatgroundTrick.landed,
   };
 
   return (
     <Form
       formId="edit-flatground-trick-form"
-      flatGroundTrickForm={flatGroundTrickForm}
+      flatgroundTrickForm={flatgroundTrickForm}
       forNewFlatGroundTrick={false}
     />
   );

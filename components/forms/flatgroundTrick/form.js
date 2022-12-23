@@ -4,22 +4,22 @@ import { mutate } from "swr";
 import styles from "../form.module.scss";
 import ColoredButton from "../../util/coloredButton/coloredButton";
 
-const Form = ({ formId, flatGroundTrickForm, forNewFlatGroundTrick = true }) => {
+const Form = ({ formId, flatgroundTrickForm, forNewFlatGroundTrick = true }) => {
   const router = useRouter();
   const contentType = "application/json";
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
   const [form, setForm] = useState({
-    name: flatGroundTrickForm.name,
-    preferred_stance: flatGroundTrickForm.preferred_stance,
-    stance: flatGroundTrickForm.stance,
-    direction: flatGroundTrickForm.direction,
-    link: flatGroundTrickForm.link,
-    description: flatGroundTrickForm.description,
-    date: new Date(flatGroundTrickForm.date).toISOString().substring(0, 10),
-    image_url: flatGroundTrickForm.image_url,
-    landed: !!flatGroundTrickForm.landed,
+    name: flatgroundTrickForm.name,
+    preferred_stance: flatgroundTrickForm.preferred_stance,
+    stance: flatgroundTrickForm.stance,
+    direction: flatgroundTrickForm.direction,
+    link: flatgroundTrickForm.link,
+    description: flatgroundTrickForm.description,
+    date: new Date(flatgroundTrickForm.date).toISOString().substring(0, 10),
+    image_url: flatgroundTrickForm.image_url,
+    landed: !!flatgroundTrickForm.landed,
   });
 
   /* The PUT method edits an existing entry in the mongodb database. */

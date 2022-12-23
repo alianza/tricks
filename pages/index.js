@@ -7,20 +7,20 @@ import FlatgroundTrickCard from "../components/cards/flatgroundTrick/flatgroundT
 export async function getServerSideProps() {
   await dbConnect();
 
-  const flatGroundTricks = await findAndSerializeDoc(FlatGroundTrick, Model.find, {});
+  const flatgroundTricks = await findAndSerializeDoc(FlatGroundTrick, Model.find, {});
 
-  return { props: { flatGroundTricks } };
+  return { props: { flatgroundTricks } };
 }
 
-const Index = ({ flatGroundTricks }) => {
+const Index = ({ flatgroundTricks }) => {
   return (
     <div className="flex flex-col items-center gap-16">
-      <h1 className="-mb-12 text-4xl">Flat Ground Tricks</h1>
+      <h1 className="-mb-12 text-4xl">Flatground Tricks</h1>
       <div id="flat-ground-tricks" className="flex flex-wrap gap-2">
-        {flatGroundTricks.map((flatGroundTrick) => (
+        {flatgroundTricks.map((flatgroundTrick) => (
           <FlatgroundTrickCard
-            key={flatGroundTrick._id}
-            flatGroundTrick={flatGroundTrick}
+            key={flatgroundTrick._id}
+            flatgroundTrick={flatgroundTrick}
             mode="view"
           />
         ))}

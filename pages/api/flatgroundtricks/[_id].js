@@ -12,11 +12,11 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET" /* Get a model by its ID */:
       try {
-        const flatGroundTrick = await FlatGroundTrick.findById(_id);
-        if (!flatGroundTrick) {
+        const flatgroundTrick = await FlatGroundTrick.findById(_id);
+        if (!flatgroundTrick) {
           return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: flatGroundTrick });
+        res.status(200).json({ success: true, data: flatgroundTrick });
       } catch (error) {
         res.status(400).json({ success: false });
       }
@@ -24,14 +24,14 @@ export default async function handler(req, res) {
 
     case "PUT" /* Edit a model by its ID */:
       try {
-        const flatGroundTrick = await FlatGroundTrick.findByIdAndUpdate(_id, req.body, {
+        const flatgroundTrick = await FlatGroundTrick.findByIdAndUpdate(_id, req.body, {
           new: true,
           runValidators: true,
         });
-        if (!flatGroundTrick) {
+        if (!flatgroundTrick) {
           return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: flatGroundTrick });
+        res.status(200).json({ success: true, data: flatgroundTrick });
       } catch (error) {
         res.status(400).json({ success: false });
       }

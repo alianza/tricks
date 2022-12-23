@@ -3,7 +3,7 @@ import ColoredButton from "../../util/coloredButton/coloredButton";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function FlatgroundTrickCard({ flatGroundTrick: trick, mode = "view" || "delete" }) {
+export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = "view" || "delete" }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
 
