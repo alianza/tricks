@@ -1,5 +1,5 @@
 import dbConnect from "../../../lib/dbConnect";
-import FlatGroundTrick from "../../../models/FlatGroundTrick";
+import FlatGroundTrick from "../../../models/FlatgroundTrick";
 
 export default async function handler(req, res) {
   const {

@@ -1,6 +1,6 @@
-import Form from "../components/forms/flatGroundTrick/form";
+import Form from "../components/forms/flatgroundTrick/form";
 
-const NewPet = () => {
+const NewFlatFlatGroundTrick = () => {
   const flatGroundTrickForm = {
     name: "",
     preferred_stance: "regular",
@@ -17,4 +17,4 @@ const NewPet = () => {
   return <Form formId="add-flatground-trick-form" flatGroundTrickForm={flatGroundTrickForm} />;
 };
 
-export default NewPet;
+export default NewFlatFlatGroundTrick;

@@ -1,14 +1,14 @@
 import dbConnect from "../../../lib/dbConnect";
 import findAndSerializeDoc from "../../../lib/util";
 import mongoose, { Model } from "mongoose";
-import FlatGroundTrickCard from "../../../components/cards/flatGroundTrick/flatGroundTrickCard";
-import FlatGroundTrick from "../../../models/FlatGroundTrick";
+import FlatgroundTrickCard from "../../../components/cards/flatgroundTrick/flatgroundTrickCard";
+import FlatGroundTrick from "../../../models/FlatgroundTrick";
 
 export async function getServerSideProps({ params: { _id } }) {
   await dbConnect();
 
   if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return { props: { error: "Not a valid pet flatground trick id" } };
+    return { props: { error: "Not a valid flatground trick id" } };
   }
 
   const flatGroundTrick = await findAndSerializeDoc(FlatGroundTrick, Model.findById, { _id });
@@ -20,7 +20,7 @@ export async function getServerSideProps({ params: { _id } }) {
   return { props: { flatGroundTrick } };
 }
 
-/* Allows you to view pet card info and delete pet card*/
+/* Allows you to view trick card info and delete trick card*/
 const flatGroundTrickPage = ({ flatGroundTrick, error }) => {
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
@@ -28,7 +28,7 @@ const flatGroundTrickPage = ({ flatGroundTrick, error }) => {
 
   return (
     <div className="flex w-full justify-center">
-      <FlatGroundTrickCard flatGroundTrick={flatGroundTrick} mode="delete" />
+      <FlatgroundTrickCard flatGroundTrick={flatGroundTrick} mode="delete" />
     </div>
   );
 };

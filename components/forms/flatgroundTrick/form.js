@@ -89,7 +89,7 @@ const Form = ({ formId, flatGroundTrickForm, forNewFlatGroundTrick = true }) => 
     });
   };
 
-  // /* Makes sure pet info is filled for pet name, owner name, species, and image url*/
+  // /* Makes sure info is filled in*/
   // const formValidate = () => {
   //   let err = {};
   //   if (!form.name) err.name = "Name is required";

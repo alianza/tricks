@@ -3,12 +3,11 @@ import ColoredButton from "../../util/coloredButton/coloredButton";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function FlatGroundTrickCard({ flatGroundTrick: trick, mode = "view" || "delete" }) {
+export default function FlatgroundTrickCard({ flatGroundTrick: trick, mode = "view" || "delete" }) {
   const router = useRouter();
   const [message, setMessage] = useState("");
 
   const handleDelete = async () => {
-    console.log(`'delete'`, "delete");
     try {
       await fetch(`/api/flatgroundtricks/${router.query._id}`, {
         method: "Delete",

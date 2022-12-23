@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
-import Form from "../../../components/forms/flatGroundTrick/form";
+import Form from "../../../components/forms/flatgroundTrick/form";
 
 const fetcher = (url) =>
   fetch(url)
@@ -18,7 +18,7 @@ const EditFlatGroundTrick = () => {
   if (error) return <p>Failed to load</p>;
   if (!flatGroundTrick) return <p>Loading...</p>;
 
-  const petForm = {
+  const flatGroundTrickForm = {
     name: flatGroundTrick.name,
     preferred_stance: flatGroundTrick.preferred_stance,
     stance: flatGroundTrick.stance,
@@ -33,7 +33,7 @@ const EditFlatGroundTrick = () => {
   return (
     <Form
       formId="edit-flatground-trick-form"
-      flatGroundTrickForm={petForm}
+      flatGroundTrickForm={flatGroundTrickForm}
       forNewFlatGroundTrick={false}
     />
   );
