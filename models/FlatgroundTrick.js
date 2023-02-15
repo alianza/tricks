@@ -1,37 +1,54 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import FLATGROUND_TRICKS from './constants/flatgroundTricks';
 
 const FlatgroundTrickSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, "Please provide a name for this trick"],
-      maxlength: [60, "Name cannot be more than 60 characters"],
+      required: [true, 'Please provide a name for this trick'],
+      enum: FLATGROUND_TRICKS,
+      // enum: { values: FLATGROUND_TRICKS, message: 'Provided name is not a valid trick name' }, // custom error message
     },
     preferred_stance: {
       type: String,
-      required: [true, "Please provide your preferred stance"],
-      enum: ["regular", "goofy"],
+      required: [true, 'Please provide your preferred stance'],
+      enum: ['regular', 'goofy'],
     },
     stance: {
       type: String,
       required: [true, "Please provide the tricks' stance"],
-      enum: ["regular", "fakie", "switch", "nollie"],
+      enum: ['regular', 'fakie', 'switch', 'nollie'],
     },
-    direction: { type: String, enum: ["none", "frontside", "backside"] },
+    direction: {
+      type: String,
+      enum: ['none', 'frontside', 'backside'],
+    },
+    rotation: {
+      type: Number,
+      enum: [0, 180, 360, 540, 720],
+    },
     date: { type: Date, default: Date.now },
-    link: {
-      type: String,
-      required: [true, "Please provide an image/video url for this trick"],
-    },
+    link: { type: String },
     image_url: { type: String },
-    description: {
-      type: String,
-      maxlength: [250, "Description cannot be more than 250 characters"],
-    },
     location: { longitude: { type: Number }, latitude: { type: Number } },
-    landed: { type: Boolean, default: false, required: true },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.FlatgroundTrick || mongoose.model("FlatgroundTrick", FlatgroundTrickSchema);
+async function validation(next, self) {
+  if (self.direction === 'none' && self.rotation !== 0) {
+    next(new Error('Must specify a direction if there is a rotation'));
+  }
+  if (self.direction !== 'none' && self.rotation === 0) {
+    next(new Error('Must specify a rotation if there is a direction'));
+  }
+  next();
+}
+FlatgroundTrickSchema.pre('validate', async function (next) {
+  await validation(next, this);
+});
+FlatgroundTrickSchema.pre('findOneAndUpdate', async function (next) {
+  await validation(next, this.getUpdate());
+});
+
+export default mongoose.models.FlatgroundTrick || mongoose.model('FlatgroundTrick', FlatgroundTrickSchema);
