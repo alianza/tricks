@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import Form from "../../../components/forms/flatgroundTrick/form";
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
+import Form from '../../../components/forms/flatgroundTrick/form';
 
 const fetcher = (url) =>
   fetch(url)
@@ -20,16 +20,13 @@ const EditFlatGroundTrick = () => {
     preferred_stance: flatgroundTrick.preferred_stance,
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
+    rotation: flatgroundTrick.rotation,
     link: flatgroundTrick.link,
-    description: flatgroundTrick.description,
     date: new Date(flatgroundTrick.date).toISOString().substring(0, 10),
     image_url: flatgroundTrick.image_url,
-    landed: flatgroundTrick.landed,
   };
 
-  return (
-    <Form formId="edit-flatground-trick-form" flatgroundTrickForm={flatgroundTrickForm} forNewFlatgroundTrick={false} />
-  );
+  return <Form flatgroundTrickForm={flatgroundTrickForm} newFlatgroundTrick={false} />;
 };
 
 export default EditFlatGroundTrick;
