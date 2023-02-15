@@ -89,93 +89,90 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <h1 className="text-2xl">{newFlatgroundTrick ? 'New Flatground Trick' : 'Edit Flatground Trick'}</h1>
+
+      <label>
+        Preferred stance
+        <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
+          <option value="regular">Regular</option>
+          <option value="goofy">Goofy</option>
+        </select>
+      </label>
+
+      <div className="flex justify-between">
         <label>
-          Preferred stance
-          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-            <option value="regular">Regular</option>
-            <option value="goofy">Goofy</option>
+          Stance
+          <select name={VN({ stance })} value={stance} onChange={handleChange} required>
+            <option value="regular">-</option>
+            <option value="fakie">Fakie</option>
+            <option value="switch">Switch</option>
+            <option value="nollie">Nollie</option>
           </select>
         </label>
 
-        <div className="flex justify-between">
-          <label>
-            Stance
-            <select name={VN({ stance })} value={stance} onChange={handleChange} required>
-              <option value="regular">-</option>
-              <option value="fakie">Fakie</option>
-              <option value="switch">Switch</option>
-              <option value="nollie">Nollie</option>
-            </select>
-          </label>
-
-          <label>
-            Direction
-            <select name={VN({ direction })} value={direction} onChange={handleChange}>
-              <option selected value="none">
-                -
-              </option>
-              <option value="frontside">Frontside</option>
-              <option value="backside">Backside</option>
-            </select>
-          </label>
-
-          <label>
-            Rotation
-            <select name={VN({ rotation })} value={rotation} onChange={handleChange} required>
-              <option value="0">-</option>
-              <option value="180">180</option>
-              <option value="360">360</option>
-              <option value="540">540</option>
-              <option value="720">720</option>
-            </select>
-          </label>
-
-          <label>
-            Name
-            <select name={VN({ name })} value={name} onChange={handleChange} required>
-              {FLATGROUND_TRICKS.map((trick) => (
-                <option key={trick} value={trick}>
-                  {capitalize(trick)}
-                </option>
-              ))}
-              <option value="other">Other</option>
-            </select>
-          </label>
-        </div>
-
-        {/*<label>*/}
-        {/*  Date*/}
-        {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
-        {/*</label>*/}
-
         <label>
-          Image URL
-          <input type="url" name={VN({ image_url })} value={image_url} onChange={handleChange} />
+          Direction
+          <select name={VN({ direction })} value={direction} onChange={handleChange}>
+            <option selected value="none">
+              -
+            </option>
+            <option value="frontside">Frontside</option>
+            <option value="backside">Backside</option>
+          </select>
         </label>
 
-        {/*<label>*/}
-        {/*  Link*/}
-        {/*  <input type="url" name={VN({link})} value={link} onChange={handleChange} required />*/}
-        {/*</label>*/}
+        <label>
+          Rotation
+          <select name={VN({ rotation })} value={rotation} onChange={handleChange} required>
+            <option value="0">-</option>
+            <option value="180">180</option>
+            <option value="360">360</option>
+            <option value="540">540</option>
+            <option value="720">720</option>
+          </select>
+        </label>
 
-        <p className="my-4">{message}</p>
+        <label>
+          Name
+          <select name={VN({ name })} value={name} onChange={handleChange} required>
+            {FLATGROUND_TRICKS.map((trick) => (
+              <option key={trick} value={trick}>
+                {capitalize(trick)}
+              </option>
+            ))}
+            <option value="other">Other</option>
+          </select>
+        </label>
+      </div>
 
-        <div className="text-red-500">
-          {Object.keys(errors).map((key, index) => (
-            <li key={index}>{errors[key]}</li>
-          ))}
-        </div>
+      {/*<label>*/}
+      {/*  Date*/}
+      {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
+      {/*</label>*/}
 
-        <button
-          type="submit"
-          className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}
-        >
-          Submit
-        </button>
-      </form>
-    </>
+      <label>
+        Image URL
+        <input type="url" name={VN({ image_url })} value={image_url} onChange={handleChange} />
+      </label>
+
+      {/*<label>*/}
+      {/*  Link*/}
+      {/*  <input type="url" name={VN({link})} value={link} onChange={handleChange} required />*/}
+      {/*</label>*/}
+
+      <p className="my-4">{message}</p>
+
+      <div className="text-red-500">
+        {Object.keys(errors).map((key, index) => (
+          <li key={index}>{errors[key]}</li>
+        ))}
+      </div>
+
+      <button type="submit" className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
+        Submit
+      </button>
+    </form>
   );
 };
 
