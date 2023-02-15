@@ -19,3 +19,13 @@
     text-shadow: none;
   }
 }
+
+body {
+  #nprogress {
+    .spinner {
+      @apply hidden;
+    }
+  }
+}
+
+
