@@ -134,7 +134,6 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
                 {capitalize(trick)}
               </option>
             ))}
-            <option value="other">Other</option>
           </select>
         </label>
       </div>

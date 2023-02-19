@@ -145,7 +145,6 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
                 {capitalize(trick)}
               </option>
             ))}
-            <option value="other">Other</option>
           </select>
         </label>
       </div>
