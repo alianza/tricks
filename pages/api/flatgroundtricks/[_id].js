@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       try {
         const flatgroundTrick = await FlatGroundTrick.findById(_id);
         if (!flatgroundTrick) {
-          return res.status(400).json({ success: false });
+          return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
         }
         res.status(200).json({ success: true, data: flatgroundTrick });
       } catch (error) {
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
           runValidators: true,
         });
         if (!flatgroundTrick) {
-          return res.status(400).json({ success: false });
+          return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
         }
         res.status(200).json({ success: true, data: flatgroundTrick });
       } catch (error) {
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       try {
         const deletedTrick = await FlatGroundTrick.deleteOne({ _id });
         if (!deletedTrick) {
-          return res.status(400).json({ success: false });
+          return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
         }
         res.status(200).json({ success: true, data: {} });
       } catch (error) {
