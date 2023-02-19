@@ -6,7 +6,7 @@ const FlatgroundTrickSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Please provide a name for this trick'],
-      enum: FLATGROUND_TRICKS,
+      enum: Object.values(FLATGROUND_TRICKS),
       // enum: { values: FLATGROUND_TRICKS, message: 'Provided name is not a valid trick name' }, // custom error message
     },
     preferred_stance: {
@@ -50,5 +50,19 @@ FlatgroundTrickSchema.pre('validate', async function (next) {
 FlatgroundTrickSchema.pre('findOneAndUpdate', async function (next) {
   await validation(next, this.getUpdate());
 });
+
+FlatgroundTrickSchema.methods.getName = function () {
+  const partRemovalCondition = (part) => part !== 'none' || part !== 'regular' || part !== 0;
+  const parts = [this.stance, this.direction, this.rotation, this.name];
+  return parts.filter(partRemovalCondition).join(' ');
+};
+
+FlatgroundTrickSchema.methods.toResource = function () {
+  return {
+    ...this,
+    id: this._id.toString(),
+    name: this.getName(),
+  };
+};
 
 export default mongoose.models.FlatgroundTrick || mongoose.model('FlatgroundTrick', FlatgroundTrickSchema);
