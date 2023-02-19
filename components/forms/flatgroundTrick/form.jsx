@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from '../form.module.scss';
 import { capitalize, VN } from '../../../lib/util';
 import utilStyles from '../../../styles/utils.module.scss';
-import FLATGROUND_TRICKS from '../../../models/constants/flatgroundTricks';
+import { FLATGROUND_TRICKS_ENUM } from '../../../models/constants/flatgroundTricks';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
 
@@ -136,7 +136,7 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
         <label>
           Name
           <select name={VN({ name })} value={name} onChange={handleChange} required>
-            {FLATGROUND_TRICKS.map((trick) => (
+            {FLATGROUND_TRICKS_ENUM.map((trick) => (
               <option key={trick} value={trick}>
                 {capitalize(trick)}
               </option>

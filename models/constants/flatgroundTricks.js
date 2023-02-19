@@ -13,4 +13,7 @@ const FLATGROUND_TRICKS = {
   inward_heelflip: 'inward heelflip',
 };
 
+const FLATGROUND_TRICKS_ENUM = Object.values(FLATGROUND_TRICKS);
+
+export { FLATGROUND_TRICKS_ENUM, FLATGROUND_TRICKS };
 export default FLATGROUND_TRICKS;

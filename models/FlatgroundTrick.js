@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-import FLATGROUND_TRICKS from './constants/flatgroundTricks';
+import { FLATGROUND_TRICKS_ENUM } from './constants/flatgroundTricks';
 
 const FlatgroundTrickSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'Please provide a name for this trick'],
-      enum: Object.values(FLATGROUND_TRICKS),
+      enum: FLATGROUND_TRICKS_ENUM,
       // enum: { values: FLATGROUND_TRICKS, message: 'Provided name is not a valid trick name' }, // custom error message
     },
     preferred_stance: {

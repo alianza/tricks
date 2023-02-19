@@ -3,7 +3,7 @@ import FLATGROUND_TRICKS from '../models/constants/flatgroundTricks';
 
 const NewFlatFlatGroundTrick = () => {
   const flatgroundTrickForm = {
-    name: FLATGROUND_TRICKS[0],
+    name: FLATGROUND_TRICKS.ollie,
     preferred_stance: 'regular',
     stance: 'regular',
     direction: 'none',
