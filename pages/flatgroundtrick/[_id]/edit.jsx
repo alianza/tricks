@@ -1,18 +1,17 @@
 import { useRouter } from 'next/router';
+import FlatgroundTrickForm from '../../../components/forms/flatgroundTrickForm';
+import { fetcher } from '../../../lib/util';
 import useSWR from 'swr';
-import Form from '../../../components/forms/flatgroundTrick/form';
-
-const fetcher = (url) =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.data);
 
 const EditFlatGroundTrick = () => {
   const router = useRouter();
   const { _id } = router.query;
-  const { data: flatgroundTrick, error } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
+  const { data, error } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
 
-  if (error) return <p>Failed to load FlatgroundTrick</p>;
+  const flatgroundTrick = data?.data;
+  const serverError = data?.error;
+
+  if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
   if (!flatgroundTrick) return <p>Loading...</p>;
 
   const flatgroundTrickForm = {
@@ -26,7 +25,7 @@ const EditFlatGroundTrick = () => {
     image_url: flatgroundTrick.image_url,
   };
 
-  return <Form flatgroundTrickForm={flatgroundTrickForm} newFlatgroundTrick={false} />;
+  return <FlatgroundTrickForm flatgroundTrickForm={flatgroundTrickForm} newFlatgroundTrick={false} />;
 };
 
 export default EditFlatGroundTrick;
