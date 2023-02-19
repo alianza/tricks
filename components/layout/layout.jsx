@@ -1,19 +1,22 @@
-import Head from "next/head";
-import Nav from "./nav";
+import Head from 'next/head';
+import Header from './header';
+import Footer from './footer';
 
 export default function Layout({ children }) {
   return (
     <div
       id="app"
-      className="min-h-screen bg-neutral-100 text-neutral-900 decoration-neutral-900 dark:bg-neutral-900 dark:text-neutral-100"
+      className="flex min-h-screen flex-col bg-neutral-100 text-neutral-900 decoration-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
     >
       <Head>
         <title>MongoDB Mongoose w/ Next.js - J.W. van Bremens</title>
       </Head>
 
-      <Nav />
+      <Header />
 
-      <main className="p-2 pb-12 ">{children}</main>
+      <main className="mx-auto max-w-7xl p-2 pb-12">{children}</main>
+
+      <Footer />
     </div>
   );
 }
