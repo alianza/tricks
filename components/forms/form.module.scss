@@ -1,5 +1,5 @@
 .form {
-  @apply mx-auto w-5/6 max-w-xl text-neutral-900 dark:text-neutral-50;
+  @apply mx-auto max-w-xl;
 
   label {
     @apply mt-3 block;
@@ -8,7 +8,7 @@
   input,
   textarea,
   select {
-    @apply block w-full rounded p-2 text-neutral-50 dark:text-neutral-900;
+    @apply block w-full rounded p-2 text-neutral-900;
   }
 
   button {
