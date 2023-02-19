@@ -1,9 +1,9 @@
-import Form from '../components/forms/flatgroundTrick/form';
-import FLATGROUND_TRICKS from '../models/constants/flatgroundTricks';
+import FlatgroundTrickForm from '../components/forms/flatgroundTrickForm';
+import { DEFAULT_FLATGROUND_TRICK } from '../models/constants/flatgroundTricks';
 
 const NewFlatFlatGroundTrick = () => {
   const flatgroundTrickForm = {
-    name: FLATGROUND_TRICKS.ollie,
+    name: DEFAULT_FLATGROUND_TRICK,
     preferred_stance: 'regular',
     stance: 'regular',
     direction: 'none',
@@ -13,7 +13,7 @@ const NewFlatFlatGroundTrick = () => {
     image_url: '',
   };
 
-  return <Form flatgroundTrickForm={flatgroundTrickForm} />;
+  return <FlatgroundTrickForm flatgroundTrickForm={flatgroundTrickForm} />;
 };
 
 export default NewFlatFlatGroundTrick;
