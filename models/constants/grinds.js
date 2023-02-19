@@ -1,11 +1,13 @@
 const GRINDS = {
   fifty_fifty: '50-50',
   five_o: '5-0',
-  nose_grind: 'Nose Grind',
+  nose_grind: 'Nose-Grind',
+  smith_grind: 'Smith',
+  feeble_grind: 'Feeble',
   tail_slide: 'Tail Slide',
   nose_slide: 'Nose Slide',
-  blunt: 'Blunt',
-  nose_blunt: 'Nose Blunt',
+  blunt_slide: 'Blunt Slide',
+  nose_blunt_slide: 'Nose-Blunt Slide',
   suski: 'Suski',
   salad: 'Salad',
 };
