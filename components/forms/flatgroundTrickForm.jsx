@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
-import styles from '../form.module.scss';
-import { capitalize, VN } from '../../../lib/util';
-import utilStyles from '../../../styles/utils.module.scss';
-import { FLATGROUND_TRICKS_ENUM } from '../../../models/constants/flatgroundTricks';
+import styles from './form.module.scss';
+import { capitalize, getFullTrickName, VN } from '../../lib/util';
+import utilStyles from '../../styles/utils.module.scss';
+import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
 
-const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
+const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   const router = useRouter();
 
-  const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
+  const [fullTrickName, setFullTrickName] = useState('');
 
   const [form, setForm] = useState({
     name: flatgroundTrickForm.name,
@@ -26,6 +26,10 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   });
 
   const { name, preferred_stance, stance, direction, rotation, link, date, image_url } = form;
+
+  useEffect(() => {
+    setFullTrickName(getFullTrickName(form));
+  }, [form]);
 
   /* The PATCH method edits an existing entry in the mongodb database. */
   const patchData = async (form) => {
@@ -100,7 +104,7 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
         </select>
       </label>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-1">
         <label>
           Stance
           <select name={VN({ stance })} value={stance} onChange={handleChange} required>
@@ -125,11 +129,11 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
         <label>
           Rotation
           <select name={VN({ rotation })} value={rotation} onChange={handleChange} required>
-            <option value="0">-</option>
-            <option value="180">180</option>
-            <option value="360">360</option>
-            <option value="540">540</option>
-            <option value="720">720</option>
+            <option value={0}>-</option>
+            <option value={180}>180</option>
+            <option value={360}>360</option>
+            <option value={540}>540</option>
+            <option value={720}>720</option>
           </select>
         </label>
 
@@ -156,18 +160,16 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
         <input type="url" name={VN({ image_url })} value={image_url} onChange={handleChange} />
       </label>
 
+      <p className="my-4">
+        Full trick name: <b>{fullTrickName}</b>
+      </p>
+
       {/*<label>*/}
       {/*  Link*/}
       {/*  <input type="url" name={VN({link})} value={link} onChange={handleChange} required />*/}
       {/*</label>*/}
 
       <p className="my-4">{message}</p>
-
-      <div className="text-red-500">
-        {Object.keys(errors).map((key, index) => (
-          <li key={index}>{errors[key]}</li>
-        ))}
-      </div>
 
       <button type="submit" className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
         Submit
@@ -176,4 +178,4 @@ const Form = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   );
 };
 
-export default Form;
+export default FlatgroundTrickForm;

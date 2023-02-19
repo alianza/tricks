@@ -1,13 +1,16 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import utilStyles from '../../../styles/utils.module.scss';
+import utilStyles from '../../styles/utils.module.scss';
+import { capitalize, getFullTrickName } from '../../lib/util';
 
 export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'view' || 'delete' }) {
   const router = useRouter();
   const [message, setMessage] = useState('');
 
   const handleDelete = async () => {
+    if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
+
     try {
       await fetch(`/api/flatgroundtricks/${router.query._id}`, { method: 'Delete' });
       await router.push('/');
@@ -17,23 +20,28 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
   };
 
   return (
-    <div key={trick._id} className="group relative h-[28rem] w-80 overflow-hidden rounded-3xl">
+    <div key={trick._id} className="group relative aspect-[4/5] max-w-[20rem] overflow-hidden rounded-3xl">
       <img
         alt={`Image of ${trick.name}`}
         className="h-full w-full object-cover"
         src={trick.image_url || '/placeholder.webp'}
       />
       <h5 className="text-shadow absolute bottom-0 p-4 text-2xl text-neutral-50 shadow-neutral-900 transition-opacity group-hover:opacity-0">
-        {trick.name}
+        {getFullTrickName(trick)}
       </h5>
 
       <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-        <div className="max-h-[24rem] overflow-y-auto p-6 pr-7 overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-400">
-          <Link href={`/flatgroundtricks/${trick._id}`}>
-            <h1 className="text-2xl font-bold text-neutral-900 hover:underline">
-              {trick.stance} {trick.direction} {trick.rotation} {trick.name}{' '}
-            </h1>
-          </Link>
+        <div className="flex h-full flex-col content-between justify-between overflow-y-auto p-6 pb-16 overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-400">
+          <div className="flex flex-col">
+            <Link href={`/flatgroundtrick/${trick._id}`}>
+              <h1 className="text-2xl font-bold text-neutral-900 hover:underline">{getFullTrickName(trick)}</h1>
+            </Link>
+            <h3 className="text-xl font-bold text-neutral-600">Skater stance: {capitalize(trick.preferred_stance)}</h3>
+          </div>
+
+          {trick.stance === 'regular' && (
+            <h3 className="text-lg font-bold text-neutral-600">Trick stance: {capitalize(trick.stance)}</h3>
+          )}
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
