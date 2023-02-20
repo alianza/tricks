@@ -17,4 +17,5 @@ const GRINDS_ENUM = Object.values(GRINDS);
 const DEFAULT_GRIND = GRINDS.fifty_fifty;
 
 export { GRINDS_ENUM, GRINDS, DEFAULT_GRIND };
+
 export default GRINDS;
