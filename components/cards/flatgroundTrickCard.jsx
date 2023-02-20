@@ -52,7 +52,7 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
             </button>
           </Link>
           {mode === 'view' && (
-            <Link href="/flatgroundtrick/index" as={`/flatgroundtrick/${trick._id}`}>
+            <Link href="/flatgroundtrick/[_id]" as={`/flatgroundtrick/${trick._id}`}>
               <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
                 View
               </button>

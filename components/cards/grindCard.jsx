@@ -52,7 +52,7 @@ export default function GrindCard({ grind, mode }) {
             </button>
           </Link>
           {mode === 'view' && (
-            <Link href="/grind/index" as={`/grind/${grind._id}`}>
+            <Link href="/grind/[_id]" as={`/grind/${grind._id}`}>
               <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
                 View
               </button>

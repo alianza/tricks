@@ -5,11 +5,11 @@ import useSWR from 'swr';
 
 const EditFlatGroundTrick = () => {
   const { _id } = useRouter().query;
-  const { data, error } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
+  const { data, error, isLoading } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
   const { data: flatgroundTrick, error: serverError } = data || {};
 
   if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
-  if (!flatgroundTrick) return <p>Loading...</p>;
+  if (!flatgroundTrick || isLoading) return <p>Loading...</p>;
 
   const flatgroundTrickForm = {
     name: flatgroundTrick.name,
