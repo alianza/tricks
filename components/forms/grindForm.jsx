@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { capitalize, getFullGrindName, getFullTrickName, VN } from '../../lib/util';
+import { capitalize, getFullGrindName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
-import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
@@ -118,9 +117,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
         <label>
           Direction
           <select name={VN({ direction })} value={direction} onChange={handleChange}>
-            <option selected value="none">
-              -
-            </option>
+            <option value="none">-</option>
             <option value="frontside">Frontside</option>
             <option value="backside">Backside</option>
           </select>

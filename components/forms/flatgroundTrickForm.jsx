@@ -118,9 +118,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
         <label>
           Direction
           <select name={VN({ direction })} value={direction} onChange={handleChange}>
-            <option selected value="none">
-              -
-            </option>
+            <option value="none">-</option>
             <option value="frontside">Frontside</option>
             <option value="backside">Backside</option>
           </select>
