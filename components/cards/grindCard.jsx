@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import utilStyles from '../../styles/utils.module.scss';
 import { capitalize, getFullGrindName } from '../../lib/util';
+import PropTypes from 'prop-types';
 
-export default function GrindCard({ grind, mode = 'view' || 'delete' }) {
+export default function GrindCard({ grind, mode }) {
   const router = useRouter();
   const [message, setMessage] = useState('');
 
@@ -70,3 +71,17 @@ export default function GrindCard({ grind, mode = 'view' || 'delete' }) {
     </div>
   );
 }
+
+GrindCard.propTypes = {
+  grind: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    preferred_stance: PropTypes.string.isRequired,
+    stance: PropTypes.string.isRequired,
+    direction: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    image_url: PropTypes.string,
+  }).isRequired,
+  mode: PropTypes.oneOf(['view', 'delete']).isRequired,
+};

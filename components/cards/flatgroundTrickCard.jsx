@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import utilStyles from '../../styles/utils.module.scss';
 import { capitalize, getFullTrickName } from '../../lib/util';
+import PropTypes from 'prop-types';
 
 export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'view' || 'delete' }) {
   const router = useRouter();
@@ -70,3 +71,18 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
     </div>
   );
 }
+
+FlatgroundTrickCard.propTypes = {
+  flatgroundTrick: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    preferred_stance: PropTypes.string.isRequired,
+    stance: PropTypes.string.isRequired,
+    direction: PropTypes.string.isRequired,
+    rotation: PropTypes.number.isRequired,
+    link: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    image_url: PropTypes.string,
+  }).isRequired,
+  mode: PropTypes.oneOf(['view', 'delete']),
+};
