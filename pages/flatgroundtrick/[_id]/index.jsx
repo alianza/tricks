@@ -1,14 +1,14 @@
 import dbConnect from '../../../lib/dbConnect';
 import findAndSerializeDoc from '../../../lib/util';
-import mongoose, { Model } from 'mongoose';
 import FlatgroundTrickCard from '../../../components/cards/flatgroundTrickCard';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
+import { isValidObjectId, Model } from 'mongoose';
 
 export async function getServerSideProps({ params: { _id } }) {
   await dbConnect();
 
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return { props: { error: 'Not a valid flatground trick id' } };
+  if (!isValidObjectId(_id)) {
+    return { props: { error: `${_id} is not a valid flatground trick id...` } };
   }
 
   const flatgroundTrick = await findAndSerializeDoc(FlatGroundTrick, Model.findById, { _id });

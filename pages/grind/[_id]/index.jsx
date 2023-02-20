@@ -1,14 +1,14 @@
 import dbConnect from '../../../lib/dbConnect';
 import findAndSerializeDoc from '../../../lib/util';
-import mongoose, { Model } from 'mongoose';
 import GrindCard from '../../../components/cards/grindCard';
 import Grind from '../../../models/Grind';
+import { isValidObjectId, Model } from 'mongoose';
 
 export async function getServerSideProps({ params: { _id } }) {
   await dbConnect();
 
-  if (!mongoose.Types.ObjectId.isValid(_id)) {
-    return { props: { error: 'Not a valid grind trick id' } };
+  if (!isValidObjectId(_id)) {
+    return { props: { error: `${_id} is not a valid grind trick id...` } };
   }
 
   const grind = await findAndSerializeDoc(Grind, Model.findById, { _id });
