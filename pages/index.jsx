@@ -32,7 +32,7 @@ const Index = ({ flatgroundTricks, grinds }) => {
         <h1 className="mb-6 text-4xl">Grinds</h1>
         <div className="flex flex-wrap justify-center gap-4">
           {grinds.map((grind) => (
-            <GrindCard key={grind._id} grind={grind} mode="aw" />
+            <GrindCard key={grind._id} grind={grind} mode="view" />
           ))}
         </div>
       </div>
