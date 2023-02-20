@@ -4,12 +4,9 @@ import { fetcher } from '../../../lib/util';
 import GrindForm from '../../../components/forms/grindForm';
 
 const EditGrind = () => {
-  const router = useRouter();
-  const { _id } = router.query;
+  const { _id } = useRouter().query;
   const { data, error } = useSWR(_id ? `/api/grinds/${_id}` : null, fetcher);
-
-  const grind = data?.data;
-  const serverError = data?.error;
+  const { data: grind, error: serverError } = data || {};
 
   if (error || serverError) return <p>Failed to load Grind: {error || serverError}</p>;
   if (!grind) return <p>Loading...</p>;

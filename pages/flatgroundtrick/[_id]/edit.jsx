@@ -4,12 +4,9 @@ import { fetcher } from '../../../lib/util';
 import useSWR from 'swr';
 
 const EditFlatGroundTrick = () => {
-  const router = useRouter();
-  const { _id } = router.query;
+  const { _id } = useRouter().query;
   const { data, error } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
-
-  const flatgroundTrick = data?.data;
-  const serverError = data?.error;
+  const { data: flatgroundTrick, error: serverError } = data || {};
 
   if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
   if (!flatgroundTrick) return <p>Loading...</p>;
