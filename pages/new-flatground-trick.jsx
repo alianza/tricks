@@ -8,9 +8,6 @@ const NewFlatFlatGroundTrick = () => {
     stance: 'regular',
     direction: 'none',
     rotation: 0,
-    date: new Date().toISOString().substring(0, 10),
-    link: '',
-    image_url: '',
   };
 
   return <FlatgroundTrickForm flatgroundTrickForm={flatgroundTrickForm} />;

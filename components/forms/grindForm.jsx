@@ -19,12 +19,10 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     preferred_stance: grindForm.preferred_stance,
     stance: grindForm.stance,
     direction: grindForm.direction,
-    link: grindForm.link,
     date: new Date(grindForm.date).toISOString().substring(0, 10),
-    image_url: grindForm.image_url,
   });
 
-  const { name, preferred_stance, stance, direction, link, date, image_url } = form;
+  const { name, preferred_stance, stance, direction } = form;
 
   useEffect(() => {
     setFullTrickName(getFullGrindName(form));
@@ -135,24 +133,9 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
         </label>
       </div>
 
-      {/*<label>*/}
-      {/*  Date*/}
-      {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
-      {/*</label>*/}
-
-      <label>
-        Image URL
-        <input type="url" name={VN({ image_url })} value={image_url} onChange={handleChange} />
-      </label>
-
       <p className="my-4">
         Full grind name: <b>{fullTrickName}</b>
       </p>
-
-      {/*<label>*/}
-      {/*  Link*/}
-      {/*  <input type="url" name={VN({link})} value={link} onChange={handleChange} required />*/}
-      {/*</label>*/}
 
       <p className="my-4">{message}</p>
 

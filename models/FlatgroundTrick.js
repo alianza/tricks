@@ -27,10 +27,6 @@ const FlatgroundTrickSchema = new mongoose.Schema(
       type: Number,
       enum: [0, 180, 360, 540, 720],
     },
-    date: { type: Date, default: Date.now },
-    link: { type: String },
-    image_url: { type: String },
-    location: { longitude: { type: Number }, latitude: { type: Number } },
   },
   { timestamps: true }
 );

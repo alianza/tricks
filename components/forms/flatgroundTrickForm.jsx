@@ -20,12 +20,10 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     stance: flatgroundTrickForm.stance,
     direction: flatgroundTrickForm.direction,
     rotation: flatgroundTrickForm.rotation,
-    link: flatgroundTrickForm.link,
     date: new Date(flatgroundTrickForm.date).toISOString().substring(0, 10),
-    image_url: flatgroundTrickForm.image_url,
   });
 
-  const { name, preferred_stance, stance, direction, rotation, link, date, image_url } = form;
+  const { name, preferred_stance, stance, direction, rotation } = form;
 
   useEffect(() => {
     setFullTrickName(getFullTrickName(form));
@@ -152,19 +150,9 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
       {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
       {/*</label>*/}
 
-      <label>
-        Image URL
-        <input type="url" name={VN({ image_url })} value={image_url} onChange={handleChange} />
-      </label>
-
       <p className="my-4">
         Full trick name: <b>{fullTrickName}</b>
       </p>
-
-      {/*<label>*/}
-      {/*  Link*/}
-      {/*  <input type="url" name={VN({link})} value={link} onChange={handleChange} required />*/}
-      {/*</label>*/}
 
       <p className="my-4">{message}</p>
 

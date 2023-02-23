@@ -16,9 +16,6 @@ const EditGrind = () => {
     preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
-    link: grind.link,
-    date: new Date(grind.date).toISOString().substring(0, 10),
-    image_url: grind.image_url,
   };
 
   return <GrindForm grindForm={grindForm} newGrind={false} />;

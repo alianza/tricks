@@ -79,9 +79,6 @@ GrindCard.propTypes = {
     preferred_stance: PropTypes.string.isRequired,
     stance: PropTypes.string.isRequired,
     direction: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    image_url: PropTypes.string,
   }).isRequired,
   mode: PropTypes.oneOf(['view', 'delete']).isRequired,
 };

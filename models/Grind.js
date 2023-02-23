@@ -23,9 +23,6 @@ const GrindSchema = new mongoose.Schema(
       type: String,
       enum: ['none', 'frontside', 'backside'],
     },
-    date: { type: Date, default: Date.now },
-    link: { type: String },
-    image_url: { type: String },
   },
   { timestamps: true }
 );

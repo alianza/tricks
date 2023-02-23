@@ -80,9 +80,6 @@ FlatgroundTrickCard.propTypes = {
     stance: PropTypes.string.isRequired,
     direction: PropTypes.string.isRequired,
     rotation: PropTypes.number.isRequired,
-    link: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    image_url: PropTypes.string,
   }).isRequired,
   mode: PropTypes.oneOf(['view', 'delete']),
 };

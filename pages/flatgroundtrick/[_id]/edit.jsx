@@ -17,9 +17,6 @@ const EditFlatGroundTrick = () => {
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
-    link: flatgroundTrick.link,
-    date: new Date(flatgroundTrick.date).toISOString().substring(0, 10),
-    image_url: flatgroundTrick.image_url,
   };
 
   return <FlatgroundTrickForm flatgroundTrickForm={flatgroundTrickForm} newFlatgroundTrick={false} />;
