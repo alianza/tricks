@@ -7,9 +7,6 @@ const newGrind = () => {
     preferred_stance: 'regular',
     stance: 'regular',
     direction: 'none',
-    date: new Date().toISOString().substring(0, 10),
-    link: '',
-    image_url: '',
   };
 
   return <GrindForm grindForm={grindForm} />;
