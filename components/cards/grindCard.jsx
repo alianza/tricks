@@ -7,16 +7,16 @@ import PropTypes from 'prop-types';
 
 export default function GrindCard({ grind, mode }) {
   const router = useRouter();
-  const [message, setMessage] = useState('');
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete "${getFullGrindName(grind)}"?`)) return;
 
     try {
-      await fetch(`/api/grinds/${router.query._id}`, { method: 'Delete' });
+      const response = await fetch(`/api/grinds/${router.query._id}`, { method: 'Delete' });
+      if (!response.ok) throw new Error('Failed to delete the grind.');
       await router.push('/');
     } catch (error) {
-      setMessage('Failed to delete the grind.');
+      alert(error.message);
     }
   };
 
@@ -46,13 +46,13 @@ export default function GrindCard({ grind, mode }) {
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Link href="/grind/[_id]/edit" as={`/grind/${grind._id}/edit`}>
+          <Link href="/grinds/[_id]/edit" as={`/grind/${grind._id}/edit`}>
             <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
               Edit
             </button>
           </Link>
           {mode === 'view' && (
-            <Link href="/grind/[_id]" as={`/grind/${grind._id}`}>
+            <Link href="/grinds/[_id]" as={`/grind/${grind._id}`}>
               <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
                 View
               </button>
@@ -67,7 +67,6 @@ export default function GrindCard({ grind, mode }) {
           )}
         </div>
       </div>
-      {message && <p>{message}</p>}
     </div>
   );
 }

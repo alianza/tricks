@@ -7,16 +7,16 @@ import PropTypes from 'prop-types';
 
 export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'view' || 'delete' }) {
   const router = useRouter();
-  const [message, setMessage] = useState('');
 
   const handleDelete = async () => {
     if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
 
     try {
-      await fetch(`/api/flatgroundtricks/${router.query._id}`, { method: 'Delete' });
+      const response = await fetch(`/api/flatgroundtricks/${router.query._id}`, { method: 'Delete' });
+      if (!response.ok) throw new Error('Failed to delete the flatground trick.');
       await router.push('/');
     } catch (error) {
-      setMessage('Failed to delete the flatground trick.');
+      alert(error.message);
     }
   };
 
@@ -30,7 +30,6 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
       <h5 className="text-shadow absolute bottom-0 p-4 text-2xl text-neutral-50 shadow-neutral-900 transition-opacity group-hover:opacity-0">
         {getFullTrickName(trick)}
       </h5>
-
       <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
         <div className="flex h-full flex-col content-between justify-between overflow-y-auto p-6 pb-16 overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-400">
           <div className="flex flex-col">
@@ -46,13 +45,13 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Link href="/flatgroundtrick/[_id]/edit" as={`/flatgroundtrick/${trick._id}/edit`}>
+          <Link href="/flatgroundtricks/[_id]/edit" as={`/flatgroundtrick/${trick._id}/edit`}>
             <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
               Edit
             </button>
           </Link>
           {mode === 'view' && (
-            <Link href="/flatgroundtrick/[_id]" as={`/flatgroundtrick/${trick._id}`}>
+            <Link href="/flatgroundtricks/[_id]" as={`/flatgroundtrick/${trick._id}`}>
               <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
                 View
               </button>
@@ -67,7 +66,6 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
           )}
         </div>
       </div>
-      {message && <p>{message}</p>}
     </div>
   );
 }
