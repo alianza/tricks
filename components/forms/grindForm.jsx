@@ -19,7 +19,6 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     preferred_stance: grindForm.preferred_stance,
     stance: grindForm.stance,
     direction: grindForm.direction,
-    date: new Date(grindForm.date).toISOString().substring(0, 10),
   });
 
   const { name, preferred_stance, stance, direction } = form;

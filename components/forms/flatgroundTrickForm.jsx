@@ -20,7 +20,6 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     stance: flatgroundTrickForm.stance,
     direction: flatgroundTrickForm.direction,
     rotation: flatgroundTrickForm.rotation,
-    date: new Date(flatgroundTrickForm.date).toISOString().substring(0, 10),
   });
 
   const { name, preferred_stance, stance, direction, rotation } = form;
