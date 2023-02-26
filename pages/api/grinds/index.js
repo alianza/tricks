@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import Grind from '../../../models/Grind';
+import { getFullGrindName } from '../../../lib/util';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -9,8 +10,12 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const grind = await Grind.find({});
-        res.status(200).json({ success: true, data: grind });
+        const grinds = await Grind.find({}).lean();
+        const data = grinds.map((grind) => ({
+          ...grind,
+          trick: getFullGrindName(grind),
+        }));
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

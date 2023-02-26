@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
+import { getFullGrindName } from '../../../lib/util';
 
 export default async function handler(req, res) {
   const {
@@ -13,10 +14,14 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const flatgroundTrick = await FlatGroundTrick.findById(_id);
+        const data = {
+          ...flatgroundTrick,
+          trick: getFullGrindName(flatgroundTrick),
+        };
         if (!flatgroundTrick) {
           return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
         }
-        res.status(200).json({ success: true, data: flatgroundTrick });
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });
@@ -29,10 +34,14 @@ export default async function handler(req, res) {
           new: true,
           runValidators: true,
         });
+        const data = {
+          ...flatgroundTrick,
+          trick: getFullGrindName(flatgroundTrick),
+        };
         if (!flatgroundTrick) {
           return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
         }
-        res.status(200).json({ success: true, data: flatgroundTrick });
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

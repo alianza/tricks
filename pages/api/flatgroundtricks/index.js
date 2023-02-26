@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatgroundTrick from '../../../models/FlatgroundTrick';
+import { getFullTrickName } from '../../../lib/util';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -9,8 +10,12 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const flatgroundTrick = await FlatgroundTrick.find({});
-        res.status(200).json({ success: true, data: flatgroundTrick });
+        const flatgroundTricks = await FlatgroundTrick.find({}).lean();
+        const data = flatgroundTricks.map((flatgroundTrick) => ({
+          ...flatgroundTrick,
+          trick: getFullTrickName(flatgroundTrick),
+        }));
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });
