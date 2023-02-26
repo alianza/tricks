@@ -33,11 +33,11 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
           const colOutput = value.map((action) => {
             switch (action) {
               case 'edit':
-                return <EditButton endpoint={endpoint} id={obj._id} />;
+                return <EditButton key={action} endpoint={endpoint} id={obj._id} />;
               case 'view':
-                return <ViewButton endpoint={endpoint} id={obj._id} />;
+                return <ViewButton key={action} endpoint={endpoint} id={obj._id} />;
               case 'delete':
-                return <DeleteButton handleDelete={handleDelete} />;
+                return <DeleteButton key={action} handleDelete={handleDelete} />;
               default:
                 return null;
             }
@@ -52,7 +52,7 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
 
         if (key === 'trick') {
           return (
-            <td key={key} className="p-3 text-sm sm:p-4">
+            <td key={key} className="p-3 text-sm font-bold sm:p-4">
               {value}
             </td>
           );
