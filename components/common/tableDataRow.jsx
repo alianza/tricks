@@ -44,7 +44,7 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
           });
 
           return (
-            <td key={key} className="p-4">
+            <td key={key} className="p-3 sm:p-4">
               <div className="flex justify-center gap-2">{colOutput}</div>
             </td>
           );
@@ -52,14 +52,14 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
 
         if (key === 'trick') {
           return (
-            <td key={key} className="p-4 text-sm">
+            <td key={key} className="p-3 text-sm sm:p-4">
               {value}
             </td>
           );
         }
 
         return (
-          <td key={key} className="p-4">
+          <td key={key} className="p-3 sm:p-4">
             {capitalize(value)}
           </td>
         );

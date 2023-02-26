@@ -12,7 +12,7 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
   columns = actions.length ? [...columns, 'actions'] : columns;
 
   useEffect(() => {
-    sort(columns[0], 'asc');
+    sort(columns[0], 'asc'); // Default sort on first column
     if (!objArrayState.length) setIsEmpty(true);
   }, [objArrayState]);
 
@@ -27,34 +27,23 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
     setColumnSortDirectionMap({ [column]: direction });
   };
 
-  const deleteRow = (id) => setObjArrayState(objArrayState.filter((obj) => obj._id !== id));
-
   return (
     <>
       <table className="mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
             {columns.map((column) => (
-              <th key={column.toString()} className="p-4">
+              <th key={column.toString()} className="p-3 sm:p-4">
                 <div className={`flex justify-center gap-2`}>
                   <p>{capitalize(column)}</p>
                   {columnSortDirectionMap[column] === 'asc' && (
-                    <ChevronDownIcon
-                      onClick={() => sort(column, 'desc')}
-                      className="h-6 w-6 cursor-pointer"
-                    ></ChevronDownIcon>
+                    <ChevronDownIcon onClick={() => sort(column, 'desc')} className="h-6 w-6 cursor-pointer" />
                   )}
                   {columnSortDirectionMap[column] === 'desc' && (
-                    <ChevronUpIcon
-                      onClick={() => sort(column, 'asc')}
-                      className="h-6 w-6 cursor-pointer"
-                    ></ChevronUpIcon>
+                    <ChevronUpIcon onClick={() => sort(column, 'asc')} className="h-6 w-6 cursor-pointer" />
                   )}
                   {column !== 'actions' && !columnSortDirectionMap[column] && (
-                    <ChevronUpDownIcon
-                      onClick={() => sort(column, 'asc')}
-                      className="h-6 w-6 cursor-pointer"
-                    ></ChevronUpDownIcon>
+                    <ChevronUpDownIcon onClick={() => sort(column, 'asc')} className="h-6 w-6 cursor-pointer" />
                   )}
                 </div>
               </th>
@@ -64,7 +53,7 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
         <tbody className="bg-neutral-50 dark:bg-neutral-800">
           {isEmpty && (
             <tr>
-              <td className="p-4 text-center" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
+              <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
             </tr>
           )}
           {objArrayState.map((obj) => (
@@ -75,7 +64,7 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
               actions={actions}
               endpoint={endpoint}
               emitMessage={(message) => setMessage(message)}
-              deleteRow={deleteRow}
+              deleteRow={(id) => setObjArrayState(objArrayState.filter((obj) => obj._id !== id))}
             />
           ))}
         </tbody>
