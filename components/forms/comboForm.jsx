@@ -74,15 +74,12 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   };
 
   const postData = async (form) => {
-    console.log(`JSON.stringify(form)`, JSON.stringify(form));
     try {
       const res = await fetch('/api/combos', {
         method: 'POST',
         headers,
         body: JSON.stringify(form),
       });
-
-      console.log(`res`, res);
 
       if (!res.ok) {
         const { error } = await res.json();
