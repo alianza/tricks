@@ -11,8 +11,8 @@ const headers = { Accept: 'application/json', 'Content-Type': 'application/json'
 const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   const router = useRouter();
 
-  const [message, setMessage] = useState('');
-  const [fullTrickName, setFullTrickName] = useState('');
+  const [message, setMessage] = useState(null);
+  const [fullTrickName, setFullTrickName] = useState(null);
 
   const [form, setForm] = useState({
     name: flatgroundTrickForm.name,
@@ -28,7 +28,6 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     setFullTrickName(getFullTrickName(form));
   }, [form]);
 
-  /* The PATCH method edits an existing entry in the mongodb database. */
   const patchData = async (form) => {
     const { _id } = router.query;
 
@@ -53,7 +52,6 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     }
   };
 
-  /* The POST method adds a new entry in the mongodb database. */
   const postData = async (form) => {
     try {
       const res = await fetch('/api/flatgroundtricks', {

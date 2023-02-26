@@ -11,8 +11,8 @@ const headers = { Accept: 'application/json', 'Content-Type': 'application/json'
 const GrindForm = ({ grindForm, newGrind = true }) => {
   const router = useRouter();
 
-  const [message, setMessage] = useState('');
-  const [fullTrickName, setFullTrickName] = useState('');
+  const [message, setMessage] = useState(null);
+  const [fullTrickName, setFullTrickName] = useState(null);
 
   const [form, setForm] = useState({
     name: grindForm.name,
@@ -27,7 +27,6 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     setFullTrickName(getFullGrindName(form));
   }, [form]);
 
-  /* The PATCH method edits an existing entry in the mongodb database. */
   const patchData = async (form) => {
     const { _id } = router.query;
 
@@ -52,7 +51,6 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     }
   };
 
-  /* The POST method adds a new entry in the mongodb database. */
   const postData = async (form) => {
     try {
       const res = await fetch('/api/grinds', {
