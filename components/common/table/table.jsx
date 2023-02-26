@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { capitalize } from '../../lib/util';
+import { capitalize } from '../../../lib/util';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
 

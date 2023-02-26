@@ -1,6 +1,6 @@
-import { capitalize, getFullName } from '../../lib/util';
+import { capitalize, getFullName } from '../../../lib/util';
 import Link from 'next/link';
-import utilStyles from '../../styles/utils.module.scss';
+import utilStyles from '../../../styles/utils.module.scss';
 
 const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow }) => {
   const objColumnMap = {};
