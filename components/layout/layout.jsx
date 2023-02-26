@@ -14,7 +14,7 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <main className="mx-auto max-w-7xl p-2 pb-12">{children}</main>
+      <main className="mx-auto max-w-7xl max-w-full p-2 pb-12">{children}</main>
 
       <Footer />
     </div>
