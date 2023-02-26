@@ -3,7 +3,7 @@ import { getTricks } from '../lib/util';
 import FlatGroundTrick from '../models/FlatgroundTrick';
 import Grind from '../models/Grind';
 import { Model } from 'mongoose';
-import Table from '../components/common/table';
+import Table from '../components/common/table/table';
 
 export async function getServerSideProps() {
   await dbConnect();
