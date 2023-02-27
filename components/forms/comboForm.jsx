@@ -4,17 +4,16 @@ import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { capitalize, getFullGrindName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
+import { ArrowRightIcon, PlusIcon } from '@heroicons/react/20/solid';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
-
-const TRICK_TYPES = ['Flatground Tricks', 'Grinds'];
 
 const TRICK_TYPES_ENDPOINTS = {
   'Flatground Tricks': 'flatgroundtricks',
   Grinds: 'grinds',
 };
 
-const TRICK_TYPES_COLLECTIONS = {
+const TRICK_TYPES_MODEL_NAMES = {
   'Flatground Tricks': 'FlatgroundTrick',
   Grinds: 'Grind',
 };
@@ -26,7 +25,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const [fullComboName, setFullComboName] = useState(null);
   const [tricks, setTricks] = useState([]);
 
-  const [trickType, setTrickType] = useState(TRICK_TYPES[0]);
+  const [trickType, setTrickType] = useState(Object.keys(TRICK_TYPES_ENDPOINTS)[0]);
 
   const [form, setForm] = useState({
     trickArray: comboForm.trickArray,
@@ -56,7 +55,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
       const res = await fetch(`/api/combos/${_id}`, {
         method: 'PATCH',
         headers,
-        body: JSON.stringify(form),
+        body: JSON.stringify(trimTrickArray(form)),
       });
 
       if (!res.ok) {
@@ -78,7 +77,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
       const res = await fetch('/api/combos', {
         method: 'POST',
         headers,
-        body: JSON.stringify(form),
+        body: JSON.stringify(trimTrickArray(form)),
       });
 
       if (!res.ok) {
@@ -92,13 +91,17 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     }
   };
 
+  const trimTrickArray = (form) => ({
+    ...form,
+    trickArray: form.trickArray.map((trick) => ({
+      _id: trick._id,
+      trickRef: trick.trickRef,
+    })),
+  });
+
   const handleChange = ({ target }) => {
     let { value, name } = target;
-
-    if (target.type === 'checkbox') {
-      value = target.checked;
-    }
-
+    if (target.type === 'checkbox') value = target.checked;
     setForm({ ...form, [name]: value });
   };
 
@@ -111,7 +114,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     e.preventDefault();
     setForm({
       ...form,
-      trickArray: [...trickArray, { _id: trick._id, trickRef: TRICK_TYPES_COLLECTIONS[trickType] }],
+      trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODEL_NAMES[trickType] }],
     });
   }
 
@@ -119,16 +122,27 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     <form onSubmit={handleSubmit} className={styles.form}>
       <h1 className="text-2xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
 
-      {trickArray.map((trick) => (
-        <p>{trick._id}</p>
-      ))}
+      <div className="mt-4 flex gap-2">
+        {trickArray.map((trick, index) => (
+          <div key={trick._id + index} className="flex gap-2">
+            <span className="font-bold">{trick.trick}</span>
+            {(index < trickArray.length - 1 || trickArray.length === 1) && (
+              <span>
+                <ArrowRightIcon title="To" className="h-6 w-6" />
+              </span>
+            )}
+            {trickArray.length > 2 && index === trickArray.length - 1 && <span className="font-bold"> Out </span>}
+            {trickArray.length === 1 && <span className="font-bold"> ... </span>}
+          </div>
+        ))}
+      </div>
 
       {!trickArray.length && <h4>Select type of trick to add</h4>}
 
       <label>
-        Trick Type
+        Trick type to add
         <select name={VN({ trickType })} value={trickType} onChange={({ target }) => setTrickType(target.value)}>
-          {TRICK_TYPES.map((trickType) => (
+          {Object.keys(TRICK_TYPES_ENDPOINTS).map((trickType) => (
             <option key={trickType} value={trickType}>
               {capitalize(trickType)}
             </option>
@@ -140,9 +154,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         <button
           key={trick._id}
           onClick={(e) => addTrick(e, trick)}
-          className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}
+          className={`${utilStyles.button} mt-4 flex items-center bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}
         >
-          {trick.trick}
+          <PlusIcon className="-ml-2 h-6 w-6" />
+          <span>{trick.trick}</span>
         </button>
       ))}
 
