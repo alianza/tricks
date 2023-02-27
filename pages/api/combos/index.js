@@ -4,8 +4,6 @@ import Combo from '../../../models/Combo';
 export default async function handler(req, res) {
   const { method } = req;
 
-  console.log(`method`, method);
-
   await dbConnect();
 
   switch (method) {
