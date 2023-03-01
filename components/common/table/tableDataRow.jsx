@@ -2,7 +2,7 @@ import { capitalize, getFullName } from '../../../lib/util';
 import Link from 'next/link';
 import utilStyles from '../../../styles/utils.module.scss';
 
-const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow }) => {
+const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow }) => {
   const objColumnMap = {};
 
   columns.forEach((column) => {
@@ -12,19 +12,6 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
       objColumnMap[column] = obj[column];
     }
   });
-
-  const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete "${getFullName(obj, endpoint)}"?`)) return;
-
-    try {
-      const response = await fetch(`/api/${endpoint}/${obj._id}`, { method: 'Delete' });
-      if (!response.ok) throw new Error(`Failed to delete ${getFullName(obj, endpoint)}`);
-      deleteRow(obj._id);
-      emitMessage(null);
-    } catch (error) {
-      emitMessage(`Failed to delete ${getFullName(obj, endpoint)}`);
-    }
-  };
 
   return (
     <tr className="border-t-2 border-neutral-400">
@@ -37,7 +24,7 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
               case 'view':
                 return <ViewButton key={action} endpoint={endpoint} id={obj._id} />;
               case 'delete':
-                return <DeleteButton key={action} handleDelete={handleDelete} />;
+                return <DeleteButton key={action} handleDelete={() => deleteRow(obj)} />;
               default:
                 return null;
             }
@@ -68,7 +55,7 @@ const tableDataRow = ({ obj, columns, actions, endpoint, emitMessage, deleteRow 
   );
 };
 
-function EditButton({ endpoint, id }) {
+export function EditButton({ endpoint, id }) {
   return (
     <Link href={`/${endpoint}/[_id]/edit`} as={`/${endpoint}/${id}/edit`}>
       <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>Edit</button>
@@ -76,7 +63,7 @@ function EditButton({ endpoint, id }) {
   );
 }
 
-function ViewButton({ endpoint, id }) {
+export function ViewButton({ endpoint, id }) {
   return (
     <Link href={`/${endpoint}/[_id]`} as={`/${endpoint}/${id}`}>
       <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>View</button>
@@ -84,7 +71,7 @@ function ViewButton({ endpoint, id }) {
   );
 }
 
-function DeleteButton({ handleDelete }) {
+export function DeleteButton({ handleDelete }) {
   return (
     <div onClick={handleDelete}>
       <button className={`${utilStyles.button} bg-red-500 focus:ring-red-600/50 hover:bg-red-600`}>Delete</button>

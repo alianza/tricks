@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
-import { capitalize } from '../../../lib/util';
+import { capitalize, getFullName } from '../../../lib/util';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
 
-const Table = ({ objArray, columns, actions, endpoint }) => {
+function ComboTableDataRow() {
+  return null;
+}
+
+const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
@@ -27,8 +31,21 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
     setColumnSortDirection({ [column]: direction });
   };
 
+  const handleDelete = async (obj) => {
+    if (!confirm(`Are you sure you want to delete "${getFullName(obj, endpoint)}"?`)) return;
+
+    try {
+      const response = await fetch(`/api/${endpoint}/${obj._id}`, { method: 'Delete' });
+      if (!response.ok) throw new Error(`Failed to delete ${getFullName(obj, endpoint)}`);
+      setObjArrayState(objArrayState.filter(({ _id }) => _id !== obj._id));
+      setMessage(null);
+    } catch (error) {
+      setMessage(`Failed to delete ${getFullName(obj, endpoint)}`);
+    }
+  };
+
   return (
-    <>
+    <div className="flex flex-col items-center overflow-x-auto">
       <table className="mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
@@ -56,21 +73,25 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
               <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
             </tr>
           )}
-          {objArrayState.map((obj) => (
-            <TableDataRow
-              key={obj._id}
-              obj={obj}
-              columns={columns}
-              actions={actions}
-              endpoint={endpoint}
-              emitMessage={(message) => setMessage(message)}
-              deleteRow={(id) => setObjArrayState(objArrayState.filter((obj) => obj._id !== id))}
-            />
-          ))}
+          {objArrayState.map((obj) =>
+            !comboTable ? (
+              <TableDataRow
+                key={obj._id}
+                obj={obj}
+                columns={columns}
+                actions={actions}
+                endpoint={endpoint}
+                emitMessage={(message) => setMessage(message)}
+                deleteRow={(obj) => handleDelete(obj)}
+              />
+            ) : (
+              <ComboTableDataRow></ComboTableDataRow>
+            )
+          )}
         </tbody>
       </table>
-      {message && <p className="mx-auto my-2 font-bold text-red-500">{message}</p>}
-    </>
+      {message && <p className="my-2 font-bold text-red-500">{message}</p>}
+    </div>
   );
 };
 
