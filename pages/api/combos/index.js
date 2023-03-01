@@ -18,7 +18,6 @@ export default async function handler(req, res) {
       break;
     case 'POST':
       try {
-        console.log(`req.body`, req.body);
         const combo = await Combo.create(req.body);
         res.status(201).json({ success: true, data: combo });
       } catch (error) {
