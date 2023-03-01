@@ -4,15 +4,15 @@ import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/re
 import TableDataRow from './tableDataRow';
 
 const Table = ({ objArray, columns, actions, endpoint }) => {
-  const [columnSortDirectionMap, setColumnSortDirectionMap] = useState({});
+  const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
 
-  columns = actions.length ? [...columns, 'actions'] : columns;
+  columns = actions.length ? [...columns, 'actions'] : columns; // Add actions column if actions are passed
 
   useEffect(() => {
-    sort(columns[0], 'asc'); // Default sort on first column
+    sort(columns[0], 'asc'); // Default ascending sort on first column
     if (!objArrayState.length) setIsEmpty(true);
   }, [objArrayState]);
 
@@ -24,7 +24,7 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
         return 0;
       })
     );
-    setColumnSortDirectionMap({ [column]: direction });
+    setColumnSortDirection({ [column]: direction });
   };
 
   return (
@@ -36,13 +36,13 @@ const Table = ({ objArray, columns, actions, endpoint }) => {
               <th key={column.toString()} className="p-3 sm:p-4">
                 <div className={`flex justify-center gap-2`}>
                   <p>{capitalize(column)}</p>
-                  {columnSortDirectionMap[column] === 'asc' && (
+                  {columnSortDirection[column] === 'asc' && (
                     <ChevronDownIcon onClick={() => sort(column, 'desc')} className="h-6 w-6 cursor-pointer" />
                   )}
-                  {columnSortDirectionMap[column] === 'desc' && (
+                  {columnSortDirection[column] === 'desc' && (
                     <ChevronUpIcon onClick={() => sort(column, 'asc')} className="h-6 w-6 cursor-pointer" />
                   )}
-                  {column !== 'actions' && !columnSortDirectionMap[column] && (
+                  {column !== 'actions' && !columnSortDirection[column] && (
                     <ChevronUpDownIcon onClick={() => sort(column, 'asc')} className="h-6 w-6 cursor-pointer" />
                   )}
                 </div>
