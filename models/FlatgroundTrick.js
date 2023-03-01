@@ -31,20 +31,22 @@ const FlatgroundTrickSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-async function validation(next, self) {
-  if (self.direction === 'none' && parseInt(self.rotation, 10) !== 0) {
-    next(new Error('Must specify a direction if there is a rotation'));
-  }
-  if (self.direction !== 'none' && parseInt(self.rotation, 10) === 0) {
-    next(new Error('Must specify a rotation if there is a direction'));
-  }
-  next();
-}
-FlatgroundTrickSchema.pre('validate', async function (next) {
-  await validation(next, this);
-});
-FlatgroundTrickSchema.pre('findOneAndUpdate', async function (next) {
-  await validation(next, this.getUpdate());
-});
+// async function validation(next, self) {
+//   if (self.direction === 'none' && parseInt(self.rotation, 10) !== 0) {
+//     next(new Error('Must specify a direction if there is a rotation'));
+//   }
+//   if (self.direction !== 'none' && parseInt(self.rotation, 10) === 0) {
+//     next(new Error('Must specify a rotation if there is a direction'));
+//   }
+//   next();
+// }
+
+// FlatgroundTrickSchema.pre('validate', async function (next) {
+//   await validation(next, this);
+// });
+
+// FlatgroundTrickSchema.pre('findOneAndUpdate', async function (next) {
+//   await validation(next, this.getUpdate());
+// });
 
 export default mongoose.models.FlatgroundTrick || mongoose.model('FlatgroundTrick', FlatgroundTrickSchema);
