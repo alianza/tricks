@@ -8,9 +8,9 @@ const ComboSchema = new mongoose.Schema(
   {
     trickArray: [
       {
-        _id: {
+        trick: {
           type: mongoose.Schema.Types.ObjectId,
-          refPath: 'trickRef',
+          refPath: 'trickArray.trickRef',
         },
         trickRef: {
           type: String,
