@@ -1,5 +1,5 @@
 import dbConnect from '../lib/dbConnect';
-import findAndSerializeDoc, { getTricks } from '../lib/util';
+import findAndSerializeDoc, { getTricks, populateCombosTricksNames } from '../lib/util';
 import FlatGroundTrick from '../models/FlatgroundTrick';
 import Grind from '../models/Grind';
 import { Model } from 'mongoose';
@@ -17,11 +17,10 @@ export async function getServerSideProps() {
   const grindColumns = ['stance', 'direction', 'name', 'trick'];
   const grindActions = ['edit', 'view', 'delete'];
 
-  let combos = await findAndSerializeDoc(Combo, Model.find);
+  let combos = await findAndSerializeDoc({ model: Combo, operation: Model.find, populateFields: ['trickArray.trick'] });
+  combos = populateCombosTricksNames(combos);
   const comboColumns = ['trickArray'];
   const comboActions = ['edit', 'view', 'delete'];
-
-  console.log(`combos`, combos);
 
   return {
     props: {
@@ -53,28 +52,28 @@ const Index = ({
     <div className="flex flex-col gap-8">
       <div className="flex flex-col">
         <h1 className="mx-auto mb-6 text-4xl">Flatground Tricks</h1>
-        <div className="overflow-x-auto">
-          <Table
-            objArray={flatgroundTricks}
-            columns={flatgroundColumns}
-            actions={flatgroundActions}
-            endpoint="flatgroundtricks"
-          />
-        </div>
+        <Table
+          objArray={flatgroundTricks}
+          columns={flatgroundColumns}
+          actions={flatgroundActions}
+          endpoint="flatgroundtricks"
+        />
       </div>
 
       <div className="flex flex-col">
         <h1 className="mx-auto mb-6 text-4xl">Grinds</h1>
-        <div className="overflow-x-auto">
-          <Table objArray={grinds} columns={grindColumns} actions={grindActions} endpoint="grinds" />
-        </div>
+        <Table objArray={grinds} columns={grindColumns} actions={grindActions} endpoint="grinds" />
       </div>
 
       <div className="flex flex-col">
         <h1 className="mx-auto mb-6 text-4xl">Combos</h1>
-        <div className="overflow-x-auto">
-          <Table objArray={combos} columns={comboColumns} actions={comboActions} endpoint="combos" />
-        </div>
+        <Table
+          objArray={combos}
+          columns={comboColumns}
+          actions={comboActions}
+          endpoint="combos"
+          // comboTable
+        />
       </div>
     </div>
   );
