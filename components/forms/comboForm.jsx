@@ -94,7 +94,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const trimTrickArray = (form) => ({
     ...form,
     trickArray: form.trickArray.map((trick) => ({
-      _id: trick._id,
+      trick: trick._id,
       trickRef: trick.trickRef,
     })),
   });
