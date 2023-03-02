@@ -26,7 +26,6 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
 
   const sort = (column, direction) => {
     setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 250); // default auto-animate duration
     setObjArrayState(
       objArrayState.sort((a, b) => {
         if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
@@ -35,6 +34,7 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
       })
     );
     setColumnSortDirection({ [column]: direction });
+    setTimeout(() => setIsAnimating(false), 250); // default auto-animate duration
   };
 
   const handleDelete = async (obj) => {
