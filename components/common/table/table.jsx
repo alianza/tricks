@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { capitalize, getFullName } from '../../../lib/util';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
+import autoAnimate from '@formkit/auto-animate';
 
 function ComboTableDataRow() {
   return null;
@@ -12,15 +13,20 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
   const [isEmpty, setIsEmpty] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const parent = useRef(null);
 
   columns = actions.length ? [...columns, 'actions'] : columns; // Add actions column if actions are passed
 
   useEffect(() => {
     sort(columns[0], 'asc'); // Default ascending sort on first column
     if (!objArrayState.length) setIsEmpty(true);
+    parent.current && autoAnimate(parent.current);
   }, [objArrayState]);
 
   const sort = (column, direction) => {
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 250); // default auto-animate duration
     setObjArrayState(
       objArrayState.sort((a, b) => {
         if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
@@ -45,7 +51,7 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
   };
 
   return (
-    <div className="flex flex-col items-center overflow-x-auto">
+    <div className={`flex flex-col items-center ${isAnimating ? '' : 'overflow-x-auto'}`}>
       <table className="mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
@@ -67,7 +73,7 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
             ))}
           </tr>
         </thead>
-        <tbody className="bg-neutral-50 dark:bg-neutral-800">
+        <tbody className="bg-neutral-50 dark:bg-neutral-800" ref={parent}>
           {isEmpty && (
             <tr>
               <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
