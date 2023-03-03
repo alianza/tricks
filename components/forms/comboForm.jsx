@@ -4,7 +4,7 @@ import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
-import { ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Loader from '../common/loader/loader';
 
@@ -32,15 +32,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const [fullComboName, setFullComboName] = useState(null);
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
-  const [invalidatedMap, setInvalidatedMap] = useState(
-    TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: false }), {})
-  ); // Fill invalidatedMap with false for each trick type
   const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
 
-  const [form, setForm] = useState({
-    trickArray: comboForm.trickArray,
-  });
+  const [form, setForm] = useState({ trickArray: comboForm.trickArray });
 
   const { trickArray } = form;
 
@@ -50,13 +45,15 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   useEffect(() => {
     (async () => {
-      if (!invalidatedMap[trickType] && tricks[trickType].length) return; // Don't fetch if we already have the data for that trick type, and it hasn't been invalidated
-      const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
-      setTricks({ ...tricks, [trickType]: data });
-      setInvalidatedMap({ ...invalidatedMap, [trickType]: false });
-      setTimeout(() => setInvalidatedMap({ ...invalidatedMap, [trickType]: true }), 10000);
+      if (tricks[trickType].length) return; // Don't fetch if we already have the data for that trick type, and it hasn't been invalidated
+      setTricks({ ...tricks, [trickType]: await getTricks(trickType) });
     })();
-  }, [trickType]);
+  }, [trickType, tricks]);
+
+  async function getTricks(trickType) {
+    const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
+    return data;
+  }
 
   const patchData = async (form) => {
     const { _id } = router.query;
@@ -86,11 +83,11 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     })),
   });
 
-  const handleChange = ({ target }) => {
-    let { value, name } = target;
-    if (target.type === 'checkbox') value = target.checked;
-    setForm({ ...form, [name]: value });
-  };
+  // const handleChange = ({ target }) => {
+  //   let { value, name } = target;
+  //   if (target.type === 'checkbox') value = target.checked;
+  //   setForm({ ...form, [name]: value });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,10 +96,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const addTrick = (e, trick) => {
     e.preventDefault();
-    setForm({
-      ...form,
-      trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }],
-    });
+    setForm({ ...form, trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }] });
   };
 
   return (
@@ -112,12 +106,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400"
       >
         {trickArray.map((trick, index) => (
-          <div key={trick._id} className="flex gap-2">
+          <div key={trick._id + index} className="flex gap-2">
             <span className="whitespace-nowrap font-bold">{trick.trick}</span>
             {(index < trickArray.length - 1 || trickArray.length === 1) && (
-              <span>
-                <ArrowRightIcon title="To" className="h-6 w-6" />
-              </span>
+              <ArrowRightIcon title="To" className="h-6 w-6" />
             )}
             {trickArray.length > 1 &&
               index === trickArray.length - 1 &&
@@ -153,7 +145,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           </select>
         </label>
 
-        <div ref={tricksRef}>
+        <div ref={tricksRef} className="flex flex-col items-center justify-center">
           {tricks[trickType].map((trick) => (
             <button
               key={trick._id}
@@ -164,7 +156,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
               <span>{trick.trick}</span>
             </button>
           ))}
-          {!tricks[trickType].length && <Loader className="mx-auto my-4" />}
+          {!tricks[trickType].length && <Loader className="mx-auto my-16" />}
 
           {/*<p className="my-4">*/}
           {/*  Full combo name: <b>{fullComboName}</b>*/}
@@ -172,13 +164,19 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         </div>
 
         <p className="my-4">{message}</p>
-
-        <button
-          type="submit"
-          className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}
-        >
-          Submit
-        </button>
+        <div className="flex items-center justify-between">
+          <button
+            type="submit"
+            className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}
+          >
+            Submit
+          </button>
+          <ArrowPathIcon
+            className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+            title="Load new tricks"
+            onClick={async () => setTricks({ ...tricks, [trickType]: [] })}
+          />
+        </div>
       </form>
     </div>
   );
