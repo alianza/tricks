@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   return (
     <div
       id="app"
-      className="flex min-h-screen flex-col bg-neutral-100 text-neutral-900 decoration-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
+      className="flex min-h-screen flex-col items-center bg-neutral-100 text-neutral-900 decoration-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
     >
       <Head>
         <title>MongoDB Mongoose w/ Next.js - J.W. van Bremens</title>
@@ -14,7 +14,7 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <main className="mx-auto max-w-7xl max-w-full p-2 py-12">{children}</main>
+      <main className="mx-auto max-w-7xl p-2 py-12">{children}</main>
 
       <Footer />
     </div>
