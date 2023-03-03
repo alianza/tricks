@@ -1,0 +1,25 @@
+.loader {
+    width: 150px; /* control the size */
+    aspect-ratio: 1;
+    display: grid;
+    -webkit-mask: conic-gradient(from 22deg, #0003,#000);
+    mask: conic-gradient(from 22deg, #0003,#000);
+    animation: load 1s steps(8) infinite;
+
+    &:before {
+        content: "";
+        transform: rotate(45deg);
+    }
+}
+.loader,
+.loader:before {
+    --_g: linear-gradient(#4b5563 0 0) 50%; /* update the color here */
+    background:
+            var(--_g)/34% 8%  space no-repeat,
+            var(--_g)/8%  34% no-repeat space;
+}
+
+@keyframes load {
+    from {transform: rotate(0turn)}
+    to   {transform: rotate(1turn)}
+}
