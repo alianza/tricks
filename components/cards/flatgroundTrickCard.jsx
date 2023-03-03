@@ -45,24 +45,29 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Link href="/flatgroundtricks/[_id]/edit" as={`/flatgroundtricks/${trick._id}/edit`}>
-            <button className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-600/50`}>
-              Edit
-            </button>
+          <Link
+            href="/flatgroundtricks/[_id]/edit"
+            as={`/flatgroundtricks/${trick._id}/edit`}
+            className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-600/50`}
+          >
+            Edit
           </Link>
           {mode === 'view' && (
-            <Link href="/flatgroundtricks/[_id]" as={`/flatgroundtricks/${trick._id}`}>
-              <button className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-600/50`}>
-                View
-              </button>
+            <Link
+              href="/flatgroundtricks/[_id]"
+              as={`/flatgroundtricks/${trick._id}`}
+              className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-600/50`}
+            >
+              View
             </Link>
           )}
           {mode === 'delete' && (
-            <div onClick={handleDelete}>
-              <button className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-600/50`}>
-                Delete
-              </button>
-            </div>
+            <button
+              onClick={handleDelete}
+              className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-600/50`}
+            >
+              Delete
+            </button>
           )}
         </div>
       </div>

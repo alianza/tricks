@@ -46,24 +46,29 @@ export default function GrindCard({ grind, mode }) {
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Link href="/grinds/[_id]/edit" as={`/grinds/${grind._id}/edit`}>
-            <button className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-500/50`}>
-              Edit
-            </button>
+          <Link
+            href="/grinds/[_id]/edit"
+            as={`/grinds/${grind._id}/edit`}
+            className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-500/50`}
+          >
+            Edit
           </Link>
           {mode === 'view' && (
-            <Link href="/grinds/[_id]" as={`/grinds/${grind._id}`}>
-              <button className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-500/50`}>
-                View
-              </button>
+            <Link
+              href="/grinds/[_id]"
+              as={`/grinds/${grind._id}`}
+              className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-500/50`}
+            >
+              View
             </Link>
           )}
           {mode === 'delete' && (
-            <div onClick={handleDelete}>
-              <button className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-500/50`}>
-                Delete
-              </button>
-            </div>
+            <button
+              onClick={handleDelete}
+              className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-500/50`}
+            >
+              Delete
+            </button>
           )}
         </div>
       </div>
