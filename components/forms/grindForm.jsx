@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { capitalize, getFullGrindName, VN } from '../../lib/util';
+import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
-
-const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const GrindForm = ({ grindForm, newGrind = true }) => {
   const router = useRouter();
 
   const [message, setMessage] = useState(null);
   const [fullTrickName, setFullTrickName] = useState(null);
+  const [trickNameRef] = useAutoAnimate();
 
   const [form, setForm] = useState({
     name: grindForm.name,
@@ -50,11 +50,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
   const handleChange = (e) => {
     const { target } = e;
     let { value, name } = target;
-
-    if (target.type === 'checkbox') {
-      value = target.checked;
-    }
-
+    if (target.type === 'checkbox') value = target.checked;
     setForm({ ...form, [name]: value });
   };
 
@@ -108,7 +104,14 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
       </div>
 
       <p className="my-4">
-        Full grind name: <b>{fullTrickName}</b>
+        Full grind name:{' '}
+        <b ref={trickNameRef}>
+          {fullTrickName?.split('').map((letter, index) => (
+            <span key={index} className="inline-block whitespace-pre">
+              {letter}
+            </span>
+          ))}
+        </b>
       </p>
 
       <p className="my-4">{message}</p>

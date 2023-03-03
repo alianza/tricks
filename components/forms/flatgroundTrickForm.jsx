@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { capitalize, getFullTrickName, VN } from '../../lib/util';
+import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
 
@@ -13,6 +14,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
 
   const [message, setMessage] = useState(null);
   const [fullTrickName, setFullTrickName] = useState(null);
+  const [trickNameRef] = useAutoAnimate();
 
   const [form, setForm] = useState({
     name: flatgroundTrickForm.name,
@@ -125,7 +127,14 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
       {/*</label>*/}
 
       <p className="my-4">
-        Full trick name: <b>{fullTrickName}</b>
+        Full trick name:{' '}
+        <b ref={trickNameRef}>
+          {fullTrickName?.split('').map((letter, index) => (
+            <span key={index} className="inline-block whitespace-pre">
+              {letter}
+            </span>
+          ))}
+        </b>
       </p>
 
       <p className="my-4">{message}</p>

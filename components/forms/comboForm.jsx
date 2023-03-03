@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { capitalize, getFullGrindName, VN } from '../../lib/util';
+import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
-import { ArrowRightIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+import Loader from '../common/loader/loader';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
 
@@ -23,9 +25,13 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const [message, setMessage] = useState(null);
   const [fullComboName, setFullComboName] = useState(null);
-  const [tricks, setTricks] = useState([]);
-
-  const [trickType, setTrickType] = useState(Object.keys(TRICK_TYPES_ENDPOINTS)[0]);
+  const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
+  const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
+  const [invalidatedMap, setInvalidatedMap] = useState(
+    TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: false }), {})
+  ); // Fill invalidatedMap with false for each trick type
+  const [trickArrayRef] = useAutoAnimate();
+  const [tricksRef] = useAutoAnimate();
 
   const [form, setForm] = useState({
     trickArray: comboForm.trickArray,
@@ -96,10 +102,11 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <h1 className="text-2xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
-
-      <div className="mt-4 flex gap-2">
+    <div className="flex flex-col justify-center">
+      <div
+        ref={trickArrayRef}
+        className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400"
+      >
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">
             <span className="font-bold">{trick.trick}</span>
@@ -127,16 +134,18 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         </select>
       </label>
 
-      {tricks.map((trick) => (
-        <button
-          key={trick._id}
-          onClick={(e) => addTrick(e, trick)}
-          className={`${utilStyles.button} mt-4 flex items-center bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}
-        >
-          <PlusIcon className="-ml-2 h-6 w-6" />
-          <span>{trick.trick}</span>
-        </button>
-      ))}
+        <div ref={tricksRef}>
+          {tricks[trickType].map((trick) => (
+            <button
+              key={trick._id}
+              onClick={(e) => addTrick(e, trick)}
+              className={`${utilStyles.button} mt-4 flex w-full items-center bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}
+            >
+              <PlusIcon className="-ml-2 h-6 w-6" />
+              <span>{trick.trick}</span>
+            </button>
+          ))}
+          {!tricks[trickType].length && <Loader className="mx-auto my-4" />}
 
       {/*<p className="my-4">*/}
       {/*  Full combo name: <b>{fullComboName}</b>*/}
