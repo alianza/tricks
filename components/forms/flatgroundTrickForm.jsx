@@ -30,21 +30,8 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
 
   const patchData = async (form) => {
     const { _id } = router.query;
-
     try {
-      const res = await fetch(`/api/flatgroundtricks/${_id}`, {
-        method: 'PATCH',
-        headers,
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error);
-      }
-
-      const { data } = await res.json();
-
+      const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       await mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
       await router.push('/');
     } catch (error) {
@@ -54,17 +41,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
 
   const postData = async (form) => {
     try {
-      const res = await fetch('/api/flatgroundtricks', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error);
-      }
-
+      await apiCall('flatgroundtricks', { method: 'POST', data: form });
       await router.push('/');
     } catch (error) {
       setMessage(`Failed to add flatground trick: ${error.message}`);
