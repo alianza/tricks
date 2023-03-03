@@ -45,13 +45,13 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Link href="/flatgroundtricks/[_id]/edit" as={`/flatgroundtrick/${trick._id}/edit`}>
+          <Link href="/flatgroundtricks/[_id]/edit" as={`/flatgroundtricks/${trick._id}/edit`}>
             <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
               Edit
             </button>
           </Link>
           {mode === 'view' && (
-            <Link href="/flatgroundtricks/[_id]" as={`/flatgroundtrick/${trick._id}`}>
+            <Link href="/flatgroundtricks/[_id]" as={`/flatgroundtricks/${trick._id}`}>
               <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
                 View
               </button>
