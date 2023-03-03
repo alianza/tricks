@@ -31,7 +31,7 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
         {getFullTrickName(trick)}
       </h5>
       <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-        <div className="scrollbar-thin scrollbar-thumb-neutral-400 flex h-full flex-col content-between justify-between overflow-y-auto overflow-x-hidden p-6 pb-16">
+        <div className="flex h-full flex-col content-between justify-between overflow-y-auto overflow-x-hidden p-6 pb-16">
           <div className="flex flex-col">
             <Link href="/flatgroundtricks/[_id]" as={`/flatgroundtricks/${trick._id}`}>
               <h1 className="text-2xl font-bold text-neutral-900 hover:underline">{getFullTrickName(trick)}</h1>
