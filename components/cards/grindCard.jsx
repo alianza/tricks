@@ -32,7 +32,7 @@ export default function GrindCard({ grind, mode }) {
       </h5>
 
       <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
-        <div className="flex h-full flex-col content-between justify-between overflow-y-auto p-6 pb-16 overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-400">
+        <div className="scrollbar-thin scrollbar-thumb-neutral-400 flex h-full flex-col content-between justify-between overflow-y-auto overflow-x-hidden p-6 pb-16">
           <div className="flex flex-col">
             <Link href={`/grinds/[_id]`} as={`/grinds/${grind._id}`}>
               <h1 className="text-2xl font-bold text-neutral-900 hover:underline">{getFullGrindName(grind)}</h1>
@@ -47,20 +47,20 @@ export default function GrindCard({ grind, mode }) {
 
         <div className="absolute bottom-4 right-4 flex gap-2">
           <Link href="/grinds/[_id]/edit" as={`/grinds/${grind._id}/edit`}>
-            <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
+            <button className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-500/50`}>
               Edit
             </button>
           </Link>
           {mode === 'view' && (
             <Link href="/grinds/[_id]" as={`/grinds/${grind._id}`}>
-              <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
+              <button className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-500/50`}>
                 View
               </button>
             </Link>
           )}
           {mode === 'delete' && (
             <div onClick={handleDelete}>
-              <button className={`${utilStyles.button} bg-red-500 focus:ring-red-600/50 hover:bg-red-600`}>
+              <button className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-500/50`}>
                 Delete
               </button>
             </div>

@@ -58,7 +58,7 @@ const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow }) => {
 export function EditButton({ endpoint, id }) {
   return (
     <Link href={`/${endpoint}/[_id]/edit`} as={`/${endpoint}/${id}/edit`}>
-      <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>Edit</button>
+      <button className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-600/50`}>Edit</button>
     </Link>
   );
 }
@@ -66,7 +66,7 @@ export function EditButton({ endpoint, id }) {
 export function ViewButton({ endpoint, id }) {
   return (
     <Link href={`/${endpoint}/[_id]`} as={`/${endpoint}/${id}`}>
-      <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>View</button>
+      <button className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-600/50`}>View</button>
     </Link>
   );
 }
@@ -74,7 +74,7 @@ export function ViewButton({ endpoint, id }) {
 export function DeleteButton({ handleDelete }) {
   return (
     <div onClick={handleDelete}>
-      <button className={`${utilStyles.button} bg-red-500 focus:ring-red-600/50 hover:bg-red-600`}>Delete</button>
+      <button className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-600/50`}>Delete</button>
     </div>
   );
 }
