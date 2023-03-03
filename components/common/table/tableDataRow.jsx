@@ -1,4 +1,4 @@
-import { capitalize, getFullName } from '../../../lib/util';
+import { capitalize } from '../../../lib/util';
 import Link from 'next/link';
 import utilStyles from '../../../styles/utils.module.scss';
 
@@ -14,7 +14,7 @@ const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow }) => {
   });
 
   return (
-    <tr className="border-t-2 border-neutral-400">
+    <tr className="relative after:absolute after:left-0 after:h-[2px] after:w-full after:bg-neutral-400">
       {Object.entries(objColumnMap).map(([key, value]) => {
         if (key === 'actions') {
           const colOutput = value.map((action) => {
