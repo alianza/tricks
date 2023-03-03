@@ -49,7 +49,7 @@ const Index = ({
   comboActions,
 }) => {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-16">
       <div className="flex flex-col">
         <h1 className="mx-auto mb-6 text-4xl">Flatground Tricks</h1>
         <Table
