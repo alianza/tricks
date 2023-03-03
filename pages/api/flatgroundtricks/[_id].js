@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       try {
         const flatgroundTrick = await FlatGroundTrick.findById(_id);
         const data = {
-          ...flatgroundTrick,
+          ...flatgroundTrick.toObject(),
           trick: getFullGrindName(flatgroundTrick),
         };
         if (!flatgroundTrick) {
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
           runValidators: true,
         });
         const data = {
-          ...flatgroundTrick,
+          ...flatgroundTrick.toObject(),
           trick: getFullGrindName(flatgroundTrick),
         };
         if (!flatgroundTrick) {

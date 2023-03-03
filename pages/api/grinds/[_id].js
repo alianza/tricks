@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       try {
         const grind = await Grind.findById(_id);
         const data = {
-          ...grind,
+          ...grind.toObject(),
           trick: getFullGrindName(grind),
         };
         if (!grind) {
@@ -35,7 +35,7 @@ export default async function handler(req, res) {
           runValidators: true,
         });
         const data = {
-          ...grind,
+          ...grind.toObject(),
           trick: getFullGrindName(grind),
         };
         if (!grind) {
