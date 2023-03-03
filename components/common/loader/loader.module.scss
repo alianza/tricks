@@ -1,7 +1,7 @@
 .loader {
-    width: 150px; /* control the size */
+    width: 50px; /* control the size */
     aspect-ratio: 1;
-    display: grid;
+    display: inline-grid;
     -webkit-mask: conic-gradient(from 22deg, #0003,#000);
     mask: conic-gradient(from 22deg, #0003,#000);
     animation: load 1s steps(8) infinite;
