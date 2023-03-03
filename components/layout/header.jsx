@@ -17,12 +17,12 @@ export default function Header() {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-10 flex h-20 w-full justify-between bg-neutral-100 p-4 text-right shadow-xl dark:bg-neutral-800">
-      <Link href="/">
+    <header className="sticky top-0 z-10 flex h-20 w-full items-center justify-between bg-blue-100 p-4 text-right shadow-xl dark:bg-blue-800">
+      <Link href="/" className="h-full">
         <img
           src="/logo.webp"
           alt="Trick logo"
-          className="h-full transition-transform hover:scale-110 active:scale-100"
+          className="h-full w-full transition-transform hover:scale-110 active:scale-100"
         />
       </Link>
 
