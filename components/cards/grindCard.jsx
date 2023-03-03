@@ -34,7 +34,7 @@ export default function GrindCard({ grind, mode }) {
       <div className="pointer-events-none absolute top-0 left-0 h-full w-full bg-white/90 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
         <div className="flex h-full flex-col content-between justify-between overflow-y-auto p-6 pb-16 overflow-x-hidden scrollbar-thin scrollbar-thumb-neutral-400">
           <div className="flex flex-col">
-            <Link href={`/grind/${grind._id}`}>
+            <Link href={`/grinds/[_id]`} as={`/grinds/${grind._id}`}>
               <h1 className="text-2xl font-bold text-neutral-900 hover:underline">{getFullGrindName(grind)}</h1>
             </Link>
             <h3 className="text-xl font-bold text-neutral-600">Skater stance: {capitalize(grind.preferred_stance)}</h3>
@@ -46,13 +46,13 @@ export default function GrindCard({ grind, mode }) {
         </div>
 
         <div className="absolute bottom-4 right-4 flex gap-2">
-          <Link href="/grinds/[_id]/edit" as={`/grind/${grind._id}/edit`}>
+          <Link href="/grinds/[_id]/edit" as={`/grinds/${grind._id}/edit`}>
             <button className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
               Edit
             </button>
           </Link>
           {mode === 'view' && (
-            <Link href="/grinds/[_id]" as={`/grind/${grind._id}`}>
+            <Link href="/grinds/[_id]" as={`/grinds/${grind._id}`}>
               <button className={`${utilStyles.button} bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}>
                 View
               </button>
