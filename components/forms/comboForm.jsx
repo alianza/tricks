@@ -8,16 +8,21 @@ import { ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/2
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Loader from '../common/loader/loader';
 
-const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
-
-const TRICK_TYPES_ENDPOINTS = {
-  'Flatground Tricks': 'flatgroundtricks',
-  Grinds: 'grinds',
+const TRICK_TYPES_MAP = {
+  flatgroundtricks: 'Flatground Tricks',
+  grinds: 'Grinds',
 };
 
-const TRICK_TYPES_MODEL_NAMES = {
-  'Flatground Tricks': 'FlatgroundTrick',
-  Grinds: 'Grind',
+const TRICK_TYPES = Object.values(TRICK_TYPES_MAP);
+
+const TRICK_TYPES_ENDPOINTS = {
+  [TRICK_TYPES_MAP.flatgroundtricks]: 'flatgroundtricks',
+  [TRICK_TYPES_MAP.grinds]: 'grinds',
+};
+
+const TRICK_TYPES_MODELS = {
+  [TRICK_TYPES_MAP.flatgroundtricks]: 'FlatgroundTrick',
+  [TRICK_TYPES_MAP.grinds]: 'Grind',
 };
 
 const ComboForm = ({ comboForm, newCombo = true }) => {
@@ -45,12 +50,11 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   useEffect(() => {
     (async () => {
-      const res = await fetch(`/api/${TRICK_TYPES_ENDPOINTS[trickType]}`, {
-        method: 'GET',
-        headers,
-      });
-      const { data } = await res.json();
-      setTricks(data);
+      if (!invalidatedMap[trickType] && tricks[trickType].length) return; // Don't fetch if we already have the data for that trick type, and it hasn't been invalidated
+      const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
+      setTricks({ ...tricks, [trickType]: data });
+      setInvalidatedMap({ ...invalidatedMap, [trickType]: false });
+      setTimeout(() => setInvalidatedMap({ ...invalidatedMap, [trickType]: true }), 10000);
     })();
   }, [trickType]);
 
@@ -93,13 +97,13 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     newCombo ? postData(form) : patchData(form);
   };
 
-  function addTrick(e, trick) {
+  const addTrick = (e, trick) => {
     e.preventDefault();
     setForm({
       ...form,
-      trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODEL_NAMES[trickType] }],
+      trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }],
     });
-  }
+  };
 
   return (
     <div className="flex flex-col justify-center">
@@ -108,31 +112,46 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400"
       >
         {trickArray.map((trick, index) => (
-          <div key={trick._id + index} className="flex gap-2">
-            <span className="font-bold">{trick.trick}</span>
+          <div key={trick._id} className="flex gap-2">
+            <span className="whitespace-nowrap font-bold">{trick.trick}</span>
             {(index < trickArray.length - 1 || trickArray.length === 1) && (
               <span>
                 <ArrowRightIcon title="To" className="h-6 w-6" />
               </span>
             )}
-            {trickArray.length > 2 && index === trickArray.length - 1 && <span className="font-bold"> Out </span>}
+            {trickArray.length > 1 &&
+              index === trickArray.length - 1 &&
+              trickArray[trickArray.length - 1].trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatgroundtricks] && (
+                <span className="font-bold"> Out </span>
+              )}
             {trickArray.length === 1 && <span className="font-bold"> ... </span>}
           </div>
         ))}
+        {!trickArray.length && <span className="whitespace-nowrap font-bold">Combo Name...</span>}
       </div>
 
-      {!trickArray.length && <h4>Select type of trick to add</h4>}
+      <form onSubmit={handleSubmit} className={`${styles.form} mx-auto mt-8 inline-block`}>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
+          {trickArray.length > 0 && (
+            <ArrowUturnLeftIcon
+              title="Remove last trick"
+              className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+              onClick={() => setForm({ ...form, trickArray: trickArray.slice(0, -1) })}
+            />
+          )}
+        </div>
 
-      <label>
-        Trick type to add
-        <select name={VN({ trickType })} value={trickType} onChange={({ target }) => setTrickType(target.value)}>
-          {Object.keys(TRICK_TYPES_ENDPOINTS).map((trickType) => (
-            <option key={trickType} value={trickType}>
-              {capitalize(trickType)}
-            </option>
-          ))}
-        </select>
-      </label>
+        <label>
+          Select type of trick to add
+          <select name={VN({ trickType })} value={trickType} onChange={({ target }) => setTrickType(target.value)}>
+            {Object.keys(TRICK_TYPES_ENDPOINTS).map((trickType) => (
+              <option key={trickType} value={trickType}>
+                {capitalize(trickType)}
+              </option>
+            ))}
+          </select>
+        </label>
 
         <div ref={tricksRef}>
           {tricks[trickType].map((trick) => (
@@ -147,16 +166,21 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           ))}
           {!tricks[trickType].length && <Loader className="mx-auto my-4" />}
 
-      {/*<p className="my-4">*/}
-      {/*  Full combo name: <b>{fullComboName}</b>*/}
-      {/*</p>*/}
+          {/*<p className="my-4">*/}
+          {/*  Full combo name: <b>{fullComboName}</b>*/}
+          {/*</p>*/}
+        </div>
 
-      <p className="my-4">{message}</p>
+        <p className="my-4">{message}</p>
 
-      <button type="submit" className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
-        Submit
-      </button>
-    </form>
+        <button
+          type="submit"
+          className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}
+        >
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 
