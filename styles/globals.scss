@@ -24,12 +24,25 @@
   @apply overflow-hidden;
 }
 
-body {
-  #nprogress {
-    .spinner {
-      @apply hidden;
+
+html {
+  ::-webkit-scrollbar {
+    @apply bg-neutral-50 dark:bg-neutral-300 w-3 h-3;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neutral-400 dark:bg-neutral-500 hover:bg-neutral-500 dark:hover:bg-neutral-600 active:bg-neutral-600 dark:active:bg-neutral-700;
+  }
+
+  body {
+    #nprogress {
+      .spinner {
+        @apply hidden;
+      }
     }
   }
+
 }
+
 
 
