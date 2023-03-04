@@ -52,7 +52,7 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
   };
 
   return (
-    <div className={`flex flex-col items-center ${isAnimating ? '' : 'overflow-x-auto'}`}>
+    <div className={`flex flex-col items-center ${isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
       <table className="relative mx-auto table-auto after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-neutral-400">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
