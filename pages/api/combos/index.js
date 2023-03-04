@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const combo = await Combo.find({}).populate('trickArray.ref').lean();
+        const combo = await Combo.find({}).populate('trickArray.trick').lean();
         res.status(200).json({ success: true, data: combo });
       } catch (error) {
         console.error(error);
