@@ -4,11 +4,7 @@ import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/re
 import TableDataRow from './tableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 
-function ComboTableDataRow() {
-  return null;
-}
-
-const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => {
+const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
@@ -42,8 +38,9 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
 
     try {
       await apiCall(`${endpoint}/`, { method: 'DELETE', id: obj._id });
-      // setObjArrayState(objArrayState.filter(({ _id }) => _id !== obj._id)); // Update the local state
-      const { data } = await apiCall(endpoint, { method: 'GET' }); // Update the local data from the API
+      const { data } = updateLocalState // get new data from Api or update local state if updateLocalState is true
+        ? { data: objArrayState.filter(({ _id }) => _id !== obj._id) }
+        : await apiCall(endpoint, { method: 'GET' }); // Update the local data from the API
       setObjArrayState(data);
       setMessage(null);
     } catch (error) {
@@ -80,21 +77,17 @@ const Table = ({ objArray, columns, actions, endpoint, comboTable = false }) => 
               <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
             </tr>
           )}
-          {objArrayState.map((obj) =>
-            !comboTable ? (
-              <TableDataRow
-                key={obj._id}
-                obj={obj}
-                columns={columns}
-                actions={actions}
-                endpoint={endpoint}
-                emitMessage={(message) => setMessage(message)}
-                deleteRow={(obj) => handleDelete(obj)}
-              />
-            ) : (
-              <ComboTableDataRow></ComboTableDataRow>
-            )
-          )}
+          {objArrayState.map((obj) => (
+            <TableDataRow
+              key={obj._id}
+              obj={obj}
+              columns={columns}
+              actions={actions}
+              endpoint={endpoint}
+              emitMessage={(message) => setMessage(message)}
+              deleteRow={(obj) => handleDelete(obj)}
+            />
+          ))}
         </tbody>
       </table>
       {message && <p className="my-2 font-bold text-red-500">{message}</p>}
