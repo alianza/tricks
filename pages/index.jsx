@@ -1,5 +1,5 @@
 import dbConnect from '../lib/dbConnect';
-import findAndSerializeDoc, { getTricks, populateCombosTricksNames } from '../lib/util';
+import findAndSerializeDoc, { getFullComboName, getTricks, populateCombosTricksNames } from '../lib/util';
 import FlatGroundTrick from '../models/FlatgroundTrick';
 import Grind from '../models/Grind';
 import { Model } from 'mongoose';
@@ -19,25 +19,9 @@ export async function getServerSideProps() {
 
   let combos = await findAndSerializeDoc({ model: Combo, operation: Model.find, populateFields: ['trickArray.trick'] });
   combos = populateCombosTricksNames(combos);
+  combos = combos.map(({ _id, trickArray }) => ({ _id, combo: getFullComboName({ trickArray }) }));
 
-  // only keep trick field with trick name and _id of each combo
-  combos = combos.map(({ _id, trickArray }) => {
-    const trickNameTypeMap = trickArray.map(({ trick, trickRef }) => ({ trick, trickRef }));
-
-    const comboNameArray = trickNameTypeMap.map(({ trick, trickRef }, index) => {
-      // if next trick is the last trick, and it's a flatground trick
-      if (index === trickNameTypeMap.length - 2 && trickNameTypeMap[index + 1].trickRef === FlatGroundTrick.modelName) {
-        return `${trick}`;
-      }
-      // last trick
-      if (index === trickNameTypeMap.length - 1) {
-        return trickRef === FlatGroundTrick.modelName ? `${trick} out` : `${trick}`;
-      }
-      return `${trick} to`;
-    });
-    return { _id: _id, trick: comboNameArray.join(' ') };
-  });
-  const comboColumns = ['trick'];
+  const comboColumns = ['combo'];
   const comboActions = ['edit', 'view', 'delete'];
 
   return {
@@ -90,6 +74,7 @@ const Index = ({
           columns={comboColumns}
           actions={comboActions}
           endpoint="combos"
+          updateLocalState
           // comboTable
         />
       </div>
