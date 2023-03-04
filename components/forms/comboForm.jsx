@@ -150,7 +150,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
             <button
               key={trick._id}
               onClick={(e) => addTrick(e, trick)}
-              className={`${utilStyles.button} mt-4 flex w-full items-center bg-blue-500 focus:ring-blue-600/50 hover:bg-blue-600`}
+              className={`${utilStyles.button} mt-4 flex w-full items-center bg-blue-500 hover:bg-blue-600 focus:ring-blue-600/50`}
             >
               <PlusIcon className="-ml-2 h-6 w-6" />
               <span>{trick.trick}</span>
@@ -167,7 +167,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         <div className="flex items-center justify-between">
           <button
             type="submit"
-            className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}
+            className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
           >
             Submit
           </button>
