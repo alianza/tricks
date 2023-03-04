@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const combo = await Combo.findById(_id).populate('trickArray.ref');
+        const combo = await Combo.findById(_id).populate('trickArray.trick');
         if (!combo) {
           return res.status(400).json({ success: false, error: `Combo with id "${_id}" not found.` });
         }
