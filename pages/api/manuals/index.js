@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
+import { getFullManualName } from '../../../lib/util';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -10,7 +11,11 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const manuals = await Manual.find({}).lean();
-        res.status(200).json({ success: true, data: manuals });
+        const data = manuals.map((manual) => ({
+          ...manual,
+          trick: getFullManualName(manual),
+        }));
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 import FlatgroundTrick from './FlatgroundTrick';
 import Grind from './Grind';
+import Manual from './Manual';
 
-const TRICK_TYPES_ENUM = [FlatgroundTrick.modelName, Grind.modelName];
+const TRICK_TYPES_ENUM = [FlatgroundTrick.modelName, Grind.modelName, Manual.modelName];
 
 const ComboSchema = new mongoose.Schema(
   {

@@ -11,6 +11,7 @@ import Loader from '../common/loader/loader';
 const TRICK_TYPES_MAP = {
   flatgroundtricks: 'Flatground Tricks',
   grinds: 'Grinds',
+  manuals: 'Manuals',
 };
 
 const TRICK_TYPES = Object.values(TRICK_TYPES_MAP);
@@ -18,11 +19,13 @@ const TRICK_TYPES = Object.values(TRICK_TYPES_MAP);
 const TRICK_TYPES_ENDPOINTS = {
   [TRICK_TYPES_MAP.flatgroundtricks]: 'flatgroundtricks',
   [TRICK_TYPES_MAP.grinds]: 'grinds',
+  [TRICK_TYPES_MAP.manuals]: 'manuals',
 };
 
 const TRICK_TYPES_MODELS = {
   [TRICK_TYPES_MAP.flatgroundtricks]: 'FlatgroundTrick',
   [TRICK_TYPES_MAP.grinds]: 'Grind',
+  [TRICK_TYPES_MAP.manuals]: 'Manual',
 };
 
 const ComboForm = ({ comboForm, newCombo = true }) => {
