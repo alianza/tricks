@@ -1,6 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import Grind from '../../../models/Grind';
 import { getFullGrindName } from '../../../lib/util';
+import { checkForUsedCombos } from '../utils';
 
 export default async function handler(req, res) {
   const {
@@ -47,6 +48,7 @@ export default async function handler(req, res) {
 
     case 'DELETE':
       try {
+        await checkForUsedCombos({ _id, trickType: 'Grind', res });
         const deletedGrind = await Grind.deleteOne({ _id });
         if (!deletedGrind) {
           return res.status(400).json({ success: false, error: `Grind with id "${_id}" not found.` });

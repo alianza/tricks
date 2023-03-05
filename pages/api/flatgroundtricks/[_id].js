@@ -1,6 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { getFullGrindName } from '../../../lib/util';
+import { checkForUsedCombos } from '../utils';
 
 export default async function handler(req, res) {
   const {
@@ -47,6 +48,7 @@ export default async function handler(req, res) {
 
     case 'DELETE':
       try {
+        await checkForUsedCombos({ _id, trickType: 'Flatground Trick', res });
         const deletedTrick = await FlatGroundTrick.deleteOne({ _id });
         if (!deletedTrick) {
           return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });

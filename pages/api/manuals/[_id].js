@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
+import { checkForUsedCombos } from '../utils';
 
 export default async function handler(req, res) {
   const {
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
 
     case 'DELETE':
       try {
+        await checkForUsedCombos({ _id, trickType: 'Manual', res });
         const deletedManual = await Manual.deleteOne({ _id });
         if (!deletedManual) {
           return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
