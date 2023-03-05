@@ -34,6 +34,7 @@ export default function Header() {
         <NavLink label="Home" href="/" exact />
         <NavLink label="New Flatground Trick" href="/new-flatground-trick" />
         <NavLink label="New Grind" href="/new-grind" />
+        <NavLink label="New Manual" href="/new-manual" />
         <NavLink label="New Combo" href="/new-combo" />
       </nav>
 
