@@ -18,7 +18,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-10 flex h-20 w-full items-center justify-between bg-blue-100 p-4 text-right shadow-xl dark:bg-blue-800">
-      <Link href="/" className="h-full">
+      <Link href="/" className="h-full grow-0">
         <img
           src="/logo.webp"
           alt="Trick logo"
