@@ -39,4 +39,8 @@ ComboSchema.pre('findOneAndUpdate', async function (next) {
   await validation(next, this.getUpdate());
 });
 
+// ComboSchema.methods.toResource = function () {
+//   return populateComboTrickName(this.toObject());
+// };
+
 export default mongoose.models.Combo || mongoose.model('Combo', ComboSchema);
