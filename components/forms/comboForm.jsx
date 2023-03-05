@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/util';
+import { apiCall, capitalize, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -29,7 +29,6 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const router = useRouter();
 
   const [message, setMessage] = useState(null);
-  const [fullComboName, setFullComboName] = useState(null);
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
   const [trickArrayRef] = useAutoAnimate();
@@ -38,10 +37,6 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const [form, setForm] = useState({ trickArray: comboForm.trickArray });
 
   const { trickArray } = form;
-
-  useEffect(() => {
-    setFullComboName(getFullGrindName(form));
-  }, [form]);
 
   useEffect(() => {
     (async () => {
@@ -157,10 +152,6 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
             </button>
           ))}
           {!tricks[trickType].length && <Loader className="mx-auto my-16" />}
-
-          {/*<p className="my-4">*/}
-          {/*  Full combo name: <b>{fullComboName}</b>*/}
-          {/*</p>*/}
         </div>
 
         <p className="my-4">{message}</p>
