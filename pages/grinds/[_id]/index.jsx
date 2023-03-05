@@ -20,7 +20,6 @@ export async function getServerSideProps({ params: { _id } }) {
   return { props: { grind } };
 }
 
-/* Allows you to view trick card info and delete trick card*/
 const grindPage = ({ grind, error }) => {
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
