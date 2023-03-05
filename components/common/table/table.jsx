@@ -42,7 +42,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
       setObjArrayState(data);
       setMessage(null);
     } catch (error) {
-      setMessage(`Failed to delete ${getFullName(obj, endpoint)}`);
+      setMessage(`Failed to delete ${getFullName(obj, endpoint)}: ${error.message}`);
     }
   };
 
