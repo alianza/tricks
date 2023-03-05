@@ -8,7 +8,6 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
-  const [isEmpty, setIsEmpty] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const tableBodyRef = useRef(null);
 
@@ -16,7 +15,6 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
 
   useEffect(() => {
     sort(columns[0], 'asc'); // Default ascending sort on first column
-    if (!objArrayState.length) setIsEmpty(true);
     setTimeout(() => tableBodyRef.current && autoAnimate(tableBodyRef.current), 1);
   }, [objArrayState]);
 
@@ -72,7 +70,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
           </tr>
         </thead>
         <tbody className="bg-neutral-50 dark:bg-neutral-800" ref={tableBodyRef}>
-          {isEmpty && (
+          {!objArrayState.length && (
             <tr>
               <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
             </tr>
