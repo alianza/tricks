@@ -49,7 +49,7 @@ export default function GrindCard({ grind, mode }) {
           <Link
             href="/grinds/[_id]/edit"
             as={`/grinds/${grind._id}/edit`}
-            className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-500/50`}
+            className={`${utilStyles.button} ${utilStyles.green}`}
           >
             Edit
           </Link>
@@ -57,16 +57,13 @@ export default function GrindCard({ grind, mode }) {
             <Link
               href="/grinds/[_id]"
               as={`/grinds/${grind._id}`}
-              className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-500/50`}
+              className={`${utilStyles.button} ${utilStyles.blue}`}
             >
               View
             </Link>
           )}
           {mode === 'delete' && (
-            <button
-              onClick={handleDelete}
-              className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-500/50`}
-            >
+            <button onClick={handleDelete} className={`${utilStyles.button} ${utilStyles.red}`}>
               Delete
             </button>
           )}

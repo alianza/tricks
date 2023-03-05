@@ -48,7 +48,7 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
           <Link
             href="/flatgroundtricks/[_id]/edit"
             as={`/flatgroundtricks/${trick._id}/edit`}
-            className={`${utilStyles.button} bg-green-600 hover:bg-green-700 focus:ring-green-600/50`}
+            className={`${utilStyles.button} ${utilStyles.green}`}
           >
             Edit
           </Link>
@@ -56,16 +56,13 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
             <Link
               href="/flatgroundtricks/[_id]"
               as={`/flatgroundtricks/${trick._id}`}
-              className={`${utilStyles.button} bg-blue-600 hover:bg-blue-700 focus:ring-blue-600/50`}
+              className={`${utilStyles.button} ${utilStyles.blue}`}
             >
               View
             </Link>
           )}
           {mode === 'delete' && (
-            <button
-              onClick={handleDelete}
-              className={`${utilStyles.button} bg-red-600 hover:bg-red-700 focus:ring-red-600/50`}
-            >
+            <button onClick={handleDelete} className={`${utilStyles.button} ${utilStyles.red}`}>
               Delete
             </button>
           )}

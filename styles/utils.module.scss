@@ -1,3 +1,15 @@
 .button {
     @apply rounded-lg px-5 py-2.5 text-sm font-medium text-neutral-100 focus:outline-none focus:ring-4 transition-colors hover:duration-75;
+
+    &.green {
+        @apply bg-green-600 hover:bg-green-700 focus:ring-green-600/50;
+    }
+
+    &.blue {
+        @apply bg-blue-600 hover:bg-blue-700 focus:ring-blue-600/50;
+    }
+
+    &.red {
+        @apply bg-red-600 hover:bg-red-700 focus:ring-red-600/50;
+    }
 }
