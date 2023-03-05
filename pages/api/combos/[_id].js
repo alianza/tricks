@@ -1,5 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import Combo from '../../../models/Combo';
+import { populateComboTrickName } from '../../../lib/util';
 
 export default async function handler(req, res) {
   const {
@@ -12,11 +13,12 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const combo = await Combo.findById(_id).populate('trickArray.trick');
+        const combo = await Combo.findById(_id).populate('trickArray.trick').lean();
+        const data = populateComboTrickName(combo);
         if (!combo) {
           return res.status(400).json({ success: false, error: `Combo with id "${_id}" not found.` });
         }
-        res.status(200).json({ success: true, data: combo });
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

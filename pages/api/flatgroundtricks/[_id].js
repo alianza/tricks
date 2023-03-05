@@ -13,11 +13,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const flatgroundTrick = await FlatGroundTrick.findById(_id);
-        const data = {
-          ...flatgroundTrick.toObject(),
-          trick: getFullGrindName(flatgroundTrick),
-        };
+        const flatgroundTrick = await FlatGroundTrick.findById(_id).lean();
+        const data = { ...flatgroundTrick, trick: getFullGrindName(flatgroundTrick) };
         if (!flatgroundTrick) {
           return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
         }

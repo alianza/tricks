@@ -13,11 +13,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const grind = await Grind.findById(_id);
-        const data = {
-          ...grind.toObject(),
-          trick: getFullGrindName(grind),
-        };
+        const grind = await Grind.findById(_id).lean();
+        const data = { ...grind, trick: getFullGrindName(grind) };
         if (!grind) {
           return res.status(400).json({ success: false, error: `Grind with id "${_id}" not found.` });
         }
