@@ -4,15 +4,12 @@ import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { apiCall, capitalize, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
-import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 
 const ManualForm = ({ manualForm, newManual = true }) => {
   const router = useRouter();
 
   const [message, setMessage] = useState(null);
-  const [fullTrickName, setFullTrickName] = useState(null);
-  const [trickNameRef] = useAutoAnimate();
 
   const [form, setForm] = useState({
     preferred_stance: manualForm.preferred_stance,
@@ -20,10 +17,6 @@ const ManualForm = ({ manualForm, newManual = true }) => {
   });
 
   const { preferred_stance, type } = form;
-
-  // useEffect(() => {
-  //   setFullTrickName(getFullManualName(form));
-  // }, [form]);
 
   const patchData = async (form) => {
     const { _id } = router.query;
@@ -81,17 +74,6 @@ const ManualForm = ({ manualForm, newManual = true }) => {
           </select>
         </label>
       </div>
-
-      <p className="my-4">
-        Full manual name:{' '}
-        <b ref={trickNameRef}>
-          {fullTrickName?.split('').map((letter, index) => (
-            <span key={index} className="inline-block whitespace-pre">
-              {letter}
-            </span>
-          ))}
-        </b>
-      </p>
 
       <p className="my-4">{message}</p>
 
