@@ -1,5 +1,5 @@
 import dbConnect from '../lib/dbConnect';
-import findAndSerializeDoc, { getFullComboName, getTricks, populateCombosTricksNames } from '../lib/util';
+import findAndSerializeDoc, { getFullComboName, getTricks, populateComboTrickName } from '../lib/util';
 import FlatGroundTrick from '../models/FlatgroundTrick';
 import Grind from '../models/Grind';
 import { Model } from 'mongoose';
@@ -18,7 +18,7 @@ export async function getServerSideProps() {
   const grindActions = ['edit', 'view', 'delete'];
 
   let combos = await findAndSerializeDoc({ model: Combo, operation: Model.find, populateFields: ['trickArray.trick'] });
-  combos = populateCombosTricksNames(combos);
+  combos = combos.map(populateComboTrickName);
   combos = combos.map(({ _id, trickArray }) => ({ _id, combo: getFullComboName({ trickArray }) }));
 
   const comboColumns = ['combo'];
