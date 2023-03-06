@@ -34,6 +34,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const [message, setMessage] = useState(null);
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
+  const [loading, setLoading] = useState(false);
   const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
 
@@ -44,13 +45,15 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   useEffect(() => {
     (async () => {
       if (tricks[trickType].length) return; // Don't fetch if we already have the data for that trick type, and it hasn't been invalidated
-      setTricks({ ...tricks, [trickType]: await getTricks(trickType) });
+      await getTricks(trickType);
     })();
-  }, [trickType, tricks]);
+  }, [trickType]);
 
   async function getTricks(trickType) {
+    setLoading(true);
     const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
-    return data;
+    setTricks({ ...tricks, [trickType]: data });
+    setLoading(false);
   }
 
   const patchData = async (form) => {
@@ -154,7 +157,8 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
               <span>{trick.trick}</span>
             </button>
           ))}
-          {!tricks[trickType].length && <Loader className="mx-auto my-16" />}
+          {loading && <Loader className="mx-auto my-16" />}
+          {!tricks[trickType].length && !loading && <p className="mt-4">No {trickType}...</p>}
         </div>
 
         <p className="my-4">{message}</p>
@@ -168,7 +172,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           <ArrowPathIcon
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
             title="Load new tricks"
-            onClick={async () => setTricks({ ...tricks, [trickType]: [] })}
+            onClick={async () => await getTricks(trickType)}
           />
         </div>
       </form>
