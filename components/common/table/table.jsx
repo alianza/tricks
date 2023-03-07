@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { capitalize, apiCall, getFullName } from '../../../lib/util';
+import { capitalize, apiCall, getFullName, SOrNoS } from '../../../lib/util';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 
-const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false }) => {
+const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
@@ -47,8 +47,12 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
   };
 
   return (
-    <div className={`flex flex-col items-center ${isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
-      <table className="relative mx-auto table-auto after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-neutral-400">
+    <div
+      className={`flex flex-col items-center overflow-y-hidden ${
+        isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'
+      }`}
+    >
+      <table className="relative mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
             {columns.map((column) => (
@@ -69,7 +73,10 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
             ))}
           </tr>
         </thead>
-        <tbody className="bg-neutral-50 dark:bg-neutral-800" ref={tableBodyRef}>
+        <tbody
+          className="bg-neutral-50 after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-neutral-400 dark:bg-neutral-800"
+          ref={tableBodyRef}
+        >
           {!objArrayState.length && (
             <tr>
               <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
@@ -87,8 +94,18 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false 
             />
           ))}
         </tbody>
+        {showCount && objArrayState.length > 0 && (
+          <tfoot>
+            <tr>
+              <td colSpan={columns.length - 1}></td>
+              <td className="text-end">
+                {objArrayState.length} {capitalize(endpoint.slice(0, -1) + SOrNoS(objArrayState.length))}
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
-      {message && <p className="my-2 font-bold text-red-500">{message}</p>}
+      {message && <p className="font-bold text-red-500">{message}</p>}
     </div>
   );
 };
