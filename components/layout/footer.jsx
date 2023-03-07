@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export default function Footer() {
   return (
-    <footer className="mt-auto h-12 w-full items-center bg-blue-100 px-6 shadow-xl dark:bg-blue-800">
+    <footer className="mt-auto h-12 w-full items-center bg-blue-600 px-6 shadow-xl">
       <div className="flex h-full items-center justify-between">
         <p>
           Authored by:{' '}
