@@ -64,6 +64,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
           columns={flatgroundTricks.flatgroundColumns}
           actions={flatgroundTricks.flatgroundActions}
           endpoint="flatgroundtricks"
+          showCount
         />
       </div>
 
@@ -74,6 +75,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
           columns={grinds.grindColumns}
           actions={grinds.grindActions}
           endpoint="grinds"
+          showCount
           // grindTable
         />
       </div>
@@ -85,6 +87,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
           columns={manuals.manualColumns}
           actions={manuals.manualActions}
           endpoint="manuals"
+          showCount
         />
       </div>
 
@@ -96,6 +99,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
           actions={combos.comboActions}
           endpoint="combos"
           updateLocalState
+          showCount
         />
       </div>
     </div>
