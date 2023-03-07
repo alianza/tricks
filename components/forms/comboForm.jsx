@@ -44,17 +44,21 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   useEffect(() => {
     (async () => {
-      if (tricks[trickType].length) return; // Don't fetch if we already have the data for that trick type, and it hasn't been invalidated
-      await getTricks(trickType);
+      setLoading(true); // Fetch all trick types
+      for (const trickType of TRICK_TYPES) {
+        const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
+        setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
+      }
+      setLoading(false);
     })();
-  }, [trickType]);
+  }, []);
 
-  async function getTricks(trickType) {
+  const fetchTrickType = async (trickType) => {
     setLoading(true);
     const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
-    setTricks({ ...tricks, [trickType]: data });
+    setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
     setLoading(false);
-  }
+  };
 
   const patchData = async (form) => {
     const { _id } = router.query;
@@ -172,7 +176,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           <ArrowPathIcon
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
             title="Load new tricks"
-            onClick={async () => await getTricks(trickType)}
+            onClick={async () => await fetchTrickType(trickType)}
           />
         </div>
       </form>
