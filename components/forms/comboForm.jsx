@@ -73,7 +73,8 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('combos', { method: 'POST', data: trimTrickArray(form) });
+      const { data } = await apiCall('combos', { method: 'POST', data: trimTrickArray(form) });
+      await mutate('/api/combos', data, false); // Update the local data without a revalidation
       await router.push('/');
     } catch (error) {
       setMessage(`Failed to add Combo: ${error.message}`);

@@ -31,7 +31,8 @@ const ManualForm = ({ manualForm, newManual = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('manuals', { method: 'POST', data: form });
+      const { data } = await apiCall('manuals', { method: 'POST', data: form });
+      await mutate('/api/manuals', data, false); // Update the local data without a revalidation
       await router.push('/');
     } catch (error) {
       setMessage(`Failed to add Manual: ${error.message}`);

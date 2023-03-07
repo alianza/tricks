@@ -40,7 +40,8 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('grinds', { method: 'POST', data: form });
+      const { data } = await apiCall('grinds', { method: 'POST', data: form });
+      await mutate('/api/grinds', data, false); // Update the local data without a revalidation
       await router.push('/');
     } catch (error) {
       setMessage(`Failed to add Grind: ${error.message}`);
@@ -116,7 +117,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
 
       <p className="my-4">{message}</p>
 
-      <button type="submit" className={`${utilStyles.button} bg-green-500 focus:ring-green-600/50 hover:bg-green-600`}>
+      <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
         Submit
       </button>
     </form>
