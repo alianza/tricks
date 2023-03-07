@@ -10,6 +10,6 @@
     }
 
     &.red {
-        @apply bg-red-600 hover:bg-red-700 focus:ring-red-600/50;
+        @apply bg-red-700 hover:bg-red-800 focus:ring-red-700/50; // For accessibility reasons, the red button is darker than the others
     }
 }
