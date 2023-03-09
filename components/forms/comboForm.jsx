@@ -44,8 +44,8 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   useEffect(() => {
     (async () => {
-      setLoading(true); // Fetch all trick types
-      for (const trickType of TRICK_TYPES) {
+      setLoading(true); // Fetch all trick types in reverse order, so loader disappears when visible trick type is loaded and every trick type is preloaded
+      for (const trickType of TRICK_TYPES.reverse()) {
         const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
         setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
       }
@@ -55,6 +55,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const fetchTrickType = async (trickType) => {
     setLoading(true);
+    setTricks((previousTricks) => ({ ...previousTricks, [trickType]: [] }));
     const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
     setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
     setLoading(false);
