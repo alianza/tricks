@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NEXTAUTH_URL=http://localhost:3000 next dev",
     "build": "next build",
     "build:analyze": "cross-env ANALYZE=true next build",
     "start": "next start"
@@ -9,10 +9,11 @@
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.6",
     "@heroicons/react": "^2.0.16",
+    "@next/bundle-analyzer": "^13.2.4",
     "mongoose": "^6.9.2",
     "next": "latest",
+    "next-auth": "^4.20.1",
     "next-pwa": "^5.6.0",
-    "@next/bundle-analyzer": "^13.2.4",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
