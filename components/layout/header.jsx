@@ -2,8 +2,10 @@ import NavLink from '../common/navLink';
 import Link from 'next/link';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function Header() {
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
 
   const openMobileMenuStyle = {
@@ -36,6 +38,7 @@ export default function Header() {
         <NavLink label="New Grind" href="/new-grind" />
         <NavLink label="New Manual" href="/new-manual" />
         <NavLink label="New Combo" href="/new-combo" />
+        {session && <button onClick={() => signOut()}>Sign out</button>}
       </nav>
 
       {open ? (
