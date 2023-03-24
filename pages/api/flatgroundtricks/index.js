@@ -1,11 +1,17 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatgroundTrick from '../../../models/FlatgroundTrick';
 import { getFullTrickName } from '../../../lib/util';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
+
+  const session = await getServerSession(req, res, authOptions);
+
+  console.log(`Api route session`, session);
 
   switch (method) {
     case 'GET':
