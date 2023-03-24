@@ -29,7 +29,7 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <main className="mx-auto max-w-7xl max-w-full p-2 py-12">{children}</main>
+      <main className="mx-auto max-w-7xl max-w-full grow p-2 py-12">{children}</main>
 
       <Footer />
     </div>
