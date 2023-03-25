@@ -9,21 +9,15 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
+
   callbacks: {
     async session({ session, user, token }) {
-      console.log('session', { session, user, token });
-      session.accessToken = token.accessToken;
-      session.user.id = token.id || token.sub;
+      session.user.id = token.id;
       return session;
     },
     async jwt({ token, account, user, profile }) {
-      console.log('jwt', { token, account, user, profile });
-      if (user) {
-        token.id = user.id;
-      }
-      if (account) {
-        token.id = profile.id;
-      }
+      user && (token.id = user.id);
+      account && (token.id = profile.id);
       return token;
     },
   },
