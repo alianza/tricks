@@ -177,7 +177,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           </button>
           <ArrowPathIcon
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-            title="Load new tricks"
+            title="Reload tricks"
             onClick={async () => await fetchTrickType(trickType)}
           />
         </div>
