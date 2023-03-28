@@ -1,5 +1,6 @@
 import Combo from '../../models/Combo';
 import { SOrNoS } from '../../lib/util';
+import { getServerSession } from 'next-auth';
 
 export const checkForUsedCombos = async ({ _id, trickType, res }) => {
   const combos = await Combo.countDocuments({ 'trickArray.trick': _id });
@@ -11,3 +12,16 @@ export const checkForUsedCombos = async ({ _id, trickType, res }) => {
     });
   }
 };
+
+async function loginBarrier(context, authOptions) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+}
