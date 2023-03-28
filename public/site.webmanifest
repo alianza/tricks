@@ -1,6 +1,6 @@
 {
-    "name": "Skateboard Tricks",
-    "short_name": "Skateboard Tricks",
+    "name": "Skateboard Tricks Tracker",
+    "short_name": "Skateboard Tricks Tracker",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
