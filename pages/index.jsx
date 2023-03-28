@@ -27,11 +27,12 @@ const Index = ({}) => {
             Sign in to get started!
           </button>
         ) : (
-          <button
-            className={`${utilStyles.button} w-full bg-blue-700 text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50 dark:bg-blue-300 dark:!text-neutral-900 hover:dark:bg-blue-400`}
+          <Link
+            href="/dashboard"
+            className={`${utilStyles.button} block w-full bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
           >
-            <Link href="/dashboard">Go to your dashboard!</Link>
-          </button>
+            Go to your dashboard!
+          </Link>
         )}
       </section>
     </div>
