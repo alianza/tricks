@@ -9,7 +9,7 @@ export default function Layout({ children }) {
       className="flex min-h-screen flex-col items-center bg-neutral-100 text-neutral-900 decoration-neutral-900 dark:bg-neutral-900 dark:text-neutral-50"
     >
       <Head>
-        <title>Skateboarding Trick List - Jan-Willem van Bremen</title>
+        <title>Skateboarding Tricks Tracker</title>
         <meta
           name="description"
           content="A modern web application to catalog skate tricks, grind, manuals and combinations - made by Jan-Willem van Bremen"
@@ -29,7 +29,7 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <main className="mx-auto max-w-7xl max-w-full grow p-2 py-12">{children}</main>
+      <main className="mx-auto max-w-7xl grow p-2 py-12">{children}</main>
 
       <Footer />
     </div>
