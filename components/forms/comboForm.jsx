@@ -66,7 +66,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     try {
       const { data } = await apiCall('combos', { method: 'PATCH', _id, data: form });
       await mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/');
+      await router.push('/dashboard');
     } catch (error) {
       setMessage(`Failed to update grind: ${error.message}`);
     }
@@ -76,7 +76,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     try {
       const { data } = await apiCall('combos', { method: 'POST', data: trimTrickArray(form) });
       await mutate('/api/combos', data, false); // Update the local data without a revalidation
-      await router.push('/');
+      await router.push('/dashboard');
     } catch (error) {
       setMessage(`Failed to add Combo: ${error.message}`);
     }

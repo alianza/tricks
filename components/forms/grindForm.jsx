@@ -32,7 +32,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     try {
       const { data } = await apiCall('grinds', { method: 'PATCH', data: form, _id });
       await mutate(`/api/grinds/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/');
+      await router.push('/dashboard');
     } catch (error) {
       setMessage(`Failed to update grind: ${error.message}`);
     }
@@ -42,7 +42,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     try {
       const { data } = await apiCall('grinds', { method: 'POST', data: form });
       await mutate('/api/grinds', data, false); // Update the local data without a revalidation
-      await router.push('/');
+      await router.push('/dashboard');
     } catch (error) {
       setMessage(`Failed to add Grind: ${error.message}`);
     }

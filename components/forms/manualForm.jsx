@@ -23,7 +23,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
     try {
       const { data } = await apiCall('manuals', { method: 'PATCH', data: form, _id });
       await mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/');
+      await router.push('/dashboard');
     } catch (error) {
       setMessage(`Failed to update manual: ${error.message}`);
     }
@@ -33,7 +33,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
     try {
       const { data } = await apiCall('manuals', { method: 'POST', data: form });
       await mutate('/api/manuals', data, false); // Update the local data without a revalidation
-      await router.push('/');
+      await router.push('/dashboard');
     } catch (error) {
       setMessage(`Failed to add Manual: ${error.message}`);
     }
