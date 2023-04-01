@@ -61,9 +61,7 @@ export default async function handler(req, res) {
       break;
 
     default:
-      const errorMessage = `Unhandled method: ${method}`;
-      console.error(errorMessage);
-      res.status(400).json({ success: false, error: errorMessage });
+      res.status(400).json({ success: false, error: `Unhandled request method: ${method}` });
       break;
   }
 }
