@@ -25,7 +25,7 @@ export default function Header() {
         <img
           src="/logo.webp"
           alt="Skateboard Trick Tracker Logo"
-          className="white h-full w-full transition-transform hover:scale-110 active:scale-100"
+          className="white h-full w-full drop-shadow-lg transition-transform hover:scale-110 active:scale-100"
         />
       </Link>
 
