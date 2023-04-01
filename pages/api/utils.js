@@ -1,5 +1,5 @@
 import Combo from '../../models/Combo';
-import { SOrNoS } from '../../lib/util';
+import { sOrNoS } from '../../lib/util';
 import { getServerSession } from 'next-auth';
 
 export const checkForUsedCombos = async ({ _id, trickType, res }) => {
@@ -8,7 +8,7 @@ export const checkForUsedCombos = async ({ _id, trickType, res }) => {
   if (combos) {
     return res.status(400).json({
       success: false,
-      error: `This ${trickType} is used in ${combos} combo${SOrNoS(combos)}`,
+      error: `This ${trickType} is used in ${combos} combo${sOrNoS(combos)}`,
     });
   }
 };
