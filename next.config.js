@@ -7,7 +7,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const withPWA = require('next-pwa')({
   dest: 'public',
   disable: !prod,
-  // buildExcludes: [/middleware-manifest\.json$/]
 });
 
 const nextConfig = {
