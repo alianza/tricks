@@ -8,15 +8,14 @@ export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
-
   const session = await getServerSession(req, res, authOptions);
-
-  console.log(`Api route session`, session);
+  if (!session) return res.status(401).json({ success: false, error: 'Unauthorized' });
+  const authQuery = { userId: session.user.id };
 
   switch (method) {
     case 'GET':
       try {
-        const flatgroundTricks = await FlatgroundTrick.find({}).lean();
+        const flatgroundTricks = await FlatgroundTrick.find({ ...authQuery }).lean();
         const data = flatgroundTricks.map((flatgroundTrick) => ({
           ...flatgroundTrick,
           trick: getFullTrickName(flatgroundTrick),
@@ -29,7 +28,7 @@ export default async function handler(req, res) {
       break;
     case 'POST':
       try {
-        const flatgroundTrick = await FlatgroundTrick.create(req.body);
+        const flatgroundTrick = await FlatgroundTrick.create({ ...req.body, ...authQuery });
         res.status(201).json({ success: true, data: flatgroundTrick });
       } catch (error) {
         console.error(error);
