@@ -1,6 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
-import { checkForUsedCombos } from '../utils';
+import { checkForUsedCombos, loginBarrier } from '../utils';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req, res) {
   const {
@@ -9,11 +10,12 @@ export default async function handler(req, res) {
   } = req;
 
   await dbConnect();
+  const { authQuery } = await loginBarrier(req, res, authOptions);
 
   switch (method) {
     case 'GET':
       try {
-        const manual = await Manual.findById(_id).lean();
+        const manual = await Manual.findOne({ _id, ...authQuery }).lean();
         if (!manual) {
           return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
         }
@@ -26,10 +28,7 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const manual = await Manual.findByIdAndUpdate(_id, req.body, {
-          new: true,
-          runValidators: true,
-        });
+        const manual = await Manual.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
         if (!manual) {
           return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
         }
@@ -42,8 +41,8 @@ export default async function handler(req, res) {
 
     case 'DELETE':
       try {
-        await checkForUsedCombos({ _id, trickType: 'Manual', res });
-        const deletedManual = await Manual.deleteOne({ _id });
+        await checkForUsedCombos(_id, 'Manual');
+        const deletedManual = await Manual.deleteOne({ _id, ...authQuery });
         if (!deletedManual) {
           return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
         }

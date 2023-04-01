@@ -1,16 +1,14 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatgroundTrick from '../../../models/FlatgroundTrick';
 import { getFullTrickName } from '../../../lib/util';
-import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
+import { loginBarrier } from '../utils';
 
 export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
-  const session = await getServerSession(req, res, authOptions);
-  if (!session) return res.status(401).json({ success: false, error: 'Unauthorized' });
-  const authQuery = { userId: session.user.id };
+  const { authQuery } = await loginBarrier(req, res, authOptions);
 
   switch (method) {
     case 'GET':

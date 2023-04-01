@@ -1,7 +1,8 @@
 import dbConnect from '../../../lib/dbConnect';
 import Grind from '../../../models/Grind';
 import { getFullGrindName } from '../../../lib/util';
-import { checkForUsedCombos } from '../utils';
+import { checkForUsedCombos, loginBarrier } from '../utils';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req, res) {
   const {
@@ -10,11 +11,12 @@ export default async function handler(req, res) {
   } = req;
 
   await dbConnect();
+  const { authQuery } = await loginBarrier(req, res, authOptions);
 
   switch (method) {
     case 'GET':
       try {
-        const grind = await Grind.findById(_id).lean();
+        const grind = await Grind.findOne({ _id, ...authQuery }).lean();
         const data = { ...grind, trick: getFullGrindName(grind) };
         if (!grind) {
           return res.status(400).json({ success: false, error: `Grind with id "${_id}" not found.` });
@@ -28,10 +30,7 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const grind = await Grind.findByIdAndUpdate(_id, req.body, {
-          new: true,
-          runValidators: true,
-        });
+        const grind = await Grind.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
         const data = {
           ...grind.toObject(),
           trick: getFullGrindName(grind),
@@ -48,8 +47,8 @@ export default async function handler(req, res) {
 
     case 'DELETE':
       try {
-        await checkForUsedCombos({ _id, trickType: 'Grind', res });
-        const deletedGrind = await Grind.deleteOne({ _id });
+        await checkForUsedCombos(_id, 'Grind');
+        const deletedGrind = await Grind.deleteOne({ _id, ...authQuery });
         if (!deletedGrind) {
           return res.status(400).json({ success: false, error: `Grind with id "${_id}" not found.` });
         }
