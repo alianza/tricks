@@ -21,6 +21,10 @@ const ComboSchema = new mongoose.Schema(
         },
       },
     ],
+    userId: {
+      type: Number,
+      required: [true, 'Authentication error. Please log in again.'],
+    },
   },
   { timestamps: true }
 );

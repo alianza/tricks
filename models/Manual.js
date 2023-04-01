@@ -13,6 +13,10 @@ const ManualSchema = new mongoose.Schema(
       required: [true, 'Please provide the type of manual'],
       enum: MANUALS_ENUM,
     },
+    userId: {
+      type: Number,
+      required: [true, 'Authentication error. Please log in again.'],
+    },
   },
   { timestamps: true }
 );

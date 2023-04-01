@@ -7,7 +7,6 @@ const FlatgroundTrickSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please provide a name for this trick'],
       enum: FLATGROUND_TRICKS_ENUM,
-      // enum: { values: FLATGROUND_TRICKS, message: 'Provided name is not a valid trick name' }, // custom error message
     },
     preferred_stance: {
       type: String,
@@ -26,6 +25,10 @@ const FlatgroundTrickSchema = new mongoose.Schema(
     rotation: {
       type: Number,
       enum: [0, 180, 360, 540, 720],
+    },
+    userId: {
+      type: Number,
+      required: [true, 'Authentication error. Please log in again.'],
     },
   },
   { timestamps: true }

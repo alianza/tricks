@@ -21,7 +21,12 @@ const GrindSchema = new mongoose.Schema(
     },
     direction: {
       type: String,
-      enum: ['none', 'frontside', 'backside'],
+      enum: { values: ['frontside', 'backside'], message: 'Provided direction is not a valid direction' },
+      required: [true, "Please provide the tricks' direction"],
+    },
+    userId: {
+      type: Number,
+      required: [true, 'Authentication error. Please log in again.'],
     },
   },
   { timestamps: true }
