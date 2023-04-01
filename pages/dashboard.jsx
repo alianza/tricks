@@ -1,56 +1,45 @@
 import dbConnect from '../lib/dbConnect';
-import findAndSerializeDoc, { getFullComboName, getTricks, populateComboTrickName } from '../lib/util';
+import { getCombos, getTricks } from '../lib/util';
 import FlatGroundTrick from '../models/FlatgroundTrick';
 import Grind from '../models/Grind';
 import { Model } from 'mongoose';
 import Table from '../components/common/table/table';
 import Combo from '../models/Combo';
 import Manual from '../models/Manual';
-import { useSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './api/auth/[...nextauth]';
+import LinkWithArrow from '../components/common/LinkWithArrow';
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   await dbConnect();
 
-  const flatgroundTricks = await getTricks(FlatGroundTrick, Model.find);
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const query = { userId: session.user.id };
+
+  const flatgroundTricks = await getTricks(FlatGroundTrick, Model.find, query);
   const flatgroundColumns = ['stance', 'direction', 'rotation', 'name', 'trick'];
   const flatgroundActions = ['edit', 'view', 'delete'];
+  const flatGroundTricksData = { flatgroundTricks, flatgroundColumns, flatgroundActions };
 
-  const grinds = await getTricks(Grind, Model.find);
+  const grinds = await getTricks(Grind, Model.find, query);
   const grindColumns = ['stance', 'direction', 'name', 'trick'];
   const grindActions = ['edit', 'view', 'delete'];
+  const grindsData = { grinds, grindColumns, grindActions };
 
-  const manuals = await findAndSerializeDoc({ model: Manual, operation: Model.find });
-  const manualColumns = ['type'];
-  const manualActions = ['edit', 'view', 'delete'];
+  const manuals = await getTricks(Manual, Model.find, query);
+  const [manualActions, manualColumns] = [['edit', 'view', 'delete'], ['type']];
+  const manualsData = { manuals, manualColumns, manualActions };
 
-  let combos = await findAndSerializeDoc({ model: Combo, operation: Model.find, populateFields: ['trickArray.trick'] });
-  combos = combos.map(populateComboTrickName);
-  combos = combos.map(({ _id, trickArray }) => ({ _id, combo: getFullComboName({ trickArray }) }));
-  const comboColumns = ['combo'];
-  const comboActions = ['edit', 'view', 'delete'];
+  let combos = await getCombos(Combo, Model.find, query);
+  const [comboColumns, comboActions] = [['combo'], ['edit', 'view', 'delete']];
+  const combosData = { combos, comboColumns, comboActions };
 
   return {
     props: {
-      flatgroundTricks: {
-        flatgroundTricks,
-        flatgroundColumns,
-        flatgroundActions,
-      },
-      grinds: {
-        grinds,
-        grindColumns,
-        grindActions,
-      },
-      combos: {
-        combos,
-        comboColumns,
-        comboActions,
-      },
-      manuals: {
-        manuals,
-        manualColumns,
-        manualActions,
-      },
+      flatgroundTricks: { ...flatGroundTricksData },
+      grinds: { ...grindsData },
+      combos: { ...combosData },
+      manuals: { ...manualsData },
     },
   };
 }
@@ -58,48 +47,54 @@ export async function getServerSideProps() {
 const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
   return (
     <div className="flex flex-col gap-16">
-      <h1 className="text-center text-5xl">Dashboard</h1>
+      <div>
+        <h1 className="text-center text-5xl">Dashboard</h1>
+        <p className="mt-2 text-center  ">This is a overview of all the tricks you've added to your account.</p>
+      </div>
       <div className="flex flex-col">
-        <h2 className="mx-auto mb-6 text-4xl">Flatground Tricks</h2>
+        <LinkWithArrow label="Flatground Tricks" />
         <Table
           objArray={flatgroundTricks.flatgroundTricks}
           columns={flatgroundTricks.flatgroundColumns}
           actions={flatgroundTricks.flatgroundActions}
           endpoint="flatgroundtricks"
+          newLink="/new-flatground-trick"
           showCount
         />
       </div>
 
       <div className="flex flex-col">
-        <h2 className="mx-auto mb-6 text-4xl">Grinds</h2>
+        <LinkWithArrow label="Grinds" />
         <Table
           objArray={grinds.grinds}
           columns={grinds.grindColumns}
           actions={grinds.grindActions}
           endpoint="grinds"
+          newLink="/new-grind"
           showCount
-          // grindTable
         />
       </div>
 
       <div className="flex flex-col">
-        <h2 className="mx-auto mb-6 text-4xl">Manuals</h2>
+        <LinkWithArrow label="Manuals" />
         <Table
           objArray={manuals.manuals}
           columns={manuals.manualColumns}
           actions={manuals.manualActions}
           endpoint="manuals"
+          newLink={'/new-manual'}
           showCount
         />
       </div>
 
       <div className="flex flex-col">
-        <h2 className="mx-auto mb-6 text-4xl">Combos</h2>
+        <LinkWithArrow label="Combos" />
         <Table
           objArray={combos.combos}
           columns={combos.comboColumns}
           actions={combos.comboActions}
           endpoint="combos"
+          newLink="/new-combo"
           updateLocalState
           showCount
         />
