@@ -6,7 +6,7 @@ const newGrind = () => {
     name: DEFAULT_GRIND,
     preferred_stance: 'regular',
     stance: 'regular',
-    direction: 'none',
+    direction: 'frontside',
   };
 
   return <GrindForm grindForm={grindForm} />;
