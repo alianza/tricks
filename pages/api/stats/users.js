@@ -17,8 +17,6 @@ export default async function handler(req, res) {
         const manualUserIds = await Manual.distinct('userId');
         const comboUserIds = await Combo.distinct('userId');
 
-        console.log(`grindUserIds`, grindUserIds);
-
         const count = new Set([...grindUserIds, ...flatgroundTricksUserIds, ...manualUserIds, ...comboUserIds]).size;
 
         res.status(200).json({ success: true, data: { count } });
