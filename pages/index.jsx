@@ -2,20 +2,14 @@ import { signIn, useSession } from 'next-auth/react';
 import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
 
-export async function getServerSideProps(context) {
-  return {
-    props: {},
-  };
-}
-
-const Index = ({}) => {
+const Index = () => {
   const { data: session } = useSession();
 
   return (
     <div className="flex flex-col gap-16">
-      <section class="hero mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
-        <h1 class="mb-4 text-4xl font-bold">Track Your Skateboarding Tricks Progress</h1>
-        <p class="mb-4">
+      <section className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
+        <h1 className="mb-4 text-4xl font-bold">Track Your Skateboarding Tricks Progress</h1>
+        <p className="mb-4">
           Keep track of the tricks you've learned and the ones you want to master. Set goals and track your progress
           over time.
         </p>
