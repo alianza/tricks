@@ -7,6 +7,7 @@ import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Loader from '../common/loader/loader';
+import { toast } from 'react-toastify';
 
 const TRICK_TYPES_MAP = {
   flatgroundtricks: 'Flatground Tricks',
@@ -31,7 +32,6 @@ const TRICK_TYPES_MODELS = {
 const ComboForm = ({ comboForm, newCombo = true }) => {
   const router = useRouter();
 
-  const [message, setMessage] = useState(null);
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
   const [loading, setLoading] = useState(false);
@@ -44,31 +44,31 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   useEffect(() => {
     (async () => {
-      setLoading(true); // Fetch all trick types in reverse order, so loader disappears when visible trick type is loaded and every trick type is preloaded
-      for (const trickType of TRICK_TYPES.reverse()) {
-        const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
-        setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
-      }
-      setLoading(false);
+      for (const trickType of TRICK_TYPES.reverse()) await fetchTrickType(trickType); // Fetch all trick types in reverse order, so loader disappears when visible trick type is loaded and every trick type is preloaded
     })();
   }, []);
 
   const fetchTrickType = async (trickType) => {
-    setLoading(true);
-    setTricks((previousTricks) => ({ ...previousTricks, [trickType]: [] }));
-    const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
-    setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
-    setLoading(false);
+    try {
+      setLoading(true);
+      setTricks((previousTricks) => ({ ...previousTricks, [trickType]: [] }));
+      const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
+      setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
+    } catch (error) {
+      toast.error(`Failed to fetch ${trickType}: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const patchData = async (form) => {
-    const { _id } = router.query;
     try {
-      const { data } = await apiCall('combos', { method: 'PATCH', _id, data: form });
+      const { _id } = router.query;
+      const { data } = await apiCall('combos', { method: 'PATCH', _id, data: trimTrickArray(form) });
       await mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to update grind: ${error.message}`);
+      toast.error(`Failed to update grind: ${error.message}`);
     }
   };
 
@@ -78,7 +78,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
       await mutate('/api/combos', data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to add Combo: ${error.message}`);
+      toast.error(`Failed to create combo: ${error.message}`);
     }
   };
 
@@ -128,7 +128,6 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         ))}
         {!trickArray.length && <span className="whitespace-nowrap font-bold">Combo Name...</span>}
       </div>
-
       <form onSubmit={handleSubmit} className={`${styles.form} mx-auto mt-8 inline-block`}>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
@@ -153,7 +152,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         </label>
 
         <div ref={tricksRef} className="flex flex-col items-center justify-center">
-          {tricks[trickType].map((trick) => (
+          {tricks[trickType]?.map((trick) => (
             <button
               key={trick._id}
               onClick={(e) => addTrick(e, trick)}
@@ -164,11 +163,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
             </button>
           ))}
           {loading && <Loader className="mx-auto my-16" />}
-          {!tricks[trickType].length && !loading && <p className="mt-4">No {trickType}...</p>}
+          {!tricks[trickType]?.length && !loading && <p className="mt-4">No {trickType}...</p>}
         </div>
 
-        <p className="my-4">{message}</p>
-        <div className="flex items-center justify-between">
+        <div className="mt-4 flex items-center justify-between">
           <button
             type="submit"
             className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}

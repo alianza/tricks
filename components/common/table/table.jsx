@@ -4,11 +4,11 @@ import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@he
 import TableDataRow from './tableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
+import { toast } from 'react-toastify';
 
 const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
-  const [message, setMessage] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const tableBodyRef = useRef(null);
 
@@ -35,17 +35,15 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
   };
 
   const handleDelete = async (obj) => {
-    if (!confirm(`Are you sure you want to delete "${getFullName(obj, endpoint)}"?`)) return;
-
     try {
+      if (!confirm(`Are you sure you want to delete "${getFullName(obj, endpoint)}"?`)) return;
       await apiCall(`${endpoint}/`, { method: 'DELETE', id: obj._id });
       const { data } = updateLocalState // get new data from Api or update local state if updateLocalState is true
         ? { data: objArrayState.filter(({ _id }) => _id !== obj._id) }
         : await apiCall(endpoint, { method: 'GET' }); // Update the local data from the API
       setObjArrayState(data);
-      setMessage(null);
     } catch (error) {
-      setMessage(`Failed to delete ${getFullName(obj, endpoint)}: ${error.message}`);
+      toast.error(`Failed to delete ${getFullName(obj, endpoint)}: ${error.message}`);
     }
   };
 
@@ -97,7 +95,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
               columns={columns}
               actions={actions}
               endpoint={endpoint}
-              emitMessage={(message) => setMessage(message)}
+              emitMessage={(message) => toast.error(message)}
               deleteRow={(obj) => handleDelete(obj)}
             />
           ))}
@@ -107,7 +105,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
             <tr>
               {newLink && (
                 <td>
-                  <IconLink title={`New ${singularEntityName}`} href={newLink} Icon={PlusIcon} />
+                  <IconLink title={`New ${singularEntityName}`} label="Add new" href={newLink} Icon={PlusIcon} />
                 </td>
               )}
               {columns.length > 2 && <td colSpan={columns.length - (newLink ? 2 : 1)}></td>}
@@ -118,7 +116,6 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
           </tfoot>
         )}
       </table>
-      {message && <p className="font-bold text-red-500">{message}</p>}
     </div>
   );
 };

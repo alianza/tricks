@@ -9,9 +9,8 @@ export default function GrindCard({ grind, mode }) {
   const router = useRouter();
 
   const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete "${getFullGrindName(grind)}"?`)) return;
-
     try {
+      if (!confirm(`Are you sure you want to delete "${getFullGrindName(grind)}"?`)) return;
       const response = await fetch(`/api/grinds/${router.query._id}`, { method: 'Delete' });
       if (!response.ok) throw new Error('Failed to delete the grind.');
       await router.push('/');

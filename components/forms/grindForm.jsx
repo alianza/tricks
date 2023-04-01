@@ -6,11 +6,11 @@ import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { toast } from 'react-toastify';
 
 const GrindForm = ({ grindForm, newGrind = true }) => {
   const router = useRouter();
 
-  const [message, setMessage] = useState(null);
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
 
@@ -28,13 +28,13 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
   }, [form]);
 
   const patchData = async (form) => {
-    const { _id } = router.query;
     try {
+      const { _id } = router.query;
       const { data } = await apiCall('grinds', { method: 'PATCH', data: form, _id });
       await mutate(`/api/grinds/${_id}`, data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to update grind: ${error.message}`);
+      toast.error(`Failed to update grind: ${error.message}`);
     }
   };
 
@@ -44,7 +44,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
       await mutate('/api/grinds', data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to add Grind: ${error.message}`);
+      toast.error(`Failed to add Grind: ${error.message}`);
     }
   };
 
@@ -86,7 +86,6 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
         <label>
           Direction
           <select name={VN({ direction })} value={direction} onChange={handleChange}>
-            <option value="none">-</option>
             <option value="frontside">Frontside</option>
             <option value="backside">Backside</option>
           </select>
@@ -114,8 +113,6 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
           ))}
         </b>
       </p>
-
-      <p className="my-4">{message}</p>
 
       <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
         Submit

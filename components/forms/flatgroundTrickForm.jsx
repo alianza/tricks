@@ -6,13 +6,13 @@ import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import { toast } from 'react-toastify';
 
 const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
 
 const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   const router = useRouter();
 
-  const [message, setMessage] = useState(null);
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
 
@@ -31,13 +31,13 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   }, [form]);
 
   const patchData = async (form) => {
-    const { _id } = router.query;
     try {
+      const { _id } = router.query;
       const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       await mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to update flatground trick: ${error.message}`);
+      toast.error(`Failed to update flatground trick: ${error.message}`);
     }
   };
 
@@ -47,7 +47,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
       await mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to add flatground trick: ${error.message}`);
+      toast.error(`Failed to add flatground trick: ${error.message}`);
     }
   };
 
@@ -137,8 +137,6 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
           ))}
         </b>
       </p>
-
-      <p className="my-4">{message}</p>
 
       <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
         Submit

@@ -5,11 +5,10 @@ import styles from './form.module.scss';
 import { apiCall, capitalize, VN } from '../../lib/util';
 import utilStyles from '../../styles/utils.module.scss';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
+import { toast } from 'react-toastify';
 
 const ManualForm = ({ manualForm, newManual = true }) => {
   const router = useRouter();
-
-  const [message, setMessage] = useState(null);
 
   const [form, setForm] = useState({
     preferred_stance: manualForm.preferred_stance,
@@ -19,13 +18,13 @@ const ManualForm = ({ manualForm, newManual = true }) => {
   const { preferred_stance, type } = form;
 
   const patchData = async (form) => {
-    const { _id } = router.query;
     try {
+      const { _id } = router.query;
       const { data } = await apiCall('manuals', { method: 'PATCH', data: form, _id });
       await mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to update manual: ${error.message}`);
+      toast.error(`Failed to update manual: ${error.message}`);
     }
   };
 
@@ -35,7 +34,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
       await mutate('/api/manuals', data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      setMessage(`Failed to add Manual: ${error.message}`);
+      toast.error(`Failed to add Manual: ${error.message}`);
     }
   };
 
@@ -63,20 +62,16 @@ const ManualForm = ({ manualForm, newManual = true }) => {
         </select>
       </label>
 
-      <div className="flex justify-between gap-1">
-        <label>
-          Type
-          <select name={VN({ type })} value={type} onChange={handleChange} required>
-            {MANUALS_ENUM.map((manual) => (
-              <option key={manual} value={manual}>
-                {capitalize(manual)}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      <p className="my-4">{message}</p>
+      <label className="mb-4">
+        Type
+        <select name={VN({ type })} value={type} onChange={handleChange} required>
+          {MANUALS_ENUM.map((manual) => (
+            <option key={manual} value={manual}>
+              {capitalize(manual)}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
         Submit

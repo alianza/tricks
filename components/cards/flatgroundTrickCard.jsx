@@ -9,9 +9,8 @@ export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'vi
   const router = useRouter();
 
   const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
-
     try {
+      if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
       const response = await fetch(`/api/flatgroundtricks/${router.query._id}`, { method: 'Delete' });
       if (!response.ok) throw new Error('Failed to delete the flatground trick.');
       await router.push('/');
