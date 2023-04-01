@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { capitalize, apiCall, getFullName, SOrNoS } from '../../../lib/util';
-import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid';
+import { capitalize, apiCall, getFullName, sOrNoS } from '../../../lib/util';
+import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
 import autoAnimate from '@formkit/auto-animate';
+import IconLink from '../IconLink';
 
-const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false }) => {
+const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [message, setMessage] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const tableBodyRef = useRef(null);
+
+  const singularEntityName = capitalize(endpoint.slice(0, -1) + sOrNoS(objArrayState.length));
 
   columns = actions.length ? [...columns, 'actions'] : columns; // Add actions column if actions are passed
 
@@ -79,7 +82,12 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
         >
           {!objArrayState.length && (
             <tr>
-              <td className="p-2 text-center sm:p-4" colSpan={columns.length}>{`No ${endpoint} yet...`}</td>
+              <td className="p-2 sm:p-4" colSpan={columns.length}>
+                <div className="flex justify-center gap-2">
+                  {`No ${endpoint} yet...`}
+                  {newLink && <IconLink title={`New ${singularEntityName}`} href={newLink} Icon={PlusIcon} />}
+                </div>
+              </td>
             </tr>
           )}
           {objArrayState.map((obj) => (
@@ -97,9 +105,14 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
         {showCount && objArrayState.length > 0 && (
           <tfoot>
             <tr>
-              <td colSpan={columns.length - 1}></td>
+              {newLink && (
+                <td>
+                  <IconLink title={`New ${singularEntityName}`} href={newLink} Icon={PlusIcon} />
+                </td>
+              )}
+              {columns.length > 2 && <td colSpan={columns.length - (newLink ? 2 : 1)}></td>}
               <td className="text-end">
-                {objArrayState.length} {capitalize(endpoint.slice(0, -1) + SOrNoS(objArrayState.length))}
+                {objArrayState.length} {singularEntityName}
               </td>
             </tr>
           </tfoot>
