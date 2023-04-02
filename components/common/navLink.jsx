@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const NavLink = ({ label, href, onClick, exact }) => {
   const router = useRouter();
@@ -8,7 +8,11 @@ const NavLink = ({ label, href, onClick, exact }) => {
   const condition = exact ? router.pathname === href : router.pathname.startsWith(href);
 
   return (
-    <Link href={href} onClick={onClick} className={`hover:font-bold ${condition ? "underline" : "no-underline"}`}>
+    <Link
+      href={href}
+      onClick={onClick}
+      className={`drop-shadow-2xl hover:font-bold ${condition ? 'underline' : 'no-underline'}`}
+    >
       {label}
     </Link>
   );
