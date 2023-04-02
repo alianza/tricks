@@ -44,7 +44,7 @@ export default function Header() {
             />
           </>
         ) : (
-          <a className="cursor-pointer text-lg hover:font-bold" onClick={() => signIn()}>
+          <a className="cursor-pointer text-lg hover:font-bold" href="#" onClick={() => signIn()}>
             Sign in
           </a>
         )}
