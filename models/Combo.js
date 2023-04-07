@@ -29,19 +29,30 @@ const ComboSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// trickArray should have at least a length of 2
-async function validation(next, self) {
-  if (self.trickArray.length < 2) {
-    next(new Error('Combo must consist of at least 2 tricks'));
-  }
+// ComboSchema.index({ userId: 1, 'trickArray.trick': 1 }, { unique: true }); // Does not work with arrays of nested documents
+
+async function validation(next, self, context) {
+  if (self.trickArray.length < 2) next(new Error('Combo must consist of at least 2 tricks'));
+
+  // 2 implementations of context for validate and findOneAndUpdate hooks
+  if (context?.getQuery) context = context.getQuery();
+
+  const query = { userId: context.userId, _id: { $ne: context._id } };
+  query['trickArray'] = { $size: self.trickArray.length };
+  query['trickArray.trick'] = { $all: self.trickArray.map(({ trick }) => trick) };
+
+  const combo = await mongoose.models.Combo.findOne(query).limit(2);
+  if (combo) next(new Error('This combo already exists'));
+
   next();
 }
 
 ComboSchema.pre('validate', async function (next) {
-  await validation(next, this);
+  await validation(next, this, this);
 });
+
 ComboSchema.pre('findOneAndUpdate', async function (next) {
-  await validation(next, this.getUpdate());
+  await validation(next, this.getUpdate(), this);
 });
 
 // ComboSchema.methods.toResource = function () {

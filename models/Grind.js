@@ -32,4 +32,6 @@ const GrindSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+GrindSchema.index({ userId: 1, name: 1, stance: 1, direction: 1 }, { unique: true });
+
 export default mongoose.models.Grind || mongoose.model('Grind', GrindSchema);

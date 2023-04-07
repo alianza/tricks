@@ -34,6 +34,8 @@ const FlatgroundTrickSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+FlatgroundTrickSchema.index({ userId: 1, name: 1, stance: 1, direction: 1, rotation: 1 }, { unique: true });
+
 // async function validation(next, self) {
 //   if (self.direction === 'none' && parseInt(self.rotation, 10) !== 0) {
 //     next(new Error('Must specify a direction if there is a rotation'));

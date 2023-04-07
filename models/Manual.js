@@ -21,4 +21,6 @@ const ManualSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+ManualSchema.index({ userId: 1, type: 1 }, { unique: true });
+
 export default mongoose.models.Manual || mongoose.model('Manual', ManualSchema);
