@@ -8,6 +8,7 @@ const GRINDS = {
   nose_slide: 'Nose Slide',
   blunt_slide: 'Blunt Slide',
   nose_blunt_slide: 'Nose-Blunt Slide',
+  crooked_grind: 'Crooked Grind',
   suski: 'Suski',
   salad: 'Salad',
 };
