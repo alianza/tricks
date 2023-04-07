@@ -12,22 +12,22 @@
     "@next/bundle-analyzer": "^13.2.4",
     "mongoose": "^7.0.3",
     "next": "latest",
-    "next-auth": "^4.20.1",
+    "next-auth": "^4.21.1",
     "next-pwa": "^5.6.0",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-toastify": "^9.1.2",
-    "sass": "^1.59.3",
-    "swr": "^2.1.1"
+    "sass": "^1.61.0",
+    "swr": "^2.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",
     "cross-env": "^7.0.3",
     "postcss": "^8.4.21",
-    "prettier": "^2.8.6",
-    "prettier-plugin-tailwindcss": "^0.2.5",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.7",
     "prop-types": "^15.8.1",
-    "tailwindcss": "^3.2.7"
+    "tailwindcss": "^3.3.1"
   }
 }
