@@ -1,14 +1,17 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { getFullGrindName } from '../../../lib/util';
-import { checkForUsedCombos, loginBarrier } from '../utils';
+import { checkForUsedCombos, loginBarrier, notFoundHandler } from '../utils';
 import { authOptions } from '../auth/[...nextauth]';
+import { isValidObjectId } from 'mongoose';
 
 export default async function handler(req, res) {
   const {
     query: { _id },
     method,
   } = req;
+
+  if (!isValidObjectId(_id)) return notFoundHandler(res, { entity: 'Flatground trick', _id });
 
   await dbConnect();
   const { authQuery } = await loginBarrier(req, res, authOptions);
@@ -18,9 +21,7 @@ export default async function handler(req, res) {
       try {
         const flatgroundTrick = await FlatGroundTrick.findOne({ _id, ...authQuery }).lean();
         const data = { ...flatgroundTrick, trick: getFullGrindName(flatgroundTrick) };
-        if (!flatgroundTrick) {
-          return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
-        }
+        if (!flatgroundTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
@@ -32,9 +33,7 @@ export default async function handler(req, res) {
       try {
         const flatgroundTrick = await FlatGroundTrick.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
         const data = { ...flatgroundTrick.toObject(), trick: getFullGrindName(flatgroundTrick) };
-        if (!flatgroundTrick) {
-          return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
-        }
+        if (!flatgroundTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
@@ -46,9 +45,7 @@ export default async function handler(req, res) {
       try {
         await checkForUsedCombos(_id, 'Flatground Trick');
         const deletedTrick = await FlatGroundTrick.deleteOne({ _id, ...authQuery });
-        if (!deletedTrick) {
-          return res.status(400).json({ success: false, error: `Flatground trick with id "${_id}" not found.` });
-        }
+        if (!deletedTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
         res.status(200).json({ success: true, data: {} });
       } catch (error) {
         console.error(error);

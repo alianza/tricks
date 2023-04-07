@@ -1,13 +1,16 @@
 import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
-import { checkForUsedCombos, loginBarrier } from '../utils';
+import { checkForUsedCombos, loginBarrier, notFoundHandler } from '../utils';
 import { authOptions } from '../auth/[...nextauth]';
+import { isValidObjectId } from 'mongoose';
 
 export default async function handler(req, res) {
   const {
     query: { _id },
     method,
   } = req;
+
+  if (!isValidObjectId(_id)) return notFoundHandler(res, { entity: 'Manual', _id });
 
   await dbConnect();
   const { authQuery } = await loginBarrier(req, res, authOptions);
@@ -16,9 +19,7 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const manual = await Manual.findOne({ _id, ...authQuery }).lean();
-        if (!manual) {
-          return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
-        }
+        if (!manual) return notFoundHandler(res, { entity: 'Manual', _id });
         res.status(200).json({ success: true, data: manual });
       } catch (error) {
         console.error(error);
@@ -29,9 +30,7 @@ export default async function handler(req, res) {
     case 'PATCH':
       try {
         const manual = await Manual.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
-        if (!manual) {
-          return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
-        }
+        if (!manual) return notFoundHandler(res, { entity: 'Manual', _id });
         res.status(200).json({ success: true, data: manual });
       } catch (error) {
         console.error(error);
@@ -43,9 +42,7 @@ export default async function handler(req, res) {
       try {
         await checkForUsedCombos(_id, 'Manual');
         const deletedManual = await Manual.deleteOne({ _id, ...authQuery });
-        if (!deletedManual) {
-          return res.status(400).json({ success: false, error: `Manual with id "${_id}" not found.` });
-        }
+        if (!deletedManual) return notFoundHandler(res, { entity: 'Manual', _id });
         res.status(200).json({ success: true, data: {} });
       } catch (error) {
         console.error(error);

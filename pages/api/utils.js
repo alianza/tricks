@@ -17,3 +17,7 @@ export async function loginBarrier(req, res) {
   const authQuery = { userId: session.user.id };
   return { authQuery, session };
 }
+
+export function notFoundHandler(res, { entity, _id, id = _id }) {
+  return res.status(400).json({ success: false, error: `${entity} with id ${id} not found.` });
+}
