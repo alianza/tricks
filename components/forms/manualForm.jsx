@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, VN } from '../../lib/util';
+import { apiCall, capitalize, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
+import { useAsyncEffect } from '../../lib/clientUtils';
 
 const ManualForm = ({ manualForm, newManual = true }) => {
   const router = useRouter();
@@ -16,6 +17,12 @@ const ManualForm = ({ manualForm, newManual = true }) => {
   });
 
   const { preferred_stance, type } = form;
+
+  useAsyncEffect(async () => {
+    if (!newManual) return;
+    const { data } = await apiCall('mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
+    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+  }, []);
 
   const patchData = async (form) => {
     try {

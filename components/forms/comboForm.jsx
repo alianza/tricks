@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, VN } from '../../lib/util';
+import { apiCall, capitalize, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Loader from '../common/loader/loader';
 import { toast } from 'react-toastify';
+import { useAsyncEffect } from '../../lib/clientUtils';
 
 const TRICK_TYPES_MAP = {
   flatgroundtricks: 'Flatground Tricks',
@@ -42,10 +43,8 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const { trickArray } = form;
 
-  useEffect(() => {
-    (async () => {
-      for (const trickType of TRICK_TYPES.reverse()) await fetchTrickType(trickType); // Fetch all trick types in reverse order, so loader disappears when visible trick type is loaded and every trick type is preloaded
-    })();
+  useAsyncEffect(async () => {
+    for (const trickType of TRICK_TYPES.reverse()) await fetchTrickType(trickType); // Fetch all trick types in reverse order, so loader disappears when visible trick type is loaded and every trick type is preloaded
   }, []);
 
   const fetchTrickType = async (trickType) => {
@@ -68,7 +67,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
       await mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      toast.error(`Failed to update grind: ${error.message}`);
+      toast.error(`Failed to update combo: ${error.message}`);
     }
   };
 

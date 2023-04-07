@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/util';
+import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
+import { useAsyncEffect } from '../../lib/clientUtils';
 
 const GrindForm = ({ grindForm, newGrind = true }) => {
   const router = useRouter();
@@ -22,6 +23,12 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
   });
 
   const { name, preferred_stance, stance, direction } = form;
+
+  useAsyncEffect(async () => {
+    if (!newGrind) return;
+    const { data } = await apiCall('mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
+    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+  }, []);
 
   useEffect(() => {
     setFullTrickName(getFullGrindName(form));
@@ -44,7 +51,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
       await mutate('/api/grinds', data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
-      toast.error(`Failed to add Grind: ${error.message}`);
+      toast.error(`Failed to add grind: ${error.message}`);
     }
   };
 

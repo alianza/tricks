@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/util';
+import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-
-const headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+import { useAsyncEffect } from '../../lib/clientUtils';
 
 const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -25,6 +24,12 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   });
 
   const { name, preferred_stance, stance, direction, rotation } = form;
+
+  useAsyncEffect(async () => {
+    if (!newFlatgroundTrick) return;
+    const { data } = await apiCall('mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
+    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+  }, []);
 
   useEffect(() => {
     setFullTrickName(getFullTrickName(form));
