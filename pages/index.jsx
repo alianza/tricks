@@ -2,7 +2,7 @@ import { signIn, useSession } from 'next-auth/react';
 import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { apiCall } from '../lib/util';
+import { apiCall } from '../lib/commonUtils';
 import { toast } from 'react-toastify';
 import Loader from '../components/common/loader/loader';
 

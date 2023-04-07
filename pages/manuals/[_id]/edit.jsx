@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { fetcher } from '../../../lib/util';
+import { fetcher } from '../../../lib/clientUtils';
 import ManualForm from '../../../components/forms/manualForm';
 
 const EditManual = () => {

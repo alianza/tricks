@@ -1,5 +1,5 @@
 import dbConnect from '../lib/dbConnect';
-import { getCombos, getTricks } from '../lib/util';
+import { getCombos, getTricks } from '../lib/serverUtils';
 import FlatGroundTrick from '../models/FlatgroundTrick';
 import Grind from '../models/Grind';
 import { Model } from 'mongoose';

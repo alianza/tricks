@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { fetcher } from '../../../lib/util';
+import { fetcher } from '../../../lib/clientUtils';
 import GrindForm from '../../../components/forms/grindForm';
 
 const EditGrind = () => {

@@ -1,6 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
-import { checkForUsedCombos, loginBarrier, notFoundHandler } from '../utils';
+import { checkForUsedCombos, loginBarrier, notFoundHandler } from '../../../lib/serverUtils';
 import { authOptions } from '../auth/[...nextauth]';
 import { isValidObjectId } from 'mongoose';
 

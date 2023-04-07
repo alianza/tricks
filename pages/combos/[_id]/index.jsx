@@ -1,5 +1,5 @@
 import dbConnect from '../../../lib/dbConnect';
-import findAndSerializeDoc from '../../../lib/util';
+import findAndSerializeDoc from '../../../lib/serverUtils';
 import Combo from '../../../models/Combo';
 import { isValidObjectId, Model } from 'mongoose';
 

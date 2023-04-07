@@ -1,7 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import Combo from '../../../models/Combo';
-import { populateComboTrickName } from '../../../lib/util';
-import { loginBarrier, notFoundHandler } from '../utils';
+import { populateComboTrickName } from '../../../lib/commonUtils';
+import { loginBarrier, notFoundHandler } from '../../../lib/serverUtils';
 import { authOptions } from '../auth/[...nextauth]';
 import { isValidObjectId } from 'mongoose';
 

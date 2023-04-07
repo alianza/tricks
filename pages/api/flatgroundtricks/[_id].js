@@ -1,7 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
-import { getFullGrindName } from '../../../lib/util';
-import { checkForUsedCombos, loginBarrier, notFoundHandler } from '../utils';
+import { getFullGrindName } from '../../../lib/commonUtils';
+import { checkForUsedCombos, loginBarrier, notFoundHandler } from '../../../lib/serverUtils';
 import { authOptions } from '../auth/[...nextauth]';
 import { isValidObjectId } from 'mongoose';
 

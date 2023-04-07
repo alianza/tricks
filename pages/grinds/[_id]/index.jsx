@@ -1,5 +1,5 @@
 import dbConnect from '../../../lib/dbConnect';
-import findAndSerializeDoc from '../../../lib/util';
+import findAndSerializeDoc from '../../../lib/serverUtils';
 import GrindCard from '../../../components/cards/grindCard';
 import Grind from '../../../models/Grind';
 import { isValidObjectId, Model } from 'mongoose';

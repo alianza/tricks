@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import utilStyles from '../../styles/utils.module.scss';
-import { capitalize, getFullTrickName } from '../../lib/util';
+import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 
 export default function FlatgroundTrickCard({ flatgroundTrick: trick, mode = 'view' || 'delete' }) {

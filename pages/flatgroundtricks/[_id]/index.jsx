@@ -1,5 +1,5 @@
 import dbConnect from '../../../lib/dbConnect';
-import findAndSerializeDoc from '../../../lib/util';
+import findAndSerializeDoc from '../../../lib/serverUtils';
 import FlatgroundTrickCard from '../../../components/cards/flatgroundTrickCard';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { isValidObjectId, Model } from 'mongoose';

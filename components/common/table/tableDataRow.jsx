@@ -1,4 +1,4 @@
-import { capitalize } from '../../../lib/util';
+import { capitalize } from '../../../lib/commonUtils';
 import Link from 'next/link';
 import utilStyles from '../../../styles/utils.module.scss';
 

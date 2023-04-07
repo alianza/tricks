@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import FlatgroundTrickForm from '../../../components/forms/flatgroundTrickForm';
-import { fetcher } from '../../../lib/util';
+import { fetcher } from '../../../lib/clientUtils';
 import useSWR from 'swr';
 
 const EditFlatGroundTrick = () => {
