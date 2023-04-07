@@ -1,8 +1,8 @@
 import dbConnect from '../../../lib/dbConnect';
 import Grind from '../../../models/Grind';
-import { getFullGrindName } from '../../../lib/util';
+import { getFullGrindName } from '../../../lib/commonUtils';
 import { authOptions } from '../auth/[...nextauth]';
-import { loginBarrier } from '../utils';
+import { loginBarrier } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -26,6 +26,9 @@ export default async function handler(req, res) {
         const grind = await Grind.create({ ...req.body, ...authQuery });
         res.status(201).json({ success: true, data: grind });
       } catch (error) {
+        if (error.code === 11000) {
+          error.message = 'This grind already exists'; // Return code for unique index constraint violation
+        }
         console.error(error);
         res.status(400).json({ success: false, error: error.message });
       }
