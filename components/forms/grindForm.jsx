@@ -26,7 +26,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
 
   useAsyncEffect(async () => {
     if (!newGrind) return;
-    const { data } = await apiCall('mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
+    const { data } = await apiCall('profiles/mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
     setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
   }, []);
 
