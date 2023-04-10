@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { apiCall } from '../lib/commonUtils';
 import { toast } from 'react-toastify';
-import Loader from '../components/common/loader/loader';
 
 const statsDef = {
   flatgroundtricks: { label: 'Flatground Tricks', endpoint: '/mine/flatgroundtricks', value: '...' },
@@ -30,13 +29,11 @@ const Index = () => {
   const [globalStats, setGlobalStats] = useState(
     Object.fromEntries(Object.values(globalStatsDef).map(({ label, value }) => [label, value]))
   );
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       if (!session) return;
       try {
-        setLoading(true);
         const response = await Promise.all(
           Object.values(statsDef).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
         );
@@ -47,7 +44,6 @@ const Index = () => {
       } catch (e) {
         toast.error('Failed to fetch your stats. Please try again later...');
       } finally {
-        setLoading(false);
       }
     })();
   }, [session]);
@@ -55,7 +51,6 @@ const Index = () => {
   useEffect(() => {
     (async () => {
       try {
-        setLoading(true);
         const response = await Promise.all(
           Object.values(globalStatsDef).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
         );
@@ -68,7 +63,6 @@ const Index = () => {
       } catch (e) {
         toast.error('Failed to fetch global stats. Please try again later...');
       } finally {
-        setLoading(false);
       }
     })();
   }, []);
@@ -127,8 +121,6 @@ const Index = () => {
           </div>
         </section>
       )}
-
-      {loading && <Loader className="mx-auto" />}
     </div>
   );
 };
