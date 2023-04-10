@@ -16,12 +16,12 @@ export const authOptions = {
   ],
 
   callbacks: {
-    // attach user id to session
+    // attach user id to session (server side)
     async session({ session, user, token }) {
       session.user.id = token.id || token.sub;
       return session;
     },
-    // attach user id to token
+    // attach user id to token (client side)
     async jwt({ token, account, user, profile }) {
       user && (token.id = user.id);
       account && (token.id = profile.id);
