@@ -9,6 +9,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Loader from '../common/loader/loader';
 import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
+import LoaderButton from '../common/LoaderButton';
 
 const TRICK_TYPES_MAP = {
   flatgroundtricks: 'Flatground Tricks',
@@ -95,9 +96,11 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   //   setForm({ ...form, [name]: value });
   // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    newCombo ? postData(form) : patchData(form);
+    newCombo ? await postData(form) : await patchData(form);
+    setLoading(false);
   };
 
   const addTrick = (e, trick) => {
@@ -161,17 +164,12 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
               <span>{trick.trick}</span>
             </button>
           ))}
-          {loading && <Loader className="mx-auto my-16" />}
           {!tricks[trickType]?.length && !loading && <p className="mt-4">No {trickType}...</p>}
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <button
-            type="submit"
-            className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
-          >
-            Submit
-          </button>
+          <LoaderButton isLoading={loading} />
+
           <ArrowPathIcon
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
             title="Reload tricks"

@@ -8,12 +8,14 @@ import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
+import LoaderButton from '../common/LoaderButton';
 
 const GrindForm = ({ grindForm, newGrind = true }) => {
   const router = useRouter();
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: grindForm.name,
@@ -62,9 +64,11 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    newGrind ? postData(form) : patchData(form);
+    newGrind ? await postData(form) : await patchData(form);
+    setLoading(false);
   };
 
   return (
@@ -121,9 +125,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
         </b>
       </p>
 
-      <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
-        Submit
-      </button>
+      <LoaderButton isLoading={loading} />
     </form>
   );
 };

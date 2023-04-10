@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { apiCall, VN } from '../../lib/commonUtils';
-import utilStyles from '../../styles/utils.module.scss';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import Loader from '../common/loader/loader';
+import LoaderButton from '../common/LoaderButton';
 
 const ProfileForm = ({ profileForm }) => {
   const { data: session } = useSession();
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     preferred_stance: profileForm.preferred_stance,
   });
@@ -18,7 +19,6 @@ const ProfileForm = ({ profileForm }) => {
 
   const patchData = async (form) => {
     try {
-      console.log(`form`, form);
       const { data } = await apiCall('profiles/mine', { method: 'PATCH', data: form });
       await mutate(`/api/profiles/mine`, data, false); // Update the local data without a revalidation
       toast.success('Profile updated!');
@@ -34,9 +34,11 @@ const ProfileForm = ({ profileForm }) => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    patchData(form);
+    await patchData(form);
+    setLoading(false);
   };
 
   if (!session) return <Loader />;
@@ -56,12 +58,7 @@ const ProfileForm = ({ profileForm }) => {
         </select>
       </label>
 
-      <button
-        type="submit"
-        className={`${utilStyles.button} mt-4 bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
-      >
-        Submit
-      </button>
+      <LoaderButton isLoading={loading} className="mt-4" />
     </form>
   );
 };

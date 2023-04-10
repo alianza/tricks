@@ -3,11 +3,11 @@ import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
-import utilStyles from '../../styles/utils.module.scss';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
+import LoaderButton from '../common/LoaderButton';
 
 const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -68,10 +68,10 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    newFlatgroundTrick ? postData(form) : patchData(form);
+    newFlatgroundTrick ? await postData(form) : await patchData(form);
     setLoading(false);
   };
 
@@ -145,33 +145,5 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     </form>
   );
 };
-
-function LoaderButton({ isLoading }) {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.log(`isLoading`, isLoading);
-    setLoading(isLoading);
-  }, [isLoading]);
-
-  return (
-    <button
-      type="submit"
-      // onClick={() => setLoading(true)}
-      className={`${utilStyles.button} flex gap-2 bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
-    >
-      Submit
-      <svg
-        className={`h-5 animate-spin text-white transition-[width] ${loading ? ' w-5' : 'w-0'}`}
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-      >
-        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-      </svg>
-    </button>
-  );
-}
 
 export default FlatgroundTrickForm;

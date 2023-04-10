@@ -7,10 +7,12 @@ import utilStyles from '../../styles/utils.module.scss';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
+import LoaderButton from '../common/LoaderButton';
 
 const ManualForm = ({ manualForm, newManual = true }) => {
   const router = useRouter();
 
+  const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
     preferred_stance: manualForm.preferred_stance,
     type: manualForm.type,
@@ -52,9 +54,11 @@ const ManualForm = ({ manualForm, newManual = true }) => {
     setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
-    newManual ? postData(form) : patchData(form);
+    newManual ? await postData(form) : await patchData(form);
+    setLoading(false);
   };
 
   return (
@@ -80,9 +84,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
         </select>
       </label>
 
-      <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
-        Submit
-      </button>
+      <LoaderButton isLoading={loading} />
     </form>
   );
 };
