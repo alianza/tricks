@@ -24,7 +24,7 @@ const Index = () => {
   const { data: session } = useSession();
 
   const [stats, setStats] = useState(
-    Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value]))
+    session ? Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value])) : null
   );
   const [globalStats, setGlobalStats] = useState(
     Object.fromEntries(Object.values(globalStatsDef).map(({ label, value }) => [label, value]))
@@ -96,9 +96,9 @@ const Index = () => {
         <section className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
           <h1 className="mb-4 text-4xl font-bold">Your stats</h1>
           <p className="my-4">Here are some basic statistics about your progress.</p>
-          <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 p-4 dark:bg-neutral-700 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 dark:bg-neutral-700 sm:grid-cols-2">
             {Object.entries(stats).map(([key, value]) => (
-              <div key={key} className="flex flex-col gap-2">
+              <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
                 <h2 className="text-center text-2xl font-bold">{key}</h2>
                 <p className="text-center text-4xl font-bold">{value}</p>
               </div>
@@ -111,9 +111,9 @@ const Index = () => {
         <section className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
           <h1 className="mb-4 text-4xl font-bold">Global stats</h1>
           <p className="my-4">Here are some basic global statistics.</p>
-          <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 p-4 dark:bg-neutral-700 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 dark:bg-neutral-700 sm:grid-cols-2">
             {Object.entries(globalStats).map(([key, value]) => (
-              <div key={key} className="flex flex-col gap-2 last:odd:col-span-2">
+              <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
                 <h2 className="text-center text-2xl font-bold">{key}</h2>
                 <p className="text-center text-4xl font-bold">{value}</p>
               </div>
