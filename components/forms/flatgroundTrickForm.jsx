@@ -14,6 +14,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     name: flatgroundTrickForm.name,
@@ -68,14 +69,15 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   };
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     newFlatgroundTrick ? postData(form) : patchData(form);
+    setLoading(false);
   };
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
       <h1 className="text-2xl">{newFlatgroundTrick ? 'New Flatground Trick' : 'Edit Flatground Trick'}</h1>
-
       <label>
         Preferred stance
         <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
@@ -83,7 +85,6 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
           <option value="goofy">Goofy</option>
         </select>
       </label>
-
       <div className="flex justify-between gap-1">
         <label>
           Stance
@@ -126,12 +127,10 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
           </select>
         </label>
       </div>
-
       {/*<label>*/}
       {/*  Date*/}
       {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
       {/*</label>*/}
-
       <p className="my-4">
         Full trick name:{' '}
         <b ref={trickNameRef}>
@@ -142,12 +141,37 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
           ))}
         </b>
       </p>
-
-      <button type="submit" className={`${utilStyles.button} bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}>
-        Submit
-      </button>
+      <LoaderButton isLoading={loading} />
     </form>
   );
 };
+
+function LoaderButton({ isLoading }) {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    console.log(`isLoading`, isLoading);
+    setLoading(isLoading);
+  }, [isLoading]);
+
+  return (
+    <button
+      type="submit"
+      // onClick={() => setLoading(true)}
+      className={`${utilStyles.button} flex gap-2 bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
+    >
+      Submit
+      <svg
+        className={`h-5 animate-spin text-white transition-[width] ${loading ? ' w-5' : 'w-0'}`}
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+      </svg>
+    </button>
+  );
+}
 
 export default FlatgroundTrickForm;
