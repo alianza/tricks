@@ -33,10 +33,10 @@ export default function Header() {
         {session ? (
           <>
             <span>
-              Signed in as: <b>{session.user.name}</b>
+              Signed in as: <b>{session.user?.name}</b>
             </span>
             <Image
-              src={session.user.image}
+              src={session.user?.image}
               className="rounded-full"
               alt="User profile picture"
               width={32}
@@ -51,7 +51,7 @@ export default function Header() {
       </div>
 
       <nav
-        className={`invisible absolute top-0 bottom-0 left-0 flex h-screen w-full flex-col flex-wrap items-center justify-center gap-4 whitespace-nowrap bg-neutral-900/80 text-3xl opacity-0 transition-[opacity,visibility] duration-500 dark:decoration-neutral-100`}
+        className={`invisible absolute bottom-0 left-0 top-0 flex h-screen w-full flex-col flex-wrap items-center justify-center gap-4 whitespace-nowrap bg-neutral-900/80 text-3xl opacity-0 transition-[opacity,visibility] duration-500 dark:decoration-neutral-100`}
         style={open ? openMobileMenuStyle : {}}
         onClick={() => setOpen(false)}
       >
@@ -62,9 +62,12 @@ export default function Header() {
         <NavLink label="New Manual" href="/new-manual" />
         <NavLink label="New Combo" href="/new-combo" />
         {session && (
-          <a className="cursor-pointer hover:font-bold" onClick={() => signOut({ callbackUrl: '/' })}>
-            Sign out
-          </a>
+          <>
+            <NavLink label="Profile" href="/profile" />
+            <a className="cursor-pointer hover:font-bold" onClick={() => signOut({ callbackUrl: '/' })}>
+              Sign out
+            </a>
+          </>
         )}
       </nav>
 
