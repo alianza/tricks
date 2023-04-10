@@ -11,11 +11,7 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: `${_id} is not a valid flatground trick id...` } };
   }
 
-  const flatgroundTrick = await findAndSerializeDoc({
-    model: FlatGroundTrick,
-    operation: Model.findById,
-    query: { _id },
-  });
+  const flatgroundTrick = await findAndSerializeDoc(FlatGroundTrick, Model.findById, { _id });
 
   if (!flatgroundTrick) {
     return { notFound: true };

@@ -11,7 +11,7 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: `${_id} is not a valid grind trick id...` } };
   }
 
-  const grind = await findAndSerializeDoc({ model: Grind, operation: Model.findById, query: { _id } });
+  const grind = await findAndSerializeDoc(Grind, Model.findById, { _id });
 
   if (!grind) {
     return { notFound: true };

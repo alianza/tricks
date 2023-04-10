@@ -3,16 +3,17 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import Profile from '../../models/Profile';
 import findAndSerializeDoc from '../../lib/serverUtils';
 import { Model } from 'mongoose';
+import ProfileForm from '../../components/forms/profileForm';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  const profile = await findAndSerializeDoc({
-    model: Profile,
-    operation: Model.findOneAndUpdate,
-    query: { userId: session.user.id },
-    options: [{}, { new: true, upsert: true }],
-  });
+  const profile = await findAndSerializeDoc(
+    Profile,
+    Model.findOneAndUpdate,
+    { userId: session.user.id },
+    { args: [{}, { new: true, upsert: true }] }
+  );
 
   return {
     props: {
@@ -22,10 +23,11 @@ export async function getServerSideProps(context) {
 }
 
 const profilePage = ({ profile }) => {
-  console.log(`profile`, profile);
-  return <div>
+  const profileForm = {
+    preferred_stance: profile.preferred_stance,
+  };
 
-  </div>;
+  return <ProfileForm profileForm={profileForm} />;
 };
 
 export default profilePage;
