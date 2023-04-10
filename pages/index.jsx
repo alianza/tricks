@@ -6,11 +6,30 @@ import { apiCall } from '../lib/commonUtils';
 import { toast } from 'react-toastify';
 import Loader from '../components/common/loader/loader';
 
+const statsDef = {
+  flatgroundtricks: { label: 'Flatground Tricks', endpoint: '/mine/flatgroundtricks', value: '...' },
+  grinds: { label: 'Grinds', endpoint: '/mine/grinds', value: '...' },
+  manuals: { label: 'Manuals', endpoint: '/mine/manuals', value: '...' },
+  combos: { label: 'Combos', endpoint: '/mine/combos', value: '...' },
+};
+
+const globalStatsDef = {
+  flatgroundtricks: { label: 'Flatground Tricks', endpoint: '/flatgroundtricks', value: '...' },
+  grinds: { label: 'Grinds', endpoint: '/grinds', value: '...' },
+  manuals: { label: 'Manuals', endpoint: '/manuals', value: '...' },
+  combos: { label: 'Combos', endpoint: '/combos', value: '...' },
+  users: { label: 'Users', endpoint: '/users', value: '...' },
+};
+
 const Index = () => {
   const { data: session } = useSession();
 
-  const [stats, setStats] = useState(null);
-  const [globalStats, setGlobalStats] = useState(null);
+  const [stats, setStats] = useState(
+    Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value]))
+  );
+  const [globalStats, setGlobalStats] = useState(
+    Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value]))
+  );
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -18,11 +37,12 @@ const Index = () => {
       if (!session) return;
       try {
         setLoading(true);
+        const response = await Promise.all(
+          Object.values(statsDef).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
+        );
+
         setStats({
-          'Flatground Tricks': (await apiCall('stats/mine/flatgroundtricks', { method: 'GET' })).data.count,
-          Grinds: (await apiCall('stats/mine/grinds', { method: 'GET' })).data.count,
-          Manuals: (await apiCall('stats/mine/manuals', { method: 'GET' })).data.count,
-          Combos: (await apiCall('stats/mine/combos', { method: 'GET' })).data.count,
+          ...Object.fromEntries(Object.values(statsDef).map(({ label }, index) => [label, response[index].data.count])),
         });
       } catch (e) {
         toast.error('Failed to fetch your stats. Please try again later...');
@@ -36,12 +56,14 @@ const Index = () => {
     (async () => {
       try {
         setLoading(true);
+        const response = await Promise.all(
+          Object.values(globalStatsDef).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
+        );
+
         setGlobalStats({
-          'Flatground Tricks': (await apiCall('stats/flatgroundtricks', { method: 'GET' })).data.count,
-          Grinds: (await apiCall('stats/grinds', { method: 'GET' })).data.count,
-          Manuals: (await apiCall('stats/manuals', { method: 'GET' })).data.count,
-          Combos: (await apiCall('stats/combos', { method: 'GET' })).data.count,
-          Users: (await apiCall('stats/users', { method: 'GET' })).data.count,
+          ...Object.fromEntries(
+            Object.values(globalStatsDef).map(({ label }, index) => [label, response[index].data.count])
+          ),
         });
       } catch (e) {
         toast.error('Failed to fetch global stats. Please try again later...');
