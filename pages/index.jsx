@@ -28,7 +28,7 @@ const Index = () => {
     Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value]))
   );
   const [globalStats, setGlobalStats] = useState(
-    Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value]))
+    Object.fromEntries(Object.values(globalStatsDef).map(({ label, value }) => [label, value]))
   );
   const [loading, setLoading] = useState(false);
 
