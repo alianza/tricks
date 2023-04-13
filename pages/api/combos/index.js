@@ -2,13 +2,13 @@ import dbConnect from '../../../lib/dbConnect';
 import Combo from '../../../models/Combo';
 import { authOptions } from '../auth/[...nextauth]';
 import { populateComboName, populateComboTrickName } from '../../../lib/commonUtils';
-import { loginBarrier } from '../../../lib/serverUtils';
+import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
-  const { authQuery } = await loginBarrier(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res, authOptions);
 
   switch (method) {
     case 'GET':

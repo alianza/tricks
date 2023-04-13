@@ -3,7 +3,7 @@ import Combo from '../../../../models/Combo';
 import FlatgroundTrick from '../../../../models/FlatgroundTrick';
 import Grind from '../../../../models/Grind';
 import Manual from '../../../../models/Manual';
-import { loginBarrier } from '../../../../lib/serverUtils';
+import { requireAuth } from '../../../../lib/serverUtils';
 import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(req, res) {
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   } = req;
 
   await dbConnect();
-  const { authQuery } = await loginBarrier(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res, authOptions);
 
   switch (method) {
     case 'GET':

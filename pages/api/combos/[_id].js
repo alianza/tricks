@@ -1,7 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import Combo from '../../../models/Combo';
 import { populateComboTrickName } from '../../../lib/commonUtils';
-import { loginBarrier, notFoundHandler } from '../../../lib/serverUtils';
+import { requireAuth, notFoundHandler } from '../../../lib/serverUtils';
 import { authOptions } from '../auth/[...nextauth]';
 import { isValidObjectId } from 'mongoose';
 
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   if (!isValidObjectId(_id)) return notFoundHandler(res, { entity: 'Combo', _id });
 
   await dbConnect();
-  const { authQuery } = await loginBarrier(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res, authOptions);
 
   switch (method) {
     case 'GET':

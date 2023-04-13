@@ -1,5 +1,5 @@
 import dbConnect from '../../../../lib/dbConnect';
-import { ensureProfile, loginBarrier, notFoundHandler } from '../../../../lib/serverUtils';
+import { ensureProfile, requireAuth, notFoundHandler } from '../../../../lib/serverUtils';
 import { authOptions } from '../../auth/[...nextauth]';
 import Profile from '../../../../models/Profile';
 
@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
-  const { authQuery } = await loginBarrier(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res, authOptions);
 
   switch (method) {
     case 'GET':

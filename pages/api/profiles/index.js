@@ -1,6 +1,4 @@
 import dbConnect from '../../../lib/dbConnect';
-import { loginBarrier } from '../../../lib/serverUtils';
-import { authOptions } from '../auth/[...nextauth]';
 import Profile from '../../../models/Profile';
 
 export default async function handler(req, res) {
