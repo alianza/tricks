@@ -45,7 +45,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const { trickArray } = form;
 
   useAsyncEffect(async () => {
-    for (const trickType of TRICK_TYPES.reverse()) await fetchTrickType(trickType); // Fetch all trick types in reverse order, so loader disappears when visible trick type is loaded and every trick type is preloaded
+    for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
   }, []);
 
   const fetchTrickType = async (trickType) => {
