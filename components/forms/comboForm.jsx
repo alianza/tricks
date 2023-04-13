@@ -6,7 +6,6 @@ import { apiCall, capitalize, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
-import Loader from '../common/loader/loader';
 import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
 import LoaderButton from '../common/LoaderButton';
@@ -36,7 +35,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
 
@@ -51,7 +50,6 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   const fetchTrickType = async (trickType) => {
     try {
       setLoading(true);
-      setTricks((previousTricks) => ({ ...previousTricks, [trickType]: [] }));
       const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
       setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
     } catch (error) {
@@ -74,7 +72,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const postData = async (form) => {
     try {
-      const { data } = await apiCall('combos', { method: 'POST', data: trimTrickArray(form) });
+      const { data } = await apiCall('combos', {
+        method: 'POST',
+        data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
+      });
       await mutate('/api/combos', data, false); // Update the local data without a revalidation
       await router.push('/dashboard');
     } catch (error) {
@@ -82,30 +83,16 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     }
   };
 
-  const trimTrickArray = (form) => ({
-    ...form,
-    trickArray: form.trickArray.map((trick) => ({
-      trick: trick._id,
-      trickRef: trick.trickRef,
-    })),
-  });
-
-  // const handleChange = ({ target }) => {
-  //   let { value, name } = target;
-  //   if (target.type === 'checkbox') value = target.checked;
-  //   setForm({ ...form, [name]: value });
-  // };
-
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     newCombo ? await postData(form) : await patchData(form);
     setLoading(false);
   };
 
   const addTrick = (e, trick) => {
     e.preventDefault();
-    setForm({ ...form, trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }] });
+    setForm({ ...form, trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }] }); // Add trick to trickArray, and add trickRef to trick
   };
 
   return (
@@ -117,15 +104,18 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">
             <span className="whitespace-nowrap font-bold">{trick.trick}</span>
-            {(index < trickArray.length - 1 || trickArray.length === 1) && (
+            {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
+            ) : (
+              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatgroundtricks] &&
+              trickArray.length > 1 && <span className="font-bold"> Out </span>
             )}
-            {trickArray.length > 1 &&
-              index === trickArray.length - 1 &&
-              trickArray[trickArray.length - 1].trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatgroundtricks] && (
-                <span className="font-bold"> Out </span>
-              )}
-            {trickArray.length === 1 && <span className="font-bold"> ... </span>}
+            {trickArray.length === 1 && (
+              <span className="font-bold">
+                <ArrowRightIcon title="To" className="mr-1 inline-block h-6 w-6" />
+                ...
+              </span>
+            )}
           </div>
         ))}
         {!trickArray.length && <span className="whitespace-nowrap font-bold">Combo Name...</span>}
@@ -154,17 +144,20 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         </label>
 
         <div ref={tricksRef} className="flex flex-col items-center justify-center">
-          {tricks[trickType]?.map((trick) => (
-            <button
-              key={trick._id}
-              onClick={(e) => addTrick(e, trick)}
-              className={`${utilStyles.button} mt-4 flex w-full items-center bg-blue-500 hover:bg-blue-600 focus:ring-blue-600/50`}
-            >
-              <PlusIcon className="-ml-2 h-6 w-6" />
-              <span>{trick.trick}</span>
-            </button>
-          ))}
-          {!tricks[trickType]?.length && !loading && <p className="mt-4">No {trickType}...</p>}
+          {!tricks[trickType].length && !loading ? (
+            <p className="mt-4">No {trickType}...</p>
+          ) : (
+            tricks[trickType].map((trick) => (
+              <button
+                key={trick._id}
+                onClick={(e) => addTrick(e, trick)}
+                className={`${utilStyles.button} mt-4 flex w-full items-center bg-blue-500 hover:bg-blue-600 focus:ring-blue-600/50`}
+              >
+                <PlusIcon className="-ml-2 h-6 w-6" />
+                <span>{trick.trick}</span>
+              </button>
+            ))
+          )}
         </div>
 
         <div className="mt-4 flex items-center justify-between">
