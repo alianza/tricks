@@ -4,6 +4,8 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import utilStyles from '../../styles/utils.module.scss';
+import logo from '../../public/logo.webp';
 
 export default function Header() {
   const { data: session } = useSession();
@@ -21,30 +23,34 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-10 flex h-20 w-full items-center justify-between bg-blue-600 p-4 text-right text-neutral-50 shadow-xl">
-      <Link href="/" className="h-12 w-12 shrink-0 sm:h-16 sm:w-16">
-        <img
-          src="/logo.webp"
+      <Link href="/" className="flex h-12 shrink-0 items-center gap-3 sm:h-16">
+        <Image
+          src={logo}
           alt="Skateboard Trick Tracker Logo"
-          className="white h-full w-full drop-shadow-lg transition-transform hover:scale-110 active:scale-100"
+          title="Skateboard Trick Tracker Logo"
+          className="h-full w-full drop-shadow-lg transition-transform hover:scale-110 active:scale-100"
         />
+        <span className={`${utilStyles.link} hidden whitespace-nowrap text-3xl sm:block`}>Trick Tracker</span>
       </Link>
 
-      <div className="ml-auto mr-4 flex items-center gap-2">
+      <div className="ml-auto mr-4">
         {session ? (
-          <>
-            <span>
-              Signed in as: <b>{session.user?.name}</b>
-            </span>
-            <Image
-              src={session.user?.image}
-              className="rounded-full"
-              alt="User profile picture"
-              width={32}
-              height={32}
-            />
-          </>
+          <div className="">
+            <span className="hidden md:inline">Signed in as: </span>
+            <Link className={`${utilStyles.link} inline items-center gap-2 xsm:inline-flex`} href="/profile">
+              <b className="hidden xsm:inline">{session.user?.name}</b>
+              <Image
+                src={session.user?.image}
+                className="rounded-full drop-shadow transition-transform hover:scale-110 active:scale-100"
+                alt="User profile picture"
+                title={`Go to profile`}
+                width={32}
+                height={32}
+              />
+            </Link>
+          </div>
         ) : (
-          <a className="cursor-pointer text-lg hover:font-bold" href="#" onClick={() => signIn()}>
+          <a className={`${utilStyles.link} font-bold`} href="#" onClick={() => signIn()}>
             Sign in
           </a>
         )}
@@ -57,24 +63,29 @@ export default function Header() {
       >
         <NavLink label="Home" href="/" exact />
         <NavLink label="Dashboard" href="/dashboard" />
-        <NavLink label="New Flatground Trick" href="/new-flatground-trick" />
-        <NavLink label="New Grind" href="/new-grind" />
-        <NavLink label="New Manual" href="/new-manual" />
-        <NavLink label="New Combo" href="/new-combo" />
-        {session && (
+
+        {session ? (
           <>
+            <NavLink label="New Flatground Trick" href="/new-flatground-trick" />
+            <NavLink label="New Grind" href="/new-grind" />
+            <NavLink label="New Manual" href="/new-manual" />
+            <NavLink label="New Combo" href="/new-combo" />
             <NavLink label="Profile" href="/profile" />
             <a className="cursor-pointer hover:font-bold" onClick={() => signOut({ callbackUrl: '/' })}>
               Sign out
             </a>
           </>
+        ) : (
+          <a className="cursor-pointer hover:font-bold" href="#" onClick={() => signIn()}>
+            Sign in
+          </a>
         )}
       </nav>
 
       {open ? (
-        <XMarkIcon onClick={() => setOpen(false)} className="z-10 h-8 w-8 cursor-pointer" />
+        <XMarkIcon onClick={() => setOpen(false)} className="z-10 h-8 w-8 shrink-0 cursor-pointer" />
       ) : (
-        <Bars3Icon onClick={() => setOpen(true)} className="z-10 h-8 w-8 cursor-pointer" />
+        <Bars3Icon onClick={() => setOpen(true)} className="z-10 h-8 w-8 shrink-0 cursor-pointer" />
       )}
     </header>
   );
