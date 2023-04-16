@@ -35,7 +35,7 @@ export default function Header() {
 
       <div className="ml-auto mr-4">
         {session ? (
-          <div className="">
+          <>
             <span className="hidden md:inline">Signed in as: </span>
             <Link className={`${utilStyles.link} inline items-center gap-2 xsm:inline-flex`} href="/profile">
               <b className="hidden xsm:inline">{session.user?.name}</b>
@@ -48,7 +48,7 @@ export default function Header() {
                 height={32}
               />
             </Link>
-          </div>
+          </>
         ) : (
           <a className={`${utilStyles.link} font-bold`} href="#" onClick={() => signIn()}>
             Sign in
