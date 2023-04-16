@@ -23,7 +23,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-10 flex h-20 w-full items-center justify-between bg-blue-600 p-4 text-right text-neutral-50 shadow-xl">
-      <Link href="/" className="flex h-12 shrink-0 items-center gap-3 sm:h-16">
+      <Link href={`/${session ? 'dashboard' : ''}`} className="flex h-12 shrink-0 items-center gap-3 sm:h-16">
         <Image
           src={logo}
           alt="Skateboard Trick Tracker Logo"
