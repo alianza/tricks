@@ -1,71 +1,25 @@
 import { signIn, useSession } from 'next-auth/react';
 import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { apiCall } from '../lib/commonUtils';
-import { toast } from 'react-toastify';
+import Stats from '../components/stats/Stats';
 
 const statsDef = {
-  flatgroundtricks: { label: 'Flatground Tricks', endpoint: '/mine/flatgroundtricks', value: '...' },
-  grinds: { label: 'Grinds', endpoint: '/mine/grinds', value: '...' },
-  manuals: { label: 'Manuals', endpoint: '/mine/manuals', value: '...' },
-  combos: { label: 'Combos', endpoint: '/mine/combos', value: '...' },
+  'Flatground Tricks': { endpoint: '/mine/flatgroundtricks', value: '...' },
+  Grinds: { endpoint: '/mine/grinds', value: '...' },
+  Manuals: { endpoint: '/mine/manuals', value: '...' },
+  Combos: { endpoint: '/mine/combos', value: '...' },
 };
 
 const globalStatsDef = {
-  flatgroundtricks: { label: 'Flatground Tricks', endpoint: '/flatgroundtricks', value: '...' },
-  grinds: { label: 'Grinds', endpoint: '/grinds', value: '...' },
-  manuals: { label: 'Manuals', endpoint: '/manuals', value: '...' },
-  combos: { label: 'Combos', endpoint: '/combos', value: '...' },
-  users: { label: 'Users', endpoint: '/users', value: '...' },
+  'Flatground Tricks': { endpoint: '/flatgroundtricks', value: '...' },
+  Grinds: { endpoint: '/grinds', value: '...' },
+  Manuals: { endpoint: '/manuals', value: '...' },
+  Combos: { endpoint: '/combos', value: '...' },
+  Users: { endpoint: '/users', value: '...' },
 };
 
-const Index = () => {
+export default function Index() {
   const { data: session } = useSession();
-
-  const [stats, setStats] = useState(
-    session ? Object.fromEntries(Object.values(statsDef).map(({ label, value }) => [label, value])) : null
-  );
-  const [globalStats, setGlobalStats] = useState(
-    Object.fromEntries(Object.values(globalStatsDef).map(({ label, value }) => [label, value]))
-  );
-
-  useEffect(() => {
-    (async () => {
-      if (!session) return;
-      try {
-        const response = await Promise.all(
-          Object.values(statsDef).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
-        );
-
-        setStats({
-          ...Object.fromEntries(Object.values(statsDef).map(({ label }, index) => [label, response[index].data.count])),
-        });
-      } catch (e) {
-        toast.error('Failed to fetch your stats. Please try again later...');
-      } finally {
-      }
-    })();
-  }, [session]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await Promise.all(
-          Object.values(globalStatsDef).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
-        );
-
-        setGlobalStats({
-          ...Object.fromEntries(
-            Object.values(globalStatsDef).map(({ label }, index) => [label, response[index].data.count])
-          ),
-        });
-      } catch (e) {
-        toast.error('Failed to fetch global stats. Please try again later...');
-      } finally {
-      }
-    })();
-  }, []);
 
   return (
     <div className="flex flex-col gap-6">
@@ -92,37 +46,19 @@ const Index = () => {
         )}
       </section>
 
-      {stats && (
-        <section className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
-          <h1 className="mb-4 text-4xl font-bold">Your stats</h1>
-          <p className="my-4">Here are some basic statistics about your progress.</p>
-          <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 dark:bg-neutral-700 sm:grid-cols-2">
-            {Object.entries(stats).map(([key, value]) => (
-              <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
-                <h2 className="text-center text-2xl font-bold">{key}</h2>
-                <p className="text-center text-4xl font-bold">{value}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+      {session && (
+        <Stats
+          statsDefinition={statsDef}
+          title="Your stats"
+          description="Here are some basic statistics about your progress."
+        />
       )}
 
-      {globalStats && (
-        <section className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
-          <h1 className="mb-4 text-4xl font-bold">Global stats</h1>
-          <p className="my-4">Here are some basic global statistics.</p>
-          <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 dark:bg-neutral-700 sm:grid-cols-2">
-            {Object.entries(globalStats).map(([key, value]) => (
-              <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
-                <h2 className="text-center text-2xl font-bold">{key}</h2>
-                <p className="text-center text-4xl font-bold">{value}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      <Stats
+        statsDefinition={globalStatsDef}
+        title="Global stats"
+        description="Here are some basic global statistics."
+      />
     </div>
   );
-};
-
-export default Index;
+}
