@@ -1,6 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
-import findAndSerializeDoc from '../../../lib/serverUtils';
-import FlatgroundTrickCard from '../../../components/cards/flatgroundTrickCard';
+import { getTricks } from '../../../lib/serverUtils';
+import FlatgroundTrickDetails from '../../../components/cards/flatgroundTrickDetails';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { isValidObjectId, Model } from 'mongoose';
 
@@ -11,7 +11,7 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: `${_id} is not a valid flatground trick id...` } };
   }
 
-  const flatgroundTrick = await findAndSerializeDoc(FlatGroundTrick, Model.findById, { _id });
+  const flatgroundTrick = await getTricks(FlatGroundTrick, Model.findById, { _id });
 
   if (!flatgroundTrick) {
     return { notFound: true };
@@ -27,7 +27,7 @@ const flatgroundTrickPage = ({ flatgroundTrick, error }) => {
 
   return (
     <div className="flex w-full justify-center">
-      <FlatgroundTrickCard flatgroundTrick={flatgroundTrick} mode="delete" />
+      <FlatgroundTrickDetails flatgroundTrick={flatgroundTrick} />
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import dbConnect from '../../../lib/dbConnect';
-import findAndSerializeDoc from '../../../lib/serverUtils';
+import { getCombos } from '../../../lib/serverUtils';
 import Combo from '../../../models/Combo';
 import { isValidObjectId, Model } from 'mongoose';
+import ComboDetails from '../../../components/cards/comboDetails';
 
 export async function getServerSideProps({ params: { _id } }) {
   await dbConnect();
@@ -10,7 +11,7 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: `${_id} is not a valid grind trick id...` } };
   }
 
-  const combo = await findAndSerializeDoc(Combo, Model.findById, { _id });
+  const combo = await getCombos(Combo, Model.findById, { _id });
 
   if (!combo) {
     return { notFound: true };
@@ -24,7 +25,11 @@ const grindPage = ({ combo, error }) => {
     return <h1 className="text-xl">{error}</h1>;
   }
 
-  return <div className="flex w-full justify-center">{JSON.stringify(combo)}</div>;
+  return (
+    <div className="flex w-full justify-center">
+      <ComboDetails combo={combo} />
+    </div>
+  );
 };
 
 export default grindPage;

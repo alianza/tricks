@@ -1,8 +1,8 @@
 import dbConnect from '../../../lib/dbConnect';
-import findAndSerializeDoc from '../../../lib/serverUtils';
-import GrindCard from '../../../components/cards/grindCard';
-import Grind from '../../../models/Grind';
+import { getTricks } from '../../../lib/serverUtils';
+import Manual from '../../../models/Manual';
 import { isValidObjectId, Model } from 'mongoose';
+import ManualDetails from '../../../components/cards/manualDetails';
 
 export async function getServerSideProps({ params: { _id } }) {
   await dbConnect();
@@ -11,23 +11,23 @@ export async function getServerSideProps({ params: { _id } }) {
     return { props: { error: `${_id} is not a valid grind trick id...` } };
   }
 
-  const grind = await findAndSerializeDoc(Grind, Model.findById, { _id });
+  const manual = await getTricks(Manual, Model.findById, { _id });
 
-  if (!grind) {
+  if (!manual) {
     return { notFound: true };
   }
 
-  return { props: { grind } };
+  return { props: { manual } };
 }
 
-const grindPage = ({ grind, error }) => {
+const grindPage = ({ manual, error }) => {
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
   }
 
   return (
     <div className="flex w-full justify-center">
-      <GrindCard grind={grind} mode="delete" />
+      <ManualDetails manual={manual} />
     </div>
   );
 };
