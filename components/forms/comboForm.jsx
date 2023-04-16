@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
 import LoaderButton from '../common/LoaderButton';
 
-const TRICK_TYPES_MAP = {
+export const TRICK_TYPES_MAP = {
   flatgroundtricks: 'Flatground Tricks',
   grinds: 'Grinds',
   manuals: 'Manuals',
@@ -24,7 +24,7 @@ const TRICK_TYPES_ENDPOINTS = {
   [TRICK_TYPES_MAP.manuals]: 'manuals',
 };
 
-const TRICK_TYPES_MODELS = {
+export const TRICK_TYPES_MODELS = {
   [TRICK_TYPES_MAP.flatgroundtricks]: 'FlatgroundTrick',
   [TRICK_TYPES_MAP.grinds]: 'Grind',
   [TRICK_TYPES_MAP.manuals]: 'Manual',
