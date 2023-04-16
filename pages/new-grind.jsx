@@ -1,7 +1,7 @@
 import GrindForm from '../components/forms/grindForm';
 import { DEFAULT_GRIND } from '../models/constants/grinds';
 
-const newGrind = () => {
+export default function NewGrind() {
   const grindForm = {
     name: DEFAULT_GRIND,
     preferred_stance: 'regular',
@@ -10,6 +10,4 @@ const newGrind = () => {
   };
 
   return <GrindForm grindForm={grindForm} />;
-};
-
-export default newGrind;
+}

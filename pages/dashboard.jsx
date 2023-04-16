@@ -49,10 +49,10 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
     <div className="flex flex-col gap-16">
       <div>
         <h1 className="text-center text-5xl">Dashboard</h1>
-        <p className="mt-2 text-center  ">This is a overview of all the tricks you've added to your account.</p>
+        <p className="mt-3 text-center">This is a overview of all the tricks you've added to your account.</p>
       </div>
       <div className="flex flex-col">
-        <LinkWithArrow label="Flatground Tricks" />
+        <LinkWithArrow label="Flatground Tricks" href="/flatgroundtricks" />
         <Table
           objArray={flatgroundTricks.flatgroundTricks}
           columns={flatgroundTricks.flatgroundColumns}
@@ -64,7 +64,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
       </div>
 
       <div className="flex flex-col">
-        <LinkWithArrow label="Grinds" />
+        <LinkWithArrow label="Grinds" href="/grinds" />
         <Table
           objArray={grinds.grinds}
           columns={grinds.grindColumns}
@@ -76,7 +76,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
       </div>
 
       <div className="flex flex-col">
-        <LinkWithArrow label="Manuals" />
+        <LinkWithArrow label="Manuals" href="/manuals" />
         <Table
           objArray={manuals.manuals}
           columns={manuals.manualColumns}
@@ -88,7 +88,7 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
       </div>
 
       <div className="flex flex-col">
-        <LinkWithArrow label="Combos" />
+        <LinkWithArrow label="Combos" href="/combos" />
         <Table
           objArray={combos.combos}
           columns={combos.comboColumns}

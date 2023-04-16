@@ -20,7 +20,7 @@ export async function getServerSideProps({ params: { _id } }) {
   return { props: { combo } };
 }
 
-const grindPage = ({ combo, error }) => {
+const GrindPage = ({ combo, error }) => {
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
   }
@@ -32,4 +32,4 @@ const grindPage = ({ combo, error }) => {
   );
 };
 
-export default grindPage;
+export default GrindPage;
