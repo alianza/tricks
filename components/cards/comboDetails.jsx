@@ -11,8 +11,6 @@ import { formatDate } from '../../lib/clientUtils';
 export default function ComboDetails({ combo }) {
   const router = useRouter();
 
-  console.log(`combo`, combo);
-
   const handleDelete = async () => {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullComboName(combo)}"?`)) return;
