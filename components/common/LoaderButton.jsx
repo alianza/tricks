@@ -5,11 +5,11 @@ function LoaderButton({ label, isLoading, className }) {
     <button
       type="submit"
       disabled={isLoading}
-      className={`${utilStyles.button} ${className} flex items-center gap-2 bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
+      className={`${utilStyles.button} ${className} flex items-center bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
     >
       {label || 'Submit'}
       <svg
-        className={`h-5 text-white transition-[width] ${isLoading ? ' w-5 animate-spin' : 'w-0'}`}
+        className={`h-5 text-white transition-[width,margin] ${isLoading ? 'ml-2 w-5 animate-spin' : 'ml-0 w-0'}`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
