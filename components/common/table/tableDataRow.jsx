@@ -3,17 +3,13 @@ import Link from 'next/link';
 import utilStyles from '../../../styles/utils.module.scss';
 
 export const EditButton = ({ endpoint, id }) => (
-  <Link
-    href={`/${endpoint}/[_id]/edit`}
-    as={`/${endpoint}/${id}/edit`}
-    className={`${utilStyles.button} ${utilStyles.green}`}
-  >
+  <Link href={`/${endpoint}/${id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>
     Edit
   </Link>
 );
 
 export const ViewButton = ({ endpoint, id }) => (
-  <Link href={`/${endpoint}/[_id]`} as={`/${endpoint}/${id}`} className={`${utilStyles.button} ${utilStyles.blue}`}>
+  <Link href={`/${endpoint}/${id}`} className={`${utilStyles.button} ${utilStyles.blue}`}>
     View
   </Link>
 );
@@ -59,13 +55,12 @@ const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow }) => {
           );
         }
 
-        if (key === 'trick') {
+        if (key === 'trick')
           return (
             <td key={key} className="p-3 text-sm font-bold sm:p-4">
               {value}
             </td>
           );
-        }
 
         return (
           <td key={key} className="p-3 sm:p-4">

@@ -75,7 +75,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
           </tr>
         </thead>
         <tbody
-          className="bg-neutral-50 after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:bg-neutral-400 dark:bg-neutral-800"
+          className="bg-neutral-50 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-neutral-400 dark:bg-neutral-800"
           ref={tableBodyRef}
         >
           {!objArrayState.length && (
