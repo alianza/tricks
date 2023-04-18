@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
@@ -35,10 +35,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
+  const [stance, setStance] = useState('all');
   const [loading, setLoading] = useState(true);
   const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
-
   const [form, setForm] = useState({ trickArray: comboForm.trickArray });
 
   const { trickArray } = form;
@@ -46,6 +46,10 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   useAsyncEffect(async () => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
   }, []);
+
+  useEffect(() => {
+    console.log(`stance`, stance);
+  }, [stance]);
 
   const fetchTrickType = async (trickType) => {
     try {
@@ -95,12 +99,11 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     setForm({ ...form, trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }] }); // Add trick to trickArray, and add trickRef to trick
   };
 
+  const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
+
   return (
-    <div className="flex flex-col justify-center">
-      <div
-        ref={trickArrayRef}
-        className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400"
-      >
+    <div className="flex grow flex-col justify-center xsm:min-w-[240px]">
+      <div ref={trickArrayRef} className="relative flex flex-wrap gap-2">
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">
             <span className="whitespace-nowrap font-bold">{trick.trick}</span>
@@ -120,7 +123,9 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         ))}
         {!trickArray.length && <span className="whitespace-nowrap font-bold">Combo Name...</span>}
       </div>
-      <form onSubmit={handleSubmit} className={`${styles.form} mx-auto mt-8 inline-block`}>
+      <hr className="my-2 border-neutral-800 dark:border-neutral-400" />
+
+      <form onSubmit={handleSubmit} className={`${styles.form} mt-6 flex grow flex-col`}>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
           {trickArray.length > 0 && (
@@ -143,19 +148,29 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           </select>
         </label>
 
-        <div ref={tricksRef} className="flex flex-col items-center justify-center">
-          {!tricks[trickType].length && !loading ? (
-            <p className="mt-4">No {trickType}...</p>
+        {(trickType === TRICK_TYPES_MAP.flatgroundtricks || trickType === TRICK_TYPES_MAP.grinds) && (
+          <div className="mt-2">
+            <select name={VN({ stance })} value={stance} onChange={({ target }) => setStance(target.value)} required>
+              <option value="all">All Stances</option>
+              <option value="regular">Regular</option>
+              <option value="fakie">Fakie</option>
+              <option value="switch">Switch</option>
+              <option value="nollie">Nollie</option>
+            </select>
+          </div>
+        )}
+
+        <div ref={tricksRef} className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-hidden">
+          {!tricks[trickType].filter(stanceFilter).length && !loading ? (
+            <p>
+              No {stance !== 'all' && stance} {trickType}...
+            </p>
           ) : (
-            tricks[trickType].map((trick) => (
-              <button
-                key={trick._id}
-                onClick={(e) => addTrick(e, trick)}
-                className={`${utilStyles.button} mt-4 flex w-full items-center bg-blue-500 hover:bg-blue-600 focus:ring-blue-600/50`}
-              >
-                <PlusIcon className="-ml-2 h-6 w-6" />
-                <span>{trick.trick}</span>
-              </button>
+            tricks[trickType].filter(stanceFilter).map((trick) => (
+              <div className="group flex cursor-pointer items-center" onClick={(e) => addTrick(e, trick)}>
+                <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
+                <span className={`${utilStyles.link} grow py-1`}>{trick.trick}</span>
+              </div>
             ))
           )}
         </div>
