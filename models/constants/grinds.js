@@ -1,6 +1,7 @@
 const GRINDS = {
   fifty_fifty: '50-50',
   five_o: '5-0',
+  board_slide: 'Boardslide',
   nose_grind: 'Nose-Grind',
   smith_grind: 'Smith',
   feeble_grind: 'Feeble',
