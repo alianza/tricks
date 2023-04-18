@@ -23,12 +23,12 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-10 flex h-20 w-full items-center justify-between bg-blue-600 p-4 text-right text-neutral-50 shadow-xl">
-      <Link href={`/${session ? 'dashboard' : ''}`} className="flex h-12 shrink-0 items-center gap-3 sm:h-16">
+      <Link href={`/${session ? 'dashboard' : ''}`} className="flex shrink-0 items-center gap-3 ">
         <Image
           src={logo}
           alt="Skateboard Trick Tracker Logo"
           title="Skateboard Trick Tracker Logo"
-          className="h-full w-full drop-shadow-lg transition-transform hover:scale-110 active:scale-100"
+          className="h-12 w-12 drop-shadow-lg transition-transform hover:scale-110 active:scale-100 sm:h-16 sm:w-16"
         />
         <span className={`${utilStyles.link} hidden whitespace-nowrap text-3xl sm:block`}>Trick Tracker</span>
       </Link>
