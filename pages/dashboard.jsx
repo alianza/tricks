@@ -44,7 +44,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
+export default function Index({ flatgroundTricks, grinds, combos, manuals }) {
   return (
     <div className="flex flex-col gap-16">
       <div>
@@ -101,6 +101,4 @@ const Index = ({ flatgroundTricks, grinds, combos, manuals }) => {
       </div>
     </div>
   );
-};
-
-export default Index;
+}
