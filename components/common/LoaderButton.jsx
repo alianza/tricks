@@ -5,7 +5,7 @@ function LoaderButton({ label, isLoading, className }) {
     <button
       type="submit"
       disabled={isLoading}
-      className={`${utilStyles.button} ${className} flex items-center bg-green-500 hover:bg-green-600 focus:ring-green-600/50`}
+      className={`${utilStyles.button} ${className} flex items-center bg-green-500 text-neutral-100 hover:bg-green-600 focus:ring-green-600/50`}
     >
       {label || 'Submit'}
       <svg
