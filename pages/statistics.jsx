@@ -2,10 +2,10 @@ import Stats from '../components/stats/Stats';
 import { statsDef } from './index';
 
 const stanceStatsDef = {
-  Regular: { endpoint: '/mine/regular', value: '...' },
-  Fakie: { endpoint: '/mine/fakie', value: '...' },
-  Nollie: { endpoint: '/mine/nollie', value: '...' },
-  Switch: { endpoint: '/mine/switch', value: '...' },
+  Regular: { endpoint: '/mine/stance/regular', value: '...' },
+  Fakie: { endpoint: '/mine/stance/fakie', value: '...' },
+  Nollie: { endpoint: '/mine/stance/nollie', value: '...' },
+  Switch: { endpoint: '/mine/stance/switch', value: '...' },
 };
 
 // const otherStatsDef = {
