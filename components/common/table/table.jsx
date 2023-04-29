@@ -30,6 +30,10 @@ const Table = ({
     setTimeout(() => tableBodyRef.current && autoAnimate(tableBodyRef.current), 1);
   }, [objArrayState]);
 
+  useEffect(() => {
+    setObjArrayState(objArray);
+  }, [objArray]);
+
   const sort = (column, direction) => {
     setIsAnimating(true);
     setObjArrayState(

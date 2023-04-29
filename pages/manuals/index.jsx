@@ -24,6 +24,26 @@ export default function ManualsPage() {
   const handleAction = async (action, obj) => {
     console.log(`ACTION PARENT`, action);
     console.log(`OBJ PARENT`, obj);
+    switch (action) {
+      case 'edit':
+        console.log(`EDIT`);
+        break;
+      case 'view':
+        console.log(`VIEW`);
+        break;
+      case 'delete':
+        console.log(`DELETE`);
+        try {
+          if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
+          await apiCall('manuals', { method: 'DELETE', id: obj._id });
+          const { data } = await apiCall('manuals', { method: 'GET' });
+          setManuals(data);
+        } catch (error) {
+          toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
+        }
+        console.log(`manuals`, manuals);
+        break;
+    }
   };
 
   return (
