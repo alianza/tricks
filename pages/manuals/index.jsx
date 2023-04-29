@@ -21,6 +21,11 @@ export default function ManualsPage() {
     }
   }, []);
 
+  const handleAction = async (action, obj) => {
+    console.log(`ACTION PARENT`, action);
+    console.log(`OBJ PARENT`, obj);
+  };
+
   return (
     <div className="flex flex-col gap-16">
       <div>
@@ -34,6 +39,7 @@ export default function ManualsPage() {
           objArray={manuals}
           columns={manualColumns}
           actions={manualActions}
+          onAction={(action, obj) => handleAction(action, obj)}
           endpoint="manuals"
           newLink="/new-manual"
           showCount

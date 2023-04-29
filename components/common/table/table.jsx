@@ -6,7 +6,16 @@ import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
 import { toast } from 'react-toastify';
 
-const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false, newLink }) => {
+const Table = ({
+  objArray,
+  columns,
+  actions,
+  endpoint,
+  onAction,
+  updateLocalState = false,
+  showCount = false,
+  newLink,
+}) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -32,19 +41,6 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
     );
     setColumnSortDirection({ [column]: direction });
     setTimeout(() => setIsAnimating(false), 250); // default auto-animate duration
-  };
-
-  const handleDelete = async (obj) => {
-    try {
-      if (!confirm(`Are you sure you want to delete "${getFullName(obj, endpoint)}"?`)) return;
-      await apiCall(`${endpoint}/`, { method: 'DELETE', id: obj._id });
-      const { data } = updateLocalState // get new data from Api or update local state if updateLocalState is true
-        ? { data: objArrayState.filter(({ _id }) => _id !== obj._id) }
-        : await apiCall(endpoint, { method: 'GET' }); // Update the local data from the API
-      setObjArrayState(data);
-    } catch (error) {
-      toast.error(`Failed to delete ${getFullName(obj, endpoint)}: ${error.message}`);
-    }
   };
 
   return (
@@ -96,7 +92,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
               actions={actions}
               endpoint={endpoint}
               emitMessage={(message) => toast.error(message)}
-              deleteRow={(obj) => handleDelete(obj)}
+              onRowAction={onAction}
             />
           ))}
         </tbody>
