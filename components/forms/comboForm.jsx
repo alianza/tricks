@@ -67,8 +67,8 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
     try {
       const { _id } = router.query;
       const { data } = await apiCall('combos', { method: 'PATCH', _id, data: trimTrickArray(form) });
-      await mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to update combo: ${error.message}`);
     }
@@ -80,8 +80,8 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
         method: 'POST',
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
-      await mutate('/api/combos', data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate('/api/combos', data, false); // Update the local data without a revalidation
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to create combo: ${error.message}`);
     }

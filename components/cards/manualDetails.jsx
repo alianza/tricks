@@ -13,7 +13,7 @@ export default function ManualDetails({ manual }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullManualName(manual)}"?`)) return;
       await apiCall('manuals', { method: 'DELETE', id: router.query._id });
-      await router.push('/dashboard');
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the manual: ${error.message}`);
     }

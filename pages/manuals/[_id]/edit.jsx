@@ -4,7 +4,8 @@ import { fetcher } from '../../../lib/clientUtils';
 import ManualForm from '../../../components/forms/manualForm';
 
 const EditManual = () => {
-  const { _id } = useRouter().query;
+  const router = useRouter();
+  const _id = router.query;
   const { data, error, isLoading } = useSWR(_id ? `/api/manuals/${_id}` : null, fetcher);
   const { data: manual, error: serverError } = data || {};
 

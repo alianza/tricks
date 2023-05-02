@@ -4,7 +4,8 @@ import { fetcher } from '../../../lib/clientUtils';
 import ComboForm from '../../../components/forms/comboForm';
 
 const EditGrind = () => {
-  const { _id } = useRouter().query;
+  const router = useRouter();
+  const _id = router.query;
   const { data, error, isLoading } = useSWR(_id ? `/api/combos/${_id}` : null, fetcher);
   const { data: combo, error: serverError } = data || {};
 

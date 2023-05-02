@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
@@ -8,6 +7,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/clientUtils';
 import LoaderButton from '../common/LoaderButton';
+import { mutate } from 'swr';
 
 const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -40,8 +40,8 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     try {
       const { _id } = router.query;
       const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
-      await mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to update flatground trick: ${error.message}`);
     }
@@ -50,8 +50,8 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   const postData = async (form) => {
     try {
       const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
-      await mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to add flatground trick: ${error.message}`);
     }
@@ -69,8 +69,8 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     newFlatgroundTrick ? await postData(form) : await patchData(form);
     setLoading(false);
   };
