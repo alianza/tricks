@@ -30,6 +30,9 @@ export const TRICK_TYPES_MODELS = {
   [TRICK_TYPES_MAP.manuals]: 'Manual',
 };
 
+const trickTypeHasStance = (trickType) =>
+  trickType === TRICK_TYPES_MAP.flatgroundtricks || trickType === TRICK_TYPES_MAP.grinds;
+
 const ComboForm = ({ comboForm, newCombo = true }) => {
   const router = useRouter();
 
@@ -48,8 +51,9 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
   }, []);
 
   useEffect(() => {
-    console.log(`stance`, stance);
-  }, [stance]);
+    if (trickTypeHasStance(trickType)) return;
+    setStance('all'); // Set stances to all if trick type is manuals (Manuals don't have a stance)
+  }, [trickType]);
 
   const fetchTrickType = async (trickType) => {
     try {
@@ -148,7 +152,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           </select>
         </label>
 
-        {(trickType === TRICK_TYPES_MAP.flatgroundtricks || trickType === TRICK_TYPES_MAP.grinds) && (
+        {trickTypeHasStance(trickType) && (
           <div className="mt-2">
             <select name={VN({ stance })} value={stance} onChange={({ target }) => setStance(target.value)} required>
               <option value="all">All Stances</option>
