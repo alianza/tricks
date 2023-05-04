@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       screens: {
         xsm: '420px',
+        touch: { raw: '(hover: none)' },
       },
     },
   },
