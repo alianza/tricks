@@ -12,11 +12,7 @@ const EditGrind = () => {
   if (error || serverError) return <p>Failed to load Combo: {error || serverError}</p>;
   if (!combo || isLoading) return <p>Loading...</p>;
 
-  const comboForm = {
-    trickArray: combo.trickArray,
-  };
-
-  return <ComboForm comboForm={comboForm} newCombo={false} />;
+  return <ComboForm combo={combo} newCombo={false} />;
 };
 
 export default EditGrind;
