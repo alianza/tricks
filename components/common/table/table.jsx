@@ -19,6 +19,9 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
 
   useEffect(() => {
     sort(columns[0], 'asc'); // Default ascending sort on first column
+  }, []);
+
+  useEffect(() => {
     setTimeout(() => tableBodyRef.current && autoAnimate(tableBodyRef.current), 1);
   }, [objArrayState]);
 
