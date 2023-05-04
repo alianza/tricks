@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, VN } from '../../lib/commonUtils';
+import { capitalize, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/clientUtils';
+import { useAsyncEffect } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
+import { apiCall } from '../../lib/clientUtils';
 
 export const TRICK_TYPES_MAP = {
   flatgroundtricks: 'Flatground Tricks',

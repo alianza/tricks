@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useAsyncEffect } from '../../lib/clientUtils';
-import { apiCall } from '../../lib/commonUtils';
+import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../common/loader/loader';
+import { apiCall } from '../../lib/clientUtils';
 
 export default function Stats({ statsDefinition, title, description }) {
   const [stats, setStats] = useState(Object.entries(statsDefinition).map(([label, { value }]) => [label, value]));

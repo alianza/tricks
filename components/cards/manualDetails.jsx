@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { apiCall, getFullManualName } from '../../lib/commonUtils';
+import { getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
-import { formatDate } from '../../lib/clientUtils';
+import { apiCall, formatDate } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 
 export default function ManualDetails({ manual }) {

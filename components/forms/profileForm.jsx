@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, VN } from '../../lib/commonUtils';
+import { VN } from '../../lib/commonUtils';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import Loader from '../common/loader/loader';
 import LoaderButton from '../common/LoaderButton';
+import { apiCall } from '../../lib/clientUtils';
 
 const ProfileForm = ({ profileForm }) => {
   const { data: session } = useSession();

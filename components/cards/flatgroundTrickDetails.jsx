@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { apiCall, capitalize, getFullTrickName } from '../../lib/commonUtils';
+import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { formatDate } from '../../lib/clientUtils';
+import { apiCall, formatDate } from '../../lib/clientUtils';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();

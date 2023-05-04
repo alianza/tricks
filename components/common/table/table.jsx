@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { capitalize, apiCall, getFullName, sOrNoS } from '../../../lib/commonUtils';
+import { capitalize, getFullName, sOrNoS } from '../../../lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
 import { toast } from 'react-toastify';
+import { apiCall } from '../../../lib/clientUtils';
 
 const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
