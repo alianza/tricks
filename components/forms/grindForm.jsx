@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
-import utilStyles from '../../styles/utils.module.scss';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
@@ -11,18 +10,17 @@ import { useAsyncEffect } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall } from '../../lib/clientUtils';
 
-const GrindForm = ({ grindForm, newGrind = true }) => {
+const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
-
   const [form, setForm] = useState({
-    name: grindForm.name,
-    preferred_stance: grindForm.preferred_stance,
-    stance: grindForm.stance,
-    direction: grindForm.direction,
+    name: grind.name,
+    preferred_stance: grind.preferred_stance,
+    stance: grind.stance,
+    direction: grind.direction,
   });
 
   const { name, preferred_stance, stance, direction } = form;
