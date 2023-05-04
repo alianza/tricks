@@ -5,7 +5,7 @@ import GrindForm from '../../../components/forms/grindForm';
 
 const EditGrind = () => {
   const router = useRouter();
-  const _id = router.query;
+  const { _id } = router.query;
   const { data, error, isLoading } = useSWR(_id ? `/api/grinds/${_id}` : null, fetcher);
   const { data: grind, error: serverError } = data || {};
 

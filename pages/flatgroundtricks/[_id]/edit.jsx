@@ -5,7 +5,7 @@ import useSWR from 'swr';
 
 const EditFlatGroundTrick = () => {
   const router = useRouter();
-  const _id = router.query;
+  const { _id } = router.query;
   const { data, error, isLoading } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
   const { data: flatgroundTrick, error: serverError } = data || {};
 

@@ -5,7 +5,7 @@ import ComboForm from '../../../components/forms/comboForm';
 
 const EditGrind = () => {
   const router = useRouter();
-  const _id = router.query;
+  const { _id } = router.query;
   const { data, error, isLoading } = useSWR(_id ? `/api/combos/${_id}` : null, fetcher);
   const { data: combo, error: serverError } = data || {};
 
