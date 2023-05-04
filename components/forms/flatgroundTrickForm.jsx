@@ -10,19 +10,18 @@ import LoaderButton from '../common/LoaderButton';
 import { mutate } from 'swr';
 import { apiCall } from '../../lib/clientUtils';
 
-const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
+const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
-
   const [form, setForm] = useState({
-    name: flatgroundTrickForm.name,
-    preferred_stance: flatgroundTrickForm.preferred_stance,
-    stance: flatgroundTrickForm.stance,
-    direction: flatgroundTrickForm.direction,
-    rotation: flatgroundTrickForm.rotation,
+    name: flatgroundTrick.name,
+    preferred_stance: flatgroundTrick.preferred_stance,
+    stance: flatgroundTrick.stance,
+    direction: flatgroundTrick.direction,
+    rotation: flatgroundTrick.rotation,
   });
 
   const { name, preferred_stance, stance, direction, rotation } = form;

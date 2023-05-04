@@ -12,15 +12,7 @@ const EditFlatGroundTrick = () => {
   if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
   if (!flatgroundTrick || isLoading) return <p>Loading...</p>;
 
-  const flatgroundTrickForm = {
-    name: flatgroundTrick.name,
-    preferred_stance: flatgroundTrick.preferred_stance,
-    stance: flatgroundTrick.stance,
-    direction: flatgroundTrick.direction,
-    rotation: flatgroundTrick.rotation,
-  };
-
-  return <FlatgroundTrickForm flatgroundTrickForm={flatgroundTrickForm} newFlatgroundTrick={false} />;
+  return <FlatgroundTrickForm flatgroundTrick={flatgroundTrick} newFlatgroundTrick={false} />;
 };
 
 export default EditFlatGroundTrick;
