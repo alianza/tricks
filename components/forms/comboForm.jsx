@@ -10,40 +10,43 @@ import { toast } from 'react-toastify';
 import { useAsyncEffect } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall } from '../../lib/clientUtils';
+import Link from 'next/link';
 
-export const TRICK_TYPES_MAP = {
-  flatgroundtricks: 'Flatground Tricks',
-  grinds: 'Grinds',
-  manuals: 'Manuals',
-};
+export const TRICK_TYPES_MAP = { flatground: 'Flatground Tricks', grind: 'Grinds', manual: 'Manuals' };
 
 const TRICK_TYPES = Object.values(TRICK_TYPES_MAP);
 
 const TRICK_TYPES_ENDPOINTS = {
-  [TRICK_TYPES_MAP.flatgroundtricks]: 'flatgroundtricks',
-  [TRICK_TYPES_MAP.grinds]: 'grinds',
-  [TRICK_TYPES_MAP.manuals]: 'manuals',
+  [TRICK_TYPES_MAP.flatground]: 'flatgroundtricks',
+  [TRICK_TYPES_MAP.grind]: 'grinds',
+  [TRICK_TYPES_MAP.manual]: 'manuals',
 };
 
 export const TRICK_TYPES_MODELS = {
-  [TRICK_TYPES_MAP.flatgroundtricks]: 'FlatgroundTrick',
-  [TRICK_TYPES_MAP.grinds]: 'Grind',
-  [TRICK_TYPES_MAP.manuals]: 'Manual',
+  [TRICK_TYPES_MAP.flatground]: 'FlatgroundTrick',
+  [TRICK_TYPES_MAP.grind]: 'Grind',
+  [TRICK_TYPES_MAP.manual]: 'Manual',
+};
+
+export const TRICK_TYPES_NEW_PAGES = {
+  [TRICK_TYPES_MAP.flatground]: '/new-flatground-trick?closeAfterAdd=true',
+  [TRICK_TYPES_MAP.grind]: '/new-grind?closeAfterAdd=true',
+  [TRICK_TYPES_MAP.manual]: '/new-manual?closeAfterAdd=true',
 };
 
 const trickTypeHasStance = (trickType) =>
-  trickType === TRICK_TYPES_MAP.flatgroundtricks || trickType === TRICK_TYPES_MAP.grinds;
+  trickType === TRICK_TYPES_MAP.flatground || trickType === TRICK_TYPES_MAP.grind;
 
-const ComboForm = ({ comboForm, newCombo = true }) => {
+const ComboForm = ({ combo, newCombo = true }) => {
   const router = useRouter();
 
-  const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatgroundtricks);
+  const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatground);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
   const [stance, setStance] = useState('all');
   const [loading, setLoading] = useState(true);
   const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
-  const [form, setForm] = useState({ trickArray: comboForm.trickArray });
+  const [form, setForm] = useState({ trickArray: combo.trickArray });
 
   const { trickArray } = form;
 
@@ -108,6 +111,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
 
   return (
     <div className="flex grow flex-col justify-center xsm:min-w-[240px]">
+      {/*Trick name*/}
       <div ref={trickArrayRef} className="relative flex flex-wrap gap-2">
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">
@@ -115,7 +119,7 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
             {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
             ) : (
-              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatgroundtricks] &&
+              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
               trickArray.length > 1 && <span className="font-bold"> Out </span>
             )}
             {trickArray.length === 1 && (
@@ -165,23 +169,36 @@ const ComboForm = ({ comboForm, newCombo = true }) => {
           </div>
         )}
 
-        <div ref={tricksRef} className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-hidden">
+        {/*Show tricks*/}
+        <div ref={tricksRef} className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-y-auto">
           {!tricks[trickType].filter(stanceFilter).length && !loading ? (
             <p>
               No {stance !== 'all' && stance} {trickType}...
             </p>
           ) : (
             tricks[trickType].filter(stanceFilter).map((trick) => (
-              <div className="group flex cursor-pointer items-center" onClick={(e) => addTrick(e, trick)}>
+              <div
+                className="group flex cursor-pointer items-center"
+                onClick={(e) => addTrick(e, trick)}
+                key={trick._id}
+              >
                 <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-                <span className={`${utilStyles.link} grow py-1`}>{trick.trick}</span>
+                <span className={`${utilStyles.link} grow py-1 touch:!decoration-transparent`}>{trick.trick}</span>
               </div>
             ))
           )}
+          <Link
+            href={TRICK_TYPES_NEW_PAGES[trickType]}
+            target="_blank"
+            className="group flex cursor-pointer items-center"
+          >
+            <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
+            <b className={`${utilStyles.link} grow py-1`}>Add new {TRICK_TYPES_MODELS[trickType]}</b>
+          </Link>
         </div>
 
         <div className="mt-4 flex items-center justify-between">
-          <LoaderButton isLoading={loading} />
+          <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
 
           <ArrowPathIcon
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"

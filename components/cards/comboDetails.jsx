@@ -33,7 +33,7 @@ export default function ComboDetails({ combo }) {
             {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
             ) : (
-              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatgroundtricks] && (
+              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] && (
                 <span className="font-bold"> Out </span>
               )
             )}
