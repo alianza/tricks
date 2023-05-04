@@ -12,12 +12,7 @@ const EditManual = () => {
   if (error || serverError) return <p>Failed to load Manual: {error || serverError}</p>;
   if (!manual || isLoading) return <p>Loading...</p>;
 
-  const manualForm = {
-    preferred_stance: manual.preferred_stance,
-    type: manual.type,
-  };
-
-  return <ManualForm manualForm={manualForm} newManual={false} />;
+  return <ManualForm manual={manual} newManual={false} />;
 };
 
 export default EditManual;
