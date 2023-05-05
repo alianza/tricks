@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
 import { apiCall } from '../../lib/clientUtils';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { shallowEqual } from '../../lib/commonUtils';
 
 const defaultFilters = { grind: false, manual: false, stance: 'all' };
 
@@ -77,13 +78,15 @@ export default function CombosPage() {
                 <option value="switch">Switch</option>
                 <option value="nollie">Nollie</option>
               </select>
-              <button
-                title="Reset filters"
-                className="ml-auto p-2 transition-transform hover:scale-110 hover:duration-100 active:scale-95"
-                onClick={() => setFilters(defaultFilters)}
-              >
-                <ArrowPathIcon className="h-6 w-6"></ArrowPathIcon>
-              </button>
+              {!shallowEqual(filters, defaultFilters) && (
+                <button
+                  title="Reset filters"
+                  className="ml-auto p-2 transition-transform hover:scale-110 hover:duration-100 active:scale-95"
+                  onClick={() => setFilters(defaultFilters)}
+                >
+                  <ArrowPathIcon className="h-6 w-6"></ArrowPathIcon>
+                </button>
+              )}
             </div>
           </details>
           <Table
