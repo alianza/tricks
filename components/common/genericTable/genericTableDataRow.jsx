@@ -1,15 +1,17 @@
 import { capitalize, omit } from '../../../lib/commonUtils';
 import { cloneElement } from 'react';
 
+const colPropsToOmit = ['className', 'key', 'alias'];
+
 const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
   const objColumnMap = {};
 
-  columns.forEach((colObj) => {
-    const [[colName, colProps]] = typeof colObj === 'string' ? [[colObj]] : Object.entries(colObj);
+  columns.forEach((col) => {
+    const [[colName, colProps]] = typeof col === 'string' ? [[col]] : Object.entries(col);
     if (colName === 'actions') {
       objColumnMap[colName] = { colProps, value: actions }; // Value of actions column are the actions itself
     } else {
-      objColumnMap[colName] = { colProps, value: obj[colProps?.property || colName] };
+      objColumnMap[colName] = { colProps, value: obj[colName] };
     }
   });
 
@@ -31,7 +33,7 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
         }
 
         return (
-          <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, ['className', 'key'])}>
+          <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, colPropsToOmit)}>
             {capitalize(value)}
           </td>
         );

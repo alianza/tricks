@@ -47,10 +47,9 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction, showCo
       <table className="relative mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
-            {columns.map((colObj) => {
-              const colName =
-                typeof colObj === 'string' ? colObj : Object.values(colObj)[0].alias || Object.keys(colObj)[0];
-              const colProp = typeof colObj === 'string' ? colObj : Object.keys(colObj)[0];
+            {columns.map((col) => {
+              const colName = typeof col === 'string' ? col : Object.values(col)[0].alias || Object.keys(col)[0];
+              const colProp = typeof col === 'string' ? col : Object.keys(col)[0];
 
               return (
                 <th key={colName} className="p-3 sm:p-4">
