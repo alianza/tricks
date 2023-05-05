@@ -41,7 +41,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       const { _id } = router.query;
       const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
-      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to update flatground trick: ${error.message}`);
     }
@@ -51,7 +50,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     try {
       const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
       mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
-      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to add flatground trick: ${error.message}`);
     }
@@ -73,6 +71,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     setLoading(true);
     newFlatgroundTrick ? await postData(form) : await patchData(form);
     setLoading(false);
+    router.back();
   };
 
   return (
