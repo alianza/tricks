@@ -1,13 +1,20 @@
-import Table from '../../components/common/table/table';
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
 import { apiCall } from '../../lib/clientUtils';
+import utilStyles from '../../styles/utils.module.scss';
+import Link from 'next/link';
+import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function ManualsPage() {
   const [manuals, setManuals] = useState([]);
-  const [manualActions, manualColumns] = [['edit', 'view', 'delete'], ['type']];
+  // const manualColumns = [{ type: { style: { backgroundColor: 'red' } } }];
+  const manualColumns = ['type'];
+  /* prettier-ignore */ const manualActions = [
+    { edit: (obj) => <Link href={`/manuals/${obj._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>Edit</Link> },
+    { view: (obj) => <Link href={`/manuals/${obj._id}`} className={`${utilStyles.button} ${utilStyles.blue}`}>View</Link> },
+    { delete: () => <button className={`${utilStyles.button} ${utilStyles.red}`}>Delete</button> } ];
   const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
@@ -22,17 +29,8 @@ export default function ManualsPage() {
   }, []);
 
   const handleAction = async (action, obj) => {
-    console.log(`ACTION PARENT`, action);
-    console.log(`OBJ PARENT`, obj);
     switch (action) {
-      case 'edit':
-        console.log(`EDIT`);
-        break;
-      case 'view':
-        console.log(`VIEW`);
-        break;
       case 'delete':
-        console.log(`DELETE`);
         try {
           if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
           await apiCall('manuals', { method: 'DELETE', id: obj._id });
@@ -41,7 +39,6 @@ export default function ManualsPage() {
         } catch (error) {
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }
-        console.log(`manuals`, manuals);
         break;
     }
   };
@@ -55,12 +52,12 @@ export default function ManualsPage() {
       {loading ? (
         <Loader className="mx-auto my-24" />
       ) : (
-        <Table
+        <GenericTable
           objArray={manuals}
           columns={manualColumns}
           actions={manualActions}
-          onAction={(action, obj) => handleAction(action, obj)}
-          endpoint="manuals"
+          onAction={handleAction}
+          entityName="manual"
           newLink="/new-manual"
           showCount
         />
