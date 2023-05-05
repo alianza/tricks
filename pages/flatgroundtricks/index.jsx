@@ -15,7 +15,7 @@ export default function FlatgroundTricksPage() {
     'direction',
     'rotation',
     { name: {} },
-    { trick: { alias: 'trickName', className: 'text-sm font-bold' } },
+    { trick: { alias: 'Trick Name', className: 'text-sm font-bold' } },
   ];
   /* prettier-ignore */ const flatgroundActions = [
     { edit: (obj) => <Link href={`/flatgroundtricks/${obj._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>Edit</Link> },
