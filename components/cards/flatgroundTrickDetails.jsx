@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { apiCall, capitalize, getFullTrickName } from '../../lib/commonUtils';
+import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { formatDate } from '../../lib/clientUtils';
+import { apiCall, formatDate } from '../../lib/clientUtils';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
       await apiCall(`flatgroundtricks`, { method: 'DELETE', id: router.query._id });
-      await router.push('/dashboard');
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the flatground trick: ${error.message}`);
     }

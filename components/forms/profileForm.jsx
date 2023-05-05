@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, VN } from '../../lib/commonUtils';
+import { VN } from '../../lib/commonUtils';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 import Loader from '../common/loader/loader';
 import LoaderButton from '../common/LoaderButton';
+import { apiCall } from '../../lib/clientUtils';
 
 const ProfileForm = ({ profileForm }) => {
   const { data: session } = useSession();
@@ -20,7 +21,7 @@ const ProfileForm = ({ profileForm }) => {
   const patchData = async (form) => {
     try {
       const { data } = await apiCall('profiles/mine', { method: 'PATCH', data: form });
-      await mutate(`/api/profiles/mine`, data, false); // Update the local data without a revalidation
+      mutate(`/api/profiles/mine`, data, false); // Update the local data without a revalidation
       toast.success('Profile updated!');
     } catch (error) {
       toast.error(`Failed to update profile: ${error.message}`);

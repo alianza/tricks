@@ -2,26 +2,25 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
-import utilStyles from '../../styles/utils.module.scss';
+import { capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/clientUtils';
+import { useAsyncEffect } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
+import { apiCall } from '../../lib/clientUtils';
 
-const GrindForm = ({ grindForm, newGrind = true }) => {
+const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
-
   const [form, setForm] = useState({
-    name: grindForm.name,
-    preferred_stance: grindForm.preferred_stance,
-    stance: grindForm.stance,
-    direction: grindForm.direction,
+    name: grind.name,
+    preferred_stance: grind.preferred_stance,
+    stance: grind.stance,
+    direction: grind.direction,
   });
 
   const { name, preferred_stance, stance, direction } = form;
@@ -40,8 +39,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     try {
       const { _id } = router.query;
       const { data } = await apiCall('grinds', { method: 'PATCH', data: form, _id });
-      await mutate(`/api/grinds/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate(`/api/grinds/${_id}`, data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to update grind: ${error.message}`);
     }
@@ -50,8 +48,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
   const postData = async (form) => {
     try {
       const { data } = await apiCall('grinds', { method: 'POST', data: form });
-      await mutate('/api/grinds', data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate('/api/grinds', data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to add grind: ${error.message}`);
     }
@@ -69,6 +66,7 @@ const GrindForm = ({ grindForm, newGrind = true }) => {
     e.preventDefault();
     newGrind ? await postData(form) : await patchData(form);
     setLoading(false);
+    router.back();
   };
 
   return (

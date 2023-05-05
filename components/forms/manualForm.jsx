@@ -2,20 +2,20 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, VN } from '../../lib/commonUtils';
-import utilStyles from '../../styles/utils.module.scss';
+import { capitalize, VN } from '../../lib/commonUtils';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/clientUtils';
+import { useAsyncEffect } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
+import { apiCall } from '../../lib/clientUtils';
 
-const ManualForm = ({ manualForm, newManual = true }) => {
+const ManualForm = ({ manual, newManual = true }) => {
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    preferred_stance: manualForm.preferred_stance,
-    type: manualForm.type,
+    preferred_stance: manual.preferred_stance,
+    type: manual.type,
   });
 
   const { preferred_stance, type } = form;
@@ -30,8 +30,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
     try {
       const { _id } = router.query;
       const { data } = await apiCall('manuals', { method: 'PATCH', data: form, _id });
-      await mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to update manual: ${error.message}`);
     }
@@ -40,8 +39,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
   const postData = async (form) => {
     try {
       const { data } = await apiCall('manuals', { method: 'POST', data: form });
-      await mutate('/api/manuals', data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate('/api/manuals', data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to add Manual: ${error.message}`);
     }
@@ -59,6 +57,7 @@ const ManualForm = ({ manualForm, newManual = true }) => {
     e.preventDefault();
     newManual ? await postData(form) : await patchData(form);
     setLoading(false);
+    router.back();
   };
 
   return (

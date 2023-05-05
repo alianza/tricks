@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { apiCall, getFullComboName } from '../../lib/commonUtils';
+import { getFullComboName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { TRICK_TYPES_MAP, TRICK_TYPES_MODELS } from '../forms/comboForm';
-import { formatDate } from '../../lib/clientUtils';
+import { apiCall, formatDate } from '../../lib/clientUtils';
 
 export default function ComboDetails({ combo }) {
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function ComboDetails({ combo }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullComboName(combo)}"?`)) return;
       await apiCall('combos', { method: 'DELETE', id: router.query._id });
-      await router.push('/dashboard');
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the combo: ${error.message}`);
     }
@@ -33,7 +33,7 @@ export default function ComboDetails({ combo }) {
             {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
             ) : (
-              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatgroundtricks] && (
+              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] && (
                 <span className="font-bold"> Out </span>
               )
             )}

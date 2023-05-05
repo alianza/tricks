@@ -1,9 +1,9 @@
 import ComboForm from '../components/forms/comboForm';
 
 export default function NewCombo() {
-  const comboForm = {
+  const newCombo = {
     trickArray: [],
   };
 
-  return <ComboForm comboForm={comboForm} />;
+  return <ComboForm combo={newCombo} />;
 }

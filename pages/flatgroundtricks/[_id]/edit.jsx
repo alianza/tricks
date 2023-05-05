@@ -4,22 +4,15 @@ import { fetcher } from '../../../lib/clientUtils';
 import useSWR from 'swr';
 
 const EditFlatGroundTrick = () => {
-  const { _id } = useRouter().query;
+  const router = useRouter();
+  const { _id } = router.query;
   const { data, error, isLoading } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
   const { data: flatgroundTrick, error: serverError } = data || {};
 
   if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
   if (!flatgroundTrick || isLoading) return <p>Loading...</p>;
 
-  const flatgroundTrickForm = {
-    name: flatgroundTrick.name,
-    preferred_stance: flatgroundTrick.preferred_stance,
-    stance: flatgroundTrick.stance,
-    direction: flatgroundTrick.direction,
-    rotation: flatgroundTrick.rotation,
-  };
-
-  return <FlatgroundTrickForm flatgroundTrickForm={flatgroundTrickForm} newFlatgroundTrick={false} />;
+  return <FlatgroundTrickForm flatgroundTrick={flatgroundTrick} newFlatgroundTrick={false} />;
 };
 
 export default EditFlatGroundTrick;

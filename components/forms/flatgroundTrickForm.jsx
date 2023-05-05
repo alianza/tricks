@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import styles from './form.module.scss';
-import { apiCall, capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
+import { capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/clientUtils';
+import { useAsyncEffect } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
+import { mutate } from 'swr';
+import { apiCall } from '../../lib/clientUtils';
 
-const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true }) => {
+const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
-
   const [form, setForm] = useState({
-    name: flatgroundTrickForm.name,
-    preferred_stance: flatgroundTrickForm.preferred_stance,
-    stance: flatgroundTrickForm.stance,
-    direction: flatgroundTrickForm.direction,
-    rotation: flatgroundTrickForm.rotation,
+    name: flatgroundTrick.name,
+    preferred_stance: flatgroundTrick.preferred_stance,
+    stance: flatgroundTrick.stance,
+    direction: flatgroundTrick.direction,
+    rotation: flatgroundTrick.rotation,
   });
 
   const { name, preferred_stance, stance, direction, rotation } = form;
@@ -40,8 +40,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
     try {
       const { _id } = router.query;
       const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
-      await mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to update flatground trick: ${error.message}`);
     }
@@ -50,8 +49,7 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   const postData = async (form) => {
     try {
       const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
-      await mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
-      await router.push('/dashboard');
+      mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to add flatground trick: ${error.message}`);
     }
@@ -69,10 +67,11 @@ const FlatgroundTrickForm = ({ flatgroundTrickForm, newFlatgroundTrick = true })
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     newFlatgroundTrick ? await postData(form) : await patchData(form);
     setLoading(false);
+    router.back();
   };
 
   return (

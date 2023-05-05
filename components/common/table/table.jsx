@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { capitalize, apiCall, getFullName, sOrNoS } from '../../../lib/commonUtils';
+import { capitalize, getFullName, sOrNoS } from '../../../lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './tableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
 import { toast } from 'react-toastify';
+import { apiCall } from '../../../lib/clientUtils';
 
 const Table = ({
   objArray,
@@ -27,6 +28,9 @@ const Table = ({
 
   useEffect(() => {
     sort(columns[0], 'asc'); // Default ascending sort on first column
+  }, []);
+
+  useEffect(() => {
     setTimeout(() => tableBodyRef.current && autoAnimate(tableBodyRef.current), 1);
   }, [objArrayState]);
 
@@ -59,7 +63,7 @@ const Table = ({
             {columns.map((column) => (
               <th key={column.toString()} className="p-3 sm:p-4">
                 <div className={`flex justify-center gap-2`}>
-                  <p>{capitalize(column)}</p>
+                  <p className="font-bold">{capitalize(column)}</p>
                   {columnSortDirection[column] === 'asc' && (
                     <ChevronDownIcon onClick={() => sort(column, 'desc')} className="h-6 w-6 cursor-pointer" />
                   )}

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { apiCall, capitalize, getFullGrindName } from '../../lib/commonUtils';
+import { capitalize, getFullGrindName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
-import { formatDate } from '../../lib/clientUtils';
+import { apiCall, formatDate } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 
 export default function GrindDetails({ grind }) {
@@ -13,7 +13,7 @@ export default function GrindDetails({ grind }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullGrindName(grind)}"?`)) return;
       await apiCall('grinds', { method: 'DELETE', id: router.query._id });
-      await router.push('/dashboard');
+      router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the grind: ${error.message}`);
     }
