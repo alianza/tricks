@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
-import styles from './form.module.scss';
+import formStyles from './form.module.scss';
 import { capitalize, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
@@ -74,7 +74,11 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const patchData = async (form) => {
     try {
       const { _id } = router.query;
-      const { data } = await apiCall('combos', { method: 'PATCH', _id, data: trimTrickArray(form) });
+      const { data } = await apiCall('combos', {
+        method: 'PATCH',
+        _id,
+        data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
+      });
       mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
     } catch (error) {
       toast.error(`Failed to update combo: ${error.message}`);
@@ -133,7 +137,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       </div>
       <hr className="my-2 border-neutral-800 dark:border-neutral-400" />
 
-      <form onSubmit={handleSubmit} className={`${styles.form} mt-6 flex grow flex-col`}>
+      <form onSubmit={handleSubmit} className={`${formStyles.form} mt-6 flex grow flex-col`}>
         <div className="flex items-center justify-between">
           <h1 className="text-2xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
           {trickArray.length > 0 && (
@@ -169,7 +173,10 @@ const ComboForm = ({ combo, newCombo = true }) => {
         )}
 
         {/*Show tricks*/}
-        <div ref={tricksRef} className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-y-auto">
+        <div
+          ref={tricksRef}
+          className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-y-auto overflow-x-hidden"
+        >
           {!tricks[trickType].filter(stanceFilter).length && !loading ? (
             <p>
               No {stance !== 'all' && stance} {trickType}...
