@@ -1,6 +1,6 @@
 import FlatgroundTrickForm from '../components/forms/flatgroundTrickForm';
 import { DEFAULT_FLATGROUND_TRICK } from '../models/constants/flatgroundTricks';
-import { useCloseAfterAdd } from '../lib/customHooks';
+import { useCloseAfterQueryParam } from '../lib/customHooks';
 
 const NewFlatFlatGroundTrick = () => {
   const newFlatgroundTrick = {
@@ -11,7 +11,7 @@ const NewFlatFlatGroundTrick = () => {
     rotation: 0,
   };
 
-  useCloseAfterAdd();
+  useCloseAfterQueryParam('closeAfterAdd');
 
   return <FlatgroundTrickForm flatgroundTrick={newFlatgroundTrick} />;
 };
