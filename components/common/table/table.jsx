@@ -7,16 +7,7 @@ import IconLink from '../IconLink';
 import { toast } from 'react-toastify';
 import { apiCall } from '../../../lib/clientUtils';
 
-const Table = ({
-  objArray,
-  columns,
-  actions,
-  endpoint,
-  onAction,
-  updateLocalState = false,
-  showCount = false,
-  newLink,
-}) => {
+const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false, showCount = false, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -51,12 +42,21 @@ const Table = ({
     setTimeout(() => setIsAnimating(false), 250); // default auto-animate duration
   };
 
+  const handleDelete = async (obj) => {
+    try {
+      if (!confirm(`Are you sure you want to delete "${getFullName(obj, endpoint)}"?`)) return;
+      await apiCall(`${endpoint}/`, { method: 'DELETE', id: obj._id });
+      const { data } = updateLocalState // get new data from Api or update local state if updateLocalState is true
+        ? { data: objArrayState.filter(({ _id }) => _id !== obj._id) }
+        : await apiCall(endpoint, { method: 'GET' }); // Update the local data from the API
+      setObjArrayState(data);
+    } catch (error) {
+      toast.error(`Failed to delete ${getFullName(obj, endpoint)}: ${error.message}`);
+    }
+  };
+
   return (
-    <div
-      className={`flex flex-col items-center overflow-y-hidden ${
-        isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'
-      }`}
-    >
+    <div className={`flex flex-col items-center overflow-y-hidden ${isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
       <table className="relative mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
@@ -100,7 +100,7 @@ const Table = ({
               actions={actions}
               endpoint={endpoint}
               emitMessage={(message) => toast.error(message)}
-              onRowAction={onAction}
+              deleteRow={(obj) => handleDelete(obj)}
             />
           ))}
         </tbody>

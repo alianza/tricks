@@ -1,7 +1,6 @@
 import { capitalize } from '../../../lib/commonUtils';
 import Link from 'next/link';
 import utilStyles from '../../../styles/utils.module.scss';
-import { act } from 'react-dom/test-utils';
 
 export const EditButton = ({ endpoint, id }) => (
   <Link href={`/${endpoint}/${id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>
@@ -21,7 +20,7 @@ export const DeleteButton = ({ handleDelete }) => (
   </button>
 );
 
-const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow, onRowAction }) => {
+const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow }) => {
   const objColumnMap = {};
 
   columns.forEach((column) => {
@@ -37,11 +36,16 @@ const tableDataRow = ({ obj, columns, actions, endpoint, deleteRow, onRowAction 
       {Object.entries(objColumnMap).map(([key, value]) => {
         if (key === 'actions') {
           const colOutput = value.map((action) => {
-            return (
-              <button key={action} onClick={() => onRowAction(action, obj)}>
-                {action}
-              </button>
-            );
+            switch (action) {
+              case 'edit':
+                return <EditButton key={action} endpoint={endpoint} id={obj._id} />;
+              case 'view':
+                return <ViewButton key={action} endpoint={endpoint} id={obj._id} />;
+              case 'delete':
+                return <DeleteButton key={action} handleDelete={() => deleteRow(obj)} />;
+              default:
+                return null;
+            }
           });
 
           return (
