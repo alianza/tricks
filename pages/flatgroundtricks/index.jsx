@@ -10,7 +10,13 @@ import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState([]);
-  const flatgroundColumns = ['stance', 'direction', 'rotation', 'name', { trick: { className: 'text-sm font-bold' } }];
+  const flatgroundColumns = [
+    'stance',
+    'direction',
+    'rotation',
+    { name: {} },
+    { trick: { alias: 'trickName', className: 'text-sm font-bold' } },
+  ];
   /* prettier-ignore */ const flatgroundActions = [
     { edit: (obj) => <Link href={`/flatgroundtricks/${obj._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>Edit</Link> },
     { view: (obj) => <Link href={`/flatgroundtricks/${obj._id}`} className={`${utilStyles.button} ${utilStyles.blue}`}>View</Link> },

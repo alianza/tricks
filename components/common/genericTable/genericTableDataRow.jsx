@@ -4,22 +4,22 @@ import { cloneElement } from 'react';
 const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
   const objColumnMap = {};
 
-  columns.forEach((columnObj) => {
-    const [[columnName, columnProps]] = typeof columnObj === 'string' ? [[columnObj]] : Object.entries(columnObj);
-    if (columnName === 'actions') {
-      objColumnMap[columnName] = { columnProps, value: actions };
+  columns.forEach((colObj) => {
+    const [[colName, colProps]] = typeof colObj === 'string' ? [[colObj]] : Object.entries(colObj);
+    if (colName === 'actions') {
+      objColumnMap[colName] = { colProps, value: actions }; // Value of actions column are the actions itself
     } else {
-      objColumnMap[columnName] = { columnProps, value: obj[columnName] };
+      objColumnMap[colName] = { colProps, value: obj[colProps?.property || colName] };
     }
   });
 
   return (
     <tr className="relative after:absolute after:left-0 after:h-[2px] after:w-full after:bg-neutral-400">
-      {Object.entries(objColumnMap).map(([columnName, columnData]) => {
-        const { value, columnProps } = columnData;
-        if (columnName === 'actions') {
+      {Object.entries(objColumnMap).map(([colName, colData]) => {
+        const { value, colProps } = colData;
+        if (colName === 'actions') {
           return (
-            <td key={columnName} className="p-3 sm:p-4">
+            <td key={colName} className="p-3 sm:p-4">
               <div className="flex justify-center gap-2">
                 {value.map((actionObj) => {
                   const [[action, elementFunc]] = Object.entries(actionObj);
@@ -31,7 +31,7 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
         }
 
         return (
-          <td key={columnName} className={`p-3 sm:p-4 ${columnProps?.className}`} {...omit(columnProps, ['className'])}>
+          <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, ['className', 'key'])}>
             {capitalize(value)}
           </td>
         );
