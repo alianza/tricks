@@ -25,6 +25,10 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
     setTimeout(() => tableBodyRef.current && autoAnimate(tableBodyRef.current), 1);
   }, [objArrayState]);
 
+  useEffect(() => {
+    setObjArrayState(objArray);
+  }, [objArray]);
+
   const sort = (column, direction) => {
     setIsAnimating(true);
     setObjArrayState(
@@ -63,7 +67,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
             {columns.map((column) => (
               <th key={column.toString()} className="p-3 sm:p-4">
                 <div className={`flex justify-center gap-2`}>
-                  <p>{capitalize(column)}</p>
+                  <p className="font-bold">{capitalize(column)}</p>
                   {columnSortDirection[column] === 'asc' && (
                     <ChevronDownIcon onClick={() => sort(column, 'desc')} className="h-6 w-6 cursor-pointer" />
                   )}
