@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { mutate } from 'swr';
 import styles from './form.module.scss';
+import utilStyles from '../../styles/utils.module.scss';
 import { VN } from '../../lib/commonUtils';
 import { toast } from 'react-toastify';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Loader from '../common/loader/loader';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall } from '../../lib/clientUtils';
@@ -62,7 +63,12 @@ const ProfileForm = ({ profileForm }) => {
         </select>
       </label>
 
-      <LoaderButton isLoading={loading} className="mt-4" />
+      <div className="flex justify-between">
+        <LoaderButton isLoading={loading} className="mt-4" />
+        <button className={`${utilStyles.button} ${utilStyles.red} mt-4`} onClick={() => signOut({ callbackUrl: '/' })}>
+          Sign Out
+        </button>
+      </div>
     </form>
   );
 };

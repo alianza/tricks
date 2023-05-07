@@ -7,13 +7,11 @@ import ProfileForm from '../../components/forms/profileForm';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
+  const query = { userId: session.user.id };
 
-  const profile = await findAndSerializeDoc(
-    Profile,
-    Model.findOneAndUpdate,
-    { userId: session.user.id },
-    { args: [{}, { new: true, upsert: true }] }
-  );
+  const profile = await findAndSerializeDoc(Profile, Model.findOneAndUpdate, query, {
+    args: [{}, { new: true, upsert: true }],
+  });
 
   return {
     props: {
