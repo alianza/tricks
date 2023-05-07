@@ -5,13 +5,14 @@ import { capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
 import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/customHooks';
+import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { mutate } from 'swr';
 import { apiCall } from '../../lib/clientUtils';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
+  const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
@@ -41,7 +42,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       const { _id } = router.query;
       const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
-      router.push('/flatgroundtricks');
+      router.back();
     } catch (error) {
       toast.error(`Failed to update flatground trick: ${error.message}`);
     }
@@ -51,7 +52,8 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     try {
       const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
       mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
-      router.push('/flatgroundtricks');
+      router.back();
+      closeAfterAdd();
     } catch (error) {
       toast.error(`Failed to add flatground trick: ${error.message}`);
     }
@@ -73,7 +75,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     setLoading(true);
     newFlatgroundTrick ? await postData(form) : await patchData(form);
     setLoading(false);
-    router.back();
   };
 
   return (

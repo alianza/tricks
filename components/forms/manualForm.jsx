@@ -5,12 +5,13 @@ import styles from './form.module.scss';
 import { capitalize, VN } from '../../lib/commonUtils';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/customHooks';
+import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall } from '../../lib/clientUtils';
 
 const ManualForm = ({ manual, newManual = true }) => {
   const router = useRouter();
+  const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -31,7 +32,8 @@ const ManualForm = ({ manual, newManual = true }) => {
       const { _id } = router.query;
       const { data } = await apiCall('manuals', { method: 'PATCH', data: form, _id });
       mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
-      router.push('/manuals');
+      router.back();
+      toast.success(`Successfully updated manual: ${data.name}`);
     } catch (error) {
       toast.error(`Failed to update manual: ${error.message}`);
     }
@@ -41,7 +43,8 @@ const ManualForm = ({ manual, newManual = true }) => {
     try {
       const { data } = await apiCall('manuals', { method: 'POST', data: form });
       mutate('/api/manuals', data, false); // Update the local data without a revalidation
-      router.push('/manuals');
+      router.back();
+      closeAfterAdd();
     } catch (error) {
       toast.error(`Failed to add Manual: ${error.message}`);
     }

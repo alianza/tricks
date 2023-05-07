@@ -7,7 +7,7 @@ import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/customHooks';
+import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall } from '../../lib/clientUtils';
 import Link from 'next/link';
@@ -39,6 +39,7 @@ const trickTypeHasStance = (trickType) =>
 
 const ComboForm = ({ combo, newCombo = true }) => {
   const router = useRouter();
+  const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatground);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
@@ -80,6 +81,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
       mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
+      router.back();
     } catch (error) {
       toast.error(`Failed to update combo: ${error.message}`);
     }
@@ -92,6 +94,8 @@ const ComboForm = ({ combo, newCombo = true }) => {
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
       mutate('/api/combos', data, false); // Update the local data without a revalidation
+      router.back();
+      closeAfterAdd();
     } catch (error) {
       toast.error(`Failed to create combo: ${error.message}`);
     }
@@ -102,7 +106,6 @@ const ComboForm = ({ combo, newCombo = true }) => {
     setLoading(true);
     newCombo ? await postData(form) : await patchData(form);
     setLoading(false);
-    router.back();
   };
 
   const addTrick = (e, trick) => {
