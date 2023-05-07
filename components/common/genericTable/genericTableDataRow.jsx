@@ -1,7 +1,7 @@
-import { capitalize, omit } from '../../../lib/commonUtils';
+import { capitalize, deepGet, omit } from '../../../lib/commonUtils';
 import { cloneElement } from 'react';
 
-const colPropsToOmit = ['className', 'key', 'alias'];
+const colPropsToOmit = ['className', 'key', 'alias', 'capitalize'];
 
 const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
   const objColumnMap = {};
@@ -11,7 +11,7 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
     if (colName === 'actions') {
       objColumnMap[colName] = { colProps, value: actions }; // Value of actions column are the actions itself
     } else {
-      objColumnMap[colName] = { colProps, value: obj[colName] };
+      objColumnMap[colName] = { colProps, value: deepGet(obj, colName) };
     }
   });
 
@@ -34,7 +34,7 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
 
         return (
           <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, colPropsToOmit)}>
-            {capitalize(value)}
+            {colProps?.capitalize === undefined || colProps?.capitalize === true ? capitalize(value) : value.toString()}
           </td>
         );
       })}
