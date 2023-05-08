@@ -9,8 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]';
 import LinkWithArrow from '../components/common/LinkWithArrow';
 import GenericTable from '../components/common/genericTable/genericTable';
-import { trickCol } from '../lib/commonUtils';
-import { apiCall, getCommonActions } from '../lib/clientUtils';
+import { apiCall, getCommonActions, trickCol } from '../lib/clientUtils';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
@@ -45,8 +44,8 @@ export async function getServerSideProps(context) {
 export default function Index({ flatgroundTricksData, grindsData, combosData, manualsData }) {
   const [flatgroundTricks, setFlatgroundTricks] = useState(flatgroundTricksData.flatgroundTricks);
   const [grinds, setGrinds] = useState(grindsData.grinds);
-  const [combos, setCombos] = useState(combosData.combos);
   const [manuals, setManuals] = useState(manualsData.manuals);
+  const [combos, setCombos] = useState(combosData.combos);
 
   flatgroundTricksData.flatgroundActions = getCommonActions('flatgroundtricks');
   grindsData.grindActions = getCommonActions('grinds');
@@ -54,21 +53,19 @@ export default function Index({ flatgroundTricksData, grindsData, combosData, ma
   combosData.comboActions = getCommonActions('combos');
 
   const handleActions = async (action, obj, entityType) => {
+    const endpointSetterMap = {
+      'flatground trick': ['flatgroundtricks', setFlatgroundTricks],
+      grind: ['grinds', setGrinds],
+      manual: ['manuals', setManuals],
+      combo: ['combos', setCombos],
+    };
+
     switch (action) {
       case 'delete':
         try {
           if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
-          const dataMap = {
-            'flatground trick': ['flatgroundtricks', setFlatgroundTricks],
-            grind: ['grinds', setGrinds],
-            manual: ['manuals', setManuals],
-            combo: ['combos', setCombos],
-          };
-
-          const [endpoint, setData] = dataMap[entityType];
-
-          if (!endpoint) throw new Error(`Invalid entity type: ${entityType}`);
-
+          const [endpoint, setData] = endpointSetterMap[entityType];
+          if (!endpoint) return toast.error(`Failed to delete ${obj.trick}: Invalid entity type: ${entityType}`);
           await apiCall(endpoint, { method: 'DELETE', id: obj._id });
           const { data } = await apiCall(endpoint, { method: 'GET' });
           setData(data);

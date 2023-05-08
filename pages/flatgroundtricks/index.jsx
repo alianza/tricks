@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall, getCommonActions } from '../../lib/clientUtils';
+import { apiCall, getCommonActions, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
-import { trickCol } from '../../lib/commonUtils';
 
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState([]);
