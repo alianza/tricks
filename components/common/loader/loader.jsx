@@ -1,7 +1,7 @@
 export default function Loader({ className }) {
   return (
     <svg
-      className={`${className} h-16 w-16 animate-spin text-white`}
+      className={`${className} h-16 w-16 animate-spin dark:text-white`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
