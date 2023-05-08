@@ -36,10 +36,10 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      flatgroundTricks: { ...flatGroundTricksData },
-      grinds: { ...grindsData },
-      combos: { ...combosData },
-      manuals: { ...manualsData },
+      flatgroundTricks: flatGroundTricksData,
+      grinds: grindsData,
+      combos: combosData,
+      manuals: manualsData,
     },
   };
 }

@@ -26,6 +26,7 @@ export default function Header() {
       <Link href={`/${session ? 'dashboard' : ''}`} className="flex shrink-0 items-center gap-3 ">
         <Image
           src={logo}
+          priority={true}
           alt="Skateboard Trick Tracker Logo"
           title="Skateboard Trick Tracker Logo"
           className="h-12 w-12 drop-shadow-lg transition-transform hover:scale-110 active:scale-100 sm:h-16 sm:w-16"
