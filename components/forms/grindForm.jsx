@@ -6,12 +6,13 @@ import { capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect } from '../../lib/customHooks';
+import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall } from '../../lib/clientUtils';
 
 const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
+  const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
@@ -40,7 +41,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
       const { _id } = router.query;
       const { data } = await apiCall('grinds', { method: 'PATCH', data: form, _id });
       mutate(`/api/grinds/${_id}`, data, false); // Update the local data without a revalidation
-      router.push('/dashboard');
+      router.back();
     } catch (error) {
       toast.error(`Failed to update grind: ${error.message}`);
     }
@@ -50,7 +51,8 @@ const GrindForm = ({ grind, newGrind = true }) => {
     try {
       const { data } = await apiCall('grinds', { method: 'POST', data: form });
       mutate('/api/grinds', data, false); // Update the local data without a revalidation
-      router.push('/dashboard');
+      router.back();
+      closeAfterAdd();
     } catch (error) {
       toast.error(`Failed to add grind: ${error.message}`);
     }
