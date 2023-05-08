@@ -1,28 +1,22 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import Loader from '../common/loader/loader';
 import { apiCall } from '../../lib/clientUtils';
 
 export default function Stats({ statsDefinition, title, description }) {
   const [stats, setStats] = useState(Object.entries(statsDefinition).map(([label, { value }]) => [label, value]));
-  const [isLoading, setIsLoading] = useState(true);
 
   useAsyncEffect(async () => {
     try {
       const response = await Promise.all(
         Object.values(statsDefinition).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' }))
       );
-
       setStats(Object.entries(statsDefinition).map(([label], index) => [label, response[index].data.count]));
     } catch (error) {
       toast.error(`Failed to fetch stats: ${error.message}`);
     } finally {
-      setIsLoading(false);
     }
   }, []);
-
-  if (isLoading) return <Loader className="mx-auto my-16"></Loader>;
 
   return (
     <section className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800">
