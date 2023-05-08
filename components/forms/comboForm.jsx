@@ -34,8 +34,7 @@ export const TRICK_TYPES_NEW_PAGES = {
   [TRICK_TYPES_MAP.manual]: '/new-manual?closeAfterAdd=true',
 };
 
-const trickTypeHasStance = (trickType) =>
-  trickType === TRICK_TYPES_MAP.flatground || trickType === TRICK_TYPES_MAP.grind;
+const trickTypeHasStance = (trickType) => trickType === TRICK_TYPES_MAP.flatground || trickType === TRICK_TYPES_MAP.grind;
 
 const ComboForm = ({ combo, newCombo = true }) => {
   const router = useRouter();
@@ -176,31 +175,20 @@ const ComboForm = ({ combo, newCombo = true }) => {
         )}
 
         {/*Show tricks*/}
-        <div
-          ref={tricksRef}
-          className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-y-auto overflow-x-hidden"
-        >
+        <div ref={tricksRef} className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-y-auto overflow-x-hidden">
           {!tricks[trickType].filter(stanceFilter).length && !loading ? (
             <p>
               No {stance !== 'all' && stance} {trickType}...
             </p>
           ) : (
             tricks[trickType].filter(stanceFilter).map((trick) => (
-              <div
-                className="group flex cursor-pointer items-center"
-                onClick={(e) => addTrick(e, trick)}
-                key={trick._id}
-              >
+              <div className="group flex cursor-pointer items-center" onClick={(e) => addTrick(e, trick)} key={trick._id}>
                 <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
                 <span className={`${utilStyles.link} grow py-1 touch:!decoration-transparent`}>{trick.trick}</span>
               </div>
             ))
           )}
-          <Link
-            href={TRICK_TYPES_NEW_PAGES[trickType]}
-            target="_blank"
-            className="group flex cursor-pointer items-center"
-          >
+          <Link href={TRICK_TYPES_NEW_PAGES[trickType]} target="_blank" className="group flex cursor-pointer items-center">
             <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
             <b className={`${utilStyles.link} grow py-1`}>Add new {TRICK_TYPES_MODELS[trickType]}</b>
           </Link>

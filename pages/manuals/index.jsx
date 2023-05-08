@@ -1,13 +1,14 @@
-import Table from '../../components/common/table/table';
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, getCommonActions } from '../../lib/clientUtils';
+import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function ManualsPage() {
   const [manuals, setManuals] = useState([]);
-  const [manualActions, manualColumns] = [['edit', 'view', 'delete'], ['type']];
+  const manualColumns = [{ type: { className: 'text-sm font-bold' } }];
+  const manualActions = getCommonActions('manuals');
   const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
@@ -21,6 +22,21 @@ export default function ManualsPage() {
     }
   }, []);
 
+  const handleAction = async (action, obj) => {
+    switch (action) {
+      case 'delete':
+        try {
+          if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
+          await apiCall('manuals', { method: 'DELETE', id: obj._id });
+          const { data } = await apiCall('manuals', { method: 'GET' });
+          setManuals(data);
+        } catch (error) {
+          toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
+        }
+        break;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-16">
       <div>
@@ -30,11 +46,12 @@ export default function ManualsPage() {
       {loading ? (
         <Loader className="mx-auto my-24" />
       ) : (
-        <Table
+        <GenericTable
           objArray={manuals}
           columns={manualColumns}
           actions={manualActions}
-          endpoint="manuals"
+          onAction={handleAction}
+          entityName="manual"
           newLink="/new-manual"
           showCount
         />

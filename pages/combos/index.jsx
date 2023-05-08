@@ -1,17 +1,18 @@
-import Table from '../../components/common/table/table';
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, getCommonActions } from '../../lib/clientUtils';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { shallowEqual } from '../../lib/commonUtils';
+import GenericTable from '../../components/common/genericTable/genericTable';
 
 const defaultFilters = { grind: false, manual: false, stance: 'all' };
 
 export default function CombosPage() {
   const [combos, setCombos] = useState([]);
-  const [comboColumns, comboActions] = [['combo'], ['edit', 'view', 'delete']];
+  const comboColumns = [{ combo: { className: 'text-sm font-bold' } }];
+  const comboActions = getCommonActions('combos');
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -25,6 +26,21 @@ export default function CombosPage() {
       setLoading(false);
     }
   }, [filters]);
+
+  const handleAction = async (action, obj) => {
+    switch (action) {
+      case 'delete':
+        try {
+          if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
+          await apiCall('combos', { method: 'DELETE', id: obj._id });
+          const { data } = await apiCall('combos', { method: 'GET' });
+          setCombos(data);
+        } catch (error) {
+          toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
+        }
+        break;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-16">
@@ -89,11 +105,13 @@ export default function CombosPage() {
               )}
             </div>
           </details>
-          <Table
+
+          <GenericTable
             objArray={combos}
             columns={comboColumns}
             actions={comboActions}
-            endpoint="combos"
+            onAction={handleAction}
+            entityName="combo"
             newLink="/new-combo"
             showCount
           />

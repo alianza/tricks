@@ -56,11 +56,7 @@ const Table = ({ objArray, columns, actions, endpoint, updateLocalState = false,
   };
 
   return (
-    <div
-      className={`flex flex-col items-center overflow-y-hidden ${
-        isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'
-      }`}
-    >
+    <div className={`flex flex-col items-center overflow-y-hidden ${isAnimating ? 'overflow-x-hidden' : 'overflow-x-auto'}`}>
       <table className="relative mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>

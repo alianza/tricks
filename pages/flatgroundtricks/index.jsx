@@ -1,14 +1,15 @@
-import Table from '../../components/common/table/table';
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, getCommonActions } from '../../lib/clientUtils';
+import GenericTable from '../../components/common/genericTable/genericTable';
+import { trickCol } from '../../lib/commonUtils';
 
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState([]);
-  const flatgroundColumns = ['stance', 'direction', 'rotation', 'name', 'trick'];
-  const flatgroundActions = ['edit', 'view', 'delete'];
+  const flatgroundColumns = ['stance', 'direction', 'rotation', { name: {} }, trickCol];
+  const flatgroundActions = getCommonActions('flatgroundtricks');
   const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
@@ -22,6 +23,21 @@ export default function FlatgroundTricksPage() {
     }
   }, []);
 
+  const handleAction = async (action, obj) => {
+    switch (action) {
+      case 'delete':
+        try {
+          if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
+          await apiCall('flatgroundtricks', { method: 'DELETE', id: obj._id });
+          const { data } = await apiCall('flatgroundtricks', { method: 'GET' });
+          setFlatgroundTricks(data);
+        } catch (error) {
+          toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
+        }
+        break;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-16">
       <div>
@@ -33,11 +49,12 @@ export default function FlatgroundTricksPage() {
       {loading ? (
         <Loader className="mx-auto my-24" />
       ) : (
-        <Table
+        <GenericTable
           objArray={flatgroundTricks}
           columns={flatgroundColumns}
           actions={flatgroundActions}
-          endpoint="flatgroundtricks"
+          onAction={handleAction}
+          entityName="flatground trick"
           newLink="/new-flatground-trick"
           showCount
         />
