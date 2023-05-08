@@ -49,7 +49,7 @@ const ProfileForm = ({ profileForm }) => {
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
-      <h1 className="text-2xl">
+      <h1 className="text-3xl">
         Hello <i>{session.user?.name}</i>!
       </h1>
       <p>Here you can change your profile settings.</p>

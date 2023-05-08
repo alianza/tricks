@@ -74,7 +74,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
-      <h1 className="text-2xl">{newGrind ? 'New Grind' : 'Edit Grind'}</h1>
+      <h1 className="text-3xl">{newGrind ? 'New Grind' : 'Edit Grind'}</h1>
 
       <label>
         Preferred stance

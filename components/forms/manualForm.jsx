@@ -66,7 +66,7 @@ const ManualForm = ({ manual, newManual = true }) => {
 
   return (
     <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
-      <h1 className="text-2xl">{newManual ? 'New Manual' : 'Edit Manual'}</h1>
+      <h1 className="text-3xl">{newManual ? 'New Manual' : 'Edit Manual'}</h1>
 
       <label>
         Preferred stance
