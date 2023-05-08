@@ -104,7 +104,7 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction = () =>
               )}
               {columns.length > 2 && <td colSpan={columns.length - (newLink ? 2 : 1)}></td>}
               <td className="text-end">
-                {objArrayState.length} {entityName + sOrNoS(objArrayState.length)}
+                {objArrayState.length} {capitalize(entityName) + sOrNoS(objArrayState.length)}
               </td>
             </tr>
           </tfoot>
