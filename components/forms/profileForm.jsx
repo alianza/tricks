@@ -54,7 +54,7 @@ const ProfileForm = ({ profileForm }) => {
 
       <label>
         Preferred stance
-        <p className="text-sm">
+        <p className="text-xs font-normal text-neutral-600 dark:text-neutral-300">
           This is the default preferred stance that will be pre-filled when creating new tricks automatically!
         </p>
         <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
