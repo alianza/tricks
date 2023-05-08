@@ -116,8 +116,17 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
 
   return (
-    <div className="flex grow flex-col justify-center xsm:min-w-[240px]">
-      <h1 className="text-3xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
+    <div className="flex grow flex-col justify-center md:min-w-[400px]">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
+        {trickArray.length > 0 && (
+          <ArrowUturnLeftIcon
+            title="Remove last trick"
+            className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+            onClick={() => setForm({ ...form, trickArray: trickArray.slice(0, -1) })}
+          />
+        )}
+      </div>
 
       {/*Trick name*/}
       <div ref={trickArrayRef} className="relative mt-4 flex flex-wrap gap-2">
@@ -143,16 +152,6 @@ const ComboForm = ({ combo, newCombo = true }) => {
       <hr className="my-2 border-neutral-800 dark:border-neutral-400" />
 
       <form onSubmit={handleSubmit} className={`${formStyles.form} flex grow flex-col`}>
-        <div className="flex items-center justify-between">
-          {trickArray.length > 0 && (
-            <ArrowUturnLeftIcon
-              title="Remove last trick"
-              className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-              onClick={() => setForm({ ...form, trickArray: trickArray.slice(0, -1) })}
-            />
-          )}
-        </div>
-
         <label>
           Select type of trick to add
           <select name={VN({ trickType })} value={trickType} onChange={({ target }) => setTrickType(target.value)}>
