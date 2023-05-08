@@ -2,19 +2,13 @@ import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall } from '../../lib/clientUtils';
-import utilStyles from '../../styles/utils.module.scss';
-import Link from 'next/link';
+import { apiCall, getCommonActions } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function ManualsPage() {
   const [manuals, setManuals] = useState([]);
-  // const manualColumns = [{ type: { style: { backgroundColor: 'red' } } }];
-  const manualColumns = ['type'];
-  /* prettier-ignore */ const manualActions = [
-    { edit: (obj) => <Link href={`/manuals/${obj._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>Edit</Link> },
-    { view: (obj) => <Link href={`/manuals/${obj._id}`} className={`${utilStyles.button} ${utilStyles.blue}`}>View</Link> },
-    { delete: () => <button className={`${utilStyles.button} ${utilStyles.red}`}>Delete</button> } ];
+  const manualColumns = [{ type: { className: 'text-sm font-bold' } }];
+  const manualActions = getCommonActions('manuals');
   const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {

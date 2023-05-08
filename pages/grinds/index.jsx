@@ -1,14 +1,15 @@
-import Table from '../../components/common/table/table';
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, getCommonActions } from '../../lib/clientUtils';
+import GenericTable from '../../components/common/genericTable/genericTable';
+import { trickCol } from '../../lib/commonUtils';
 
 export default function GrindsPage() {
   const [grinds, setGrinds] = useState([]);
-  const grindColumns = ['stance', 'direction', 'name', 'trick'];
-  const grindActions = ['edit', 'view', 'delete'];
+  const grindColumns = ['stance', 'direction', 'name', trickCol];
+  const grindActions = getCommonActions('grinds');
   const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
@@ -22,6 +23,21 @@ export default function GrindsPage() {
     }
   }, []);
 
+  const handleAction = async (action, obj) => {
+    switch (action) {
+      case 'delete':
+        try {
+          if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
+          await apiCall('grinds', { method: 'DELETE', id: obj._id });
+          const { data } = await apiCall('grinds', { method: 'GET' });
+          setGrinds(data);
+        } catch (error) {
+          toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
+        }
+        break;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-16">
       <div>
@@ -31,11 +47,12 @@ export default function GrindsPage() {
       {loading ? (
         <Loader className="mx-auto my-24" />
       ) : (
-        <Table
+        <GenericTable
           objArray={grinds}
           columns={grindColumns}
           actions={grindActions}
-          endpoint="grinds"
+          entityName="grind"
+          onAction={handleAction}
           newLink="/new-grind"
           showCount
         />

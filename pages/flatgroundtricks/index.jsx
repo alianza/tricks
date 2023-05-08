@@ -1,26 +1,15 @@
-import Table from '../../components/common/table/table';
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import Loader from '../../components/common/loader/loader';
-import { apiCall } from '../../lib/clientUtils';
-import Link from 'next/link';
-import utilStyles from '../../styles/utils.module.scss';
+import { apiCall, getCommonActions } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
+import { trickCol } from '../../lib/commonUtils';
 
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState([]);
-  const flatgroundColumns = [
-    'stance',
-    'direction',
-    'rotation',
-    { name: {} },
-    { trick: { alias: 'Trick Name', className: 'text-sm font-bold' } },
-  ];
-  /* prettier-ignore */ const flatgroundActions = [
-    { edit: (obj) => <Link href={`/flatgroundtricks/${obj._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>Edit</Link> },
-    { view: (obj) => <Link href={`/flatgroundtricks/${obj._id}`} className={`${utilStyles.button} ${utilStyles.blue}`}>View</Link> },
-    { delete: () => <button className={`${utilStyles.button} ${utilStyles.red}`}>Delete</button> } ];
+  const flatgroundColumns = ['stance', 'direction', 'rotation', { name: {} }, trickCol];
+  const flatgroundActions = getCommonActions('flatgroundtricks');
   const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
