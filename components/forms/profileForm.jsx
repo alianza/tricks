@@ -32,7 +32,9 @@ const ProfileForm = ({ profileForm }) => {
   const handleChange = (e) => {
     const { target } = e;
     let { value, name } = target;
-    if (target.type === 'checkbox') value = target.checked;
+    if (target.type === 'checkbox') {
+      value = target.checked;
+    }
     setForm({ ...form, [name]: value });
   };
 
