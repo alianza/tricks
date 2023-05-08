@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { capitalize, sOrNoS } from '../../../lib/commonUtils';
+import { capitalize, isString, sOrNoS } from '../../../lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './genericTableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
 
-const GenericTable = ({ objArray, columns, actions, entityName, onAction, showCount = false, newLink }) => {
+const GenericTable = ({ objArray, columns, actions, entityName, onAction = () => {}, showCount = false, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [objArrayState, setObjArrayState] = useState(objArray);
   const [animating, setAnimating] = useState(false);
@@ -48,8 +48,8 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction, showCo
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
             {columns.map((col) => {
-              const colName = typeof col === 'string' ? col : Object.values(col)[0].alias || Object.keys(col)[0];
-              const colProp = typeof col === 'string' ? col : Object.keys(col)[0];
+              const colName = isString(col) ? col : Object.values(col)[0].alias || Object.keys(col)[0];
+              const colProp = isString(col) ? col : Object.keys(col)[0];
 
               return (
                 <th key={colName} className="p-3 sm:p-4">
@@ -85,7 +85,13 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction, showCo
             </tr>
           )}
           {objArrayState.map((obj) => (
-            <TableDataRow key={obj._id} obj={obj} columns={columns} actions={actions} onRowAction={onAction} />
+            <TableDataRow
+              key={obj._id}
+              obj={obj}
+              columns={columns}
+              actions={actions}
+              onRowAction={(...params) => onAction(...params, entityName)}
+            />
           ))}
         </tbody>
         {showCount && objArrayState.length > 0 && (
