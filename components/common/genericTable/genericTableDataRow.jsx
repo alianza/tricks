@@ -38,7 +38,7 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
 
         return (
           <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, colPropsToOmit)}>
-            {colProps?.capitalize ?? true ? capitalize(value) : value.toString()}
+            {colProps?.capitalize === false ? value.toString() : capitalize(value)}
           </td>
         );
       })}

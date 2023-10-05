@@ -4,10 +4,14 @@ import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@he
 import TableDataRow from './genericTableDataRow';
 import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
+import Loader from '../loader/loader';
+
+const duration = 250; // default auto-animate duration
 
 const GenericTable = ({ objArray, columns, actions, entityName, onAction = () => {}, showCount = false, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
-  const [objArrayState, setObjArrayState] = useState(objArray);
+  const [loading, setLoading] = useState(objArray === null);
+  const [objArrayState, setObjArrayState] = useState(objArray || []);
   const [animating, setAnimating] = useState(false);
   const tableBodyRef = useRef(null);
 
@@ -24,20 +28,29 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction = () =>
   }, [objArrayState]);
 
   useEffect(() => {
-    setObjArrayState(objArray);
+    animate(() => {
+      setObjArrayState(objArray || []);
+      setLoading(objArray === null);
+    });
   }, [objArray]);
 
   const sort = (column, direction) => {
+    animate(() => {
+      setObjArrayState((prevObjArrayState) =>
+        prevObjArrayState.sort((a, b) => {
+          if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
+          if (a[column] < b[column]) return direction === 'asc' ? -1 : 1;
+          return 0;
+        })
+      );
+      setColumnSortDirection({ [column]: direction });
+    });
+  };
+
+  const animate = (fn) => {
     setAnimating(true);
-    setObjArrayState((prevObjArrayState) =>
-      prevObjArrayState.sort((a, b) => {
-        if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
-        if (a[column] < b[column]) return direction === 'asc' ? -1 : 1;
-        return 0;
-      })
-    );
-    setColumnSortDirection({ [column]: direction });
-    setTimeout(() => setAnimating(false), 250); // default auto-animate duration
+    fn();
+    setTimeout(() => setAnimating(false), duration);
   };
 
   return (
@@ -78,8 +91,8 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction = () =>
             <tr>
               <td className="p-2 sm:p-4" colSpan={columns.length}>
                 <div className="flex justify-center gap-2">
-                  {`No ${entityName}s yet...`}
-                  {newLink && <IconLink title={`New ${entityName}`} href={newLink} Icon={PlusIcon} />}
+                  {loading ? <Loader className="mx-auto my-24" /> : `No ${entityName}s found.`}
+                  {newLink && !loading && <IconLink title={`New ${entityName}`} href={newLink} Icon={PlusIcon} />}
                 </div>
               </td>
             </tr>
