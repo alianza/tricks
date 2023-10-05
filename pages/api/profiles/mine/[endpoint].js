@@ -16,8 +16,8 @@ export default async function handler(req, res) {
       switch (endpoint) {
         case 'preferred_stance':
           try {
-            const profile = await ensureProfile({ ...authQuery });
-            res.status(200).json({ success: true, data: { preferred_stance: profile.preferred_stance } });
+            const { preferred_stance } = await ensureProfile({ ...authQuery });
+            res.status(200).json({ success: true, data: { preferred_stance } });
           } catch (error) {
             console.error(error);
             res.status(400).json({ success: false, error: error.message });
