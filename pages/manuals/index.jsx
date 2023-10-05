@@ -1,24 +1,21 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import Loader from '../../components/common/loader/loader';
 import { apiCall, getCommonActions } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function ManualsPage() {
-  const [manuals, setManuals] = useState([]);
+  const [manuals, setManuals] = useState(null);
   const manualColumns = [{ type: { className: 'text-sm font-bold' } }];
   const manualActions = getCommonActions('manuals');
-  const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
     try {
       const { data } = await apiCall('manuals', { method: 'GET' });
       setManuals(data);
     } catch (error) {
+      setManuals([]);
       toast.error(`Could not load manuals: ${error.message}`);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -43,19 +40,15 @@ export default function ManualsPage() {
         <h1 className="text-center text-5xl">Manuals</h1>
         <p className="mt-3 text-center">This is a overview of all the manuals you've added to your account.</p>
       </div>
-      {loading ? (
-        <Loader className="mx-auto my-24" />
-      ) : (
-        <GenericTable
-          objArray={manuals}
-          columns={manualColumns}
-          actions={manualActions}
-          onAction={handleAction}
-          entityName="manual"
-          newLink="/new-manual"
-          showCount
-        />
-      )}
+      <GenericTable
+        objArray={manuals}
+        columns={manualColumns}
+        actions={manualActions}
+        onAction={handleAction}
+        entityName="manual"
+        newLink="/new-manual"
+        showCount
+      />
     </div>
   );
 }

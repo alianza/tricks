@@ -1,24 +1,21 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import Loader from '../../components/common/loader/loader';
 import { apiCall, getCommonActions, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function GrindsPage() {
-  const [grinds, setGrinds] = useState([]);
+  const [grinds, setGrinds] = useState(null);
   const grindColumns = ['stance', 'direction', 'name', trickCol];
   const grindActions = getCommonActions('grinds');
-  const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
     try {
       const { data } = await apiCall('grinds', { method: 'GET' });
       setGrinds(data);
     } catch (error) {
+      setGrinds([]);
       toast.error(`Could not load grinds: ${error.message}`);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -43,19 +40,15 @@ export default function GrindsPage() {
         <h1 className="text-center text-5xl">Grinds</h1>
         <p className="mt-3 text-center">This is a overview of all the grinds you've added to your account.</p>
       </div>
-      {loading ? (
-        <Loader className="mx-auto my-24" />
-      ) : (
-        <GenericTable
-          objArray={grinds}
-          columns={grindColumns}
-          actions={grindActions}
-          entityName="grind"
-          onAction={handleAction}
-          newLink="/new-grind"
-          showCount
-        />
-      )}
+      <GenericTable
+        objArray={grinds}
+        columns={grindColumns}
+        actions={grindActions}
+        entityName="grind"
+        onAction={handleAction}
+        newLink="/new-grind"
+        showCount
+      />
     </div>
   );
 }

@@ -1,24 +1,21 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import Loader from '../../components/common/loader/loader';
 import { apiCall, getCommonActions, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
 
 export default function FlatgroundTricksPage() {
-  const [flatgroundTricks, setFlatgroundTricks] = useState([]);
-  const flatgroundColumns = ['stance', 'direction', 'rotation', { name: {} }, trickCol];
+  const [flatgroundTricks, setFlatgroundTricks] = useState(null);
+  const flatgroundColumns = ['stance', 'direction', 'rotation', 'name', trickCol];
   const flatgroundActions = getCommonActions('flatgroundtricks');
-  const [loading, setLoading] = useState(true);
 
   useAsyncEffect(async () => {
     try {
       const { data } = await apiCall('flatgroundtricks', { method: 'GET' });
       setFlatgroundTricks(data);
     } catch (error) {
+      setFlatgroundTricks([]);
       toast.error(`Could not load flatground tricks: ${error.message}`);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -31,6 +28,7 @@ export default function FlatgroundTricksPage() {
           const { data } = await apiCall('flatgroundtricks', { method: 'GET' });
           setFlatgroundTricks(data);
         } catch (error) {
+          setFlatgroundTricks([]);
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }
         break;
@@ -45,19 +43,15 @@ export default function FlatgroundTricksPage() {
           This is a overview of all the flatground tricks you've added to your account.
         </p>
       </div>
-      {loading ? (
-        <Loader className="mx-auto my-24" />
-      ) : (
-        <GenericTable
-          objArray={flatgroundTricks}
-          columns={flatgroundColumns}
-          actions={flatgroundActions}
-          onAction={handleAction}
-          entityName="flatground trick"
-          newLink="/new-flatground-trick"
-          showCount
-        />
-      )}
+      <GenericTable
+        objArray={flatgroundTricks}
+        columns={flatgroundColumns}
+        actions={flatgroundActions}
+        onAction={handleAction}
+        entityName="flatground trick"
+        newLink="/new-flatground-trick"
+        showCount
+      />
     </div>
   );
 }
