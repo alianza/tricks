@@ -13,7 +13,7 @@ export default function GrindDetails({ grind }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullGrindName(grind)}"?`)) return;
       await apiCall('grinds', { method: 'DELETE', id: router.query._id });
-      router.push('/dashboard');
+      await router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the grind: ${error.message}`);
     }

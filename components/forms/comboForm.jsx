@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import formStyles from './form.module.scss';
-import { capitalize, VN } from '../../lib/commonUtils';
+import { capitalize, stanceSelectOptions, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -81,7 +81,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
       mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
-      router.back();
+      await router.back();
     } catch (error) {
       toast.error(`Failed to update combo: ${error.message}`);
     }
@@ -94,7 +94,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
       mutate('/api/combos', data, false); // Update the local data without a revalidation
-      router.back();
+      await router.back();
       closeAfterAdd();
     } catch (error) {
       toast.error(`Failed to create combo: ${error.message}`);
@@ -166,11 +166,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         {trickTypeHasStance(trickType) && (
           <div className="mt-2">
             <select name={VN({ stance })} value={stance} onChange={({ target }) => setStance(target.value)} required>
-              <option value="all">All Stances</option>
-              <option value="regular">Regular</option>
-              <option value="fakie">Fakie</option>
-              <option value="switch">Switch</option>
-              <option value="nollie">Nollie</option>
+              {stanceSelectOptions}
             </select>
           </div>
         )}

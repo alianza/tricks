@@ -15,7 +15,7 @@ export default function ComboDetails({ combo }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullComboName(combo)}"?`)) return;
       await apiCall('combos', { method: 'DELETE', id: router.query._id });
-      router.push('/dashboard');
+      await router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the combo: ${error.message}`);
     }

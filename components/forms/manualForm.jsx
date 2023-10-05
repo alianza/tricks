@@ -32,7 +32,7 @@ const ManualForm = ({ manual, newManual = true }) => {
       const { _id } = router.query;
       const { data } = await apiCall('manuals', { method: 'PATCH', data: form, _id });
       mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
-      router.back();
+      await router.back();
       toast.success(`Successfully updated manual: ${data.name}`);
     } catch (error) {
       toast.error(`Failed to update manual: ${error.message}`);
@@ -43,7 +43,7 @@ const ManualForm = ({ manual, newManual = true }) => {
     try {
       const { data } = await apiCall('manuals', { method: 'POST', data: form });
       mutate('/api/manuals', data, false); // Update the local data without a revalidation
-      router.back();
+      await router.back();
       closeAfterAdd();
     } catch (error) {
       toast.error(`Failed to add Manual: ${error.message}`);

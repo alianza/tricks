@@ -13,7 +13,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
       await apiCall(`flatgroundtricks`, { method: 'DELETE', id: router.query._id });
-      router.push('/dashboard');
+      await router.push('/dashboard');
     } catch (error) {
       toast.error(`Failed to delete the flatground trick: ${error.message}`);
     }
