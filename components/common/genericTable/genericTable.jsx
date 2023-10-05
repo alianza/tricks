@@ -14,6 +14,7 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction = () =>
   const [objArrayState, setObjArrayState] = useState(objArray || []);
   const [animating, setAnimating] = useState(false);
   const tableBodyRef = useRef(null);
+  let animationTimeout;
 
   if (actions.length) {
     columns = [...columns, 'actions'];
@@ -49,8 +50,9 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction = () =>
 
   const animate = (fn) => {
     setAnimating(true);
+    if (animationTimeout) clearTimeout(animationTimeout);
     fn();
-    setTimeout(() => setAnimating(false), duration);
+    animationTimeout = setTimeout(() => setAnimating(false), duration);
   };
 
   return (
