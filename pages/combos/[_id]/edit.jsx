@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
-import { fetcher } from '../../../lib/clientUtils';
 import ComboForm from '../../../components/forms/comboForm';
+import { useApiCall } from '../../../lib/customHooks';
 
 const EditGrind = () => {
   const router = useRouter();
   const { _id } = router.query;
-  const { data, error, isLoading } = useSWR(_id ? `/api/combos/${_id}` : null, fetcher);
+  const { data, error, isLoading } = useApiCall(_id && 'combos', { method: 'GET', _id });
   const { data: combo, error: serverError } = data || {};
 
   if (error || serverError) return <p>Failed to load Combo: {error || serverError}</p>;

@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
 import FlatgroundTrickForm from '../../../components/forms/flatgroundTrickForm';
-import { fetcher } from '../../../lib/clientUtils';
-import useSWR from 'swr';
+import { useApiCall } from '../../../lib/customHooks';
+import Loader from '../../../components/common/loader/loader';
 
 const EditFlatGroundTrick = () => {
   const router = useRouter();
   const { _id } = router.query;
-  const { data, error, isLoading } = useSWR(_id ? `/api/flatgroundtricks/${_id}` : null, fetcher);
+  const { data, error, loading } = useApiCall(_id && 'flatgroundtricks', { method: 'GET', _id });
   const { data: flatgroundTrick, error: serverError } = data || {};
 
   if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
-  if (!flatgroundTrick || isLoading) return <p>Loading...</p>;
+  if (!flatgroundTrick || loading) return <Loader className="mx-auto my-24" />;
 
   return <FlatgroundTrickForm flatgroundTrick={flatgroundTrick} newFlatgroundTrick={false} />;
 };
