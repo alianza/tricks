@@ -25,46 +25,39 @@ import { useAsyncEffect } from '../lib/customHooks';
 //
 //   return {
 //     props: {
-//       flatgroundTricksData: { flatgroundColumns },
-//       grindsData: { grindColumns },
-//       manualsData: { manualColumns },
-//       combosData: { comboColumns },
+//       flatgroundTricksData: { flatgroundTricks, flatgroundColumns },
+//       grindsData: { grinds, grindColumns },
+//       manualsData: { manuals, manualColumns },
+//       combosData: { combos, comboColumns },
 //     },
 //   };
 // }
 
-export default function Index({ flatgroundTricksData = {}, grindsData = {}, combosData = {}, manualsData = {} }) {
+export default function Index() {
   const [flatgroundTricks, setFlatgroundTricks] = useState(null);
   const [grinds, setGrinds] = useState(null);
   const [manuals, setManuals] = useState(null);
   const [combos, setCombos] = useState(null);
 
-  flatgroundTricksData.flatgroundActions = getCommonActions('flatgroundtricks');
-  grindsData.grindActions = getCommonActions('grinds');
-  manualsData.manualActions = getCommonActions('manuals');
-  combosData.comboActions = getCommonActions('combos');
-
-  flatgroundTricksData.flatgroundColumns = ['stance', 'direction', 'rotation', 'name', trickCol];
-  grindsData.grindColumns = ['stance', 'direction', 'name', trickCol];
-  manualsData.manualColumns = [{ type: { className: 'text-sm font-bold' } }];
-  combosData.comboColumns = [{ combo: { className: 'text-sm font-bold' } }];
-
   // Client-side fetch
   useAsyncEffect(async () => {
-    try {
-      const trickTypes = ['flatgroundtricks', 'grinds', 'manuals', 'combos'];
-      const promises = trickTypes.map((type) => apiCall(type, { method: 'GET' }));
-      const [flatgroundTricks, grinds, manuals, combos] = await Promise.allSettled(promises);
-      setFlatgroundTricks(flatgroundTricks.value?.data);
-      setGrinds(grinds.value?.data);
-      setManuals(manuals.value?.data);
-      setCombos(combos.value?.data);
-      [flatgroundTricks, grinds, manuals, combos].forEach(({ status, reason }) => {
-        if (status === 'rejected') throw new Error(`Failed to fetch ${trickTypes.shift()} ${reason}`);
-      });
-    } catch (error) {
-      toast.error(error.message);
-    }
+    const fetchAndSetData = async (endpoint, setData) => {
+      try {
+        const { data } = await apiCall(endpoint, { method: 'GET' });
+        setData(data);
+      } catch (error) {
+        toast.error(`Failed to fetch ${endpoint}: ${error.message}`);
+      }
+    };
+
+    const trickTypesAndSetters = [
+      ['flatgroundtricks', setFlatgroundTricks],
+      ['grinds', setGrinds],
+      ['manuals', setManuals],
+      ['combos', setCombos],
+    ];
+
+    (() => trickTypesAndSetters.forEach(([endpoint, setData]) => fetchAndSetData(endpoint, setData)))();
   }, []);
 
   const handleActions = async (action, obj, entityType) => {
@@ -84,6 +77,7 @@ export default function Index({ flatgroundTricksData = {}, grindsData = {}, comb
           await apiCall(endpoint, { method: 'DELETE', id: obj._id });
           const { data } = await apiCall(endpoint, { method: 'GET' });
           setData(data);
+          toast.success(`Successfully deleted ${obj.trick}`);
         } catch (error) {
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }
@@ -100,8 +94,8 @@ export default function Index({ flatgroundTricksData = {}, grindsData = {}, comb
         <LinkWithArrow label="Flatground Tricks" href="/flatgroundtricks" />
         <GenericTable
           objArray={flatgroundTricks}
-          columns={flatgroundTricksData.flatgroundColumns}
-          actions={flatgroundTricksData.flatgroundActions}
+          columns={['stance', 'direction', 'rotation', 'name', trickCol]}
+          actions={getCommonActions('flatgroundtricks')}
           onAction={handleActions}
           entityName="flatground trick"
           newLink="/new-flatground-trick"
@@ -113,8 +107,8 @@ export default function Index({ flatgroundTricksData = {}, grindsData = {}, comb
         <LinkWithArrow label="Grinds" href="/grinds" />
         <GenericTable
           objArray={grinds}
-          columns={grindsData.grindColumns}
-          actions={grindsData.grindActions}
+          columns={['stance', 'direction', 'name', trickCol]}
+          actions={getCommonActions('grinds')}
           onAction={handleActions}
           entityName="grind"
           newLink="/new-grind"
@@ -126,8 +120,8 @@ export default function Index({ flatgroundTricksData = {}, grindsData = {}, comb
         <LinkWithArrow label="Manuals" href="/manuals" />
         <GenericTable
           objArray={manuals}
-          columns={manualsData.manualColumns}
-          actions={manualsData.manualActions}
+          columns={[{ type: { className: 'text-sm font-bold' } }]}
+          actions={getCommonActions('manuals')}
           onAction={handleActions}
           entityName="manual"
           newLink={'/new-manual'}
@@ -139,8 +133,8 @@ export default function Index({ flatgroundTricksData = {}, grindsData = {}, comb
         <LinkWithArrow label="Combos" href="/combos" />
         <GenericTable
           objArray={combos}
-          columns={combosData.comboColumns}
-          actions={combosData.comboActions}
+          columns={[{ combo: { className: 'text-sm font-bold' } }]}
+          actions={getCommonActions('combos')}
           onAction={handleActions}
           entityName="combo"
           newLink="/new-combo"
