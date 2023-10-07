@@ -1,64 +1,52 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { capitalize, isString, sOrNoS } from '../../../lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import TableDataRow from './genericTableDataRow';
-import autoAnimate from '@formkit/auto-animate';
 import IconLink from '../IconLink';
 import Loader from '../loader/loader';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const duration = 250; // default auto-animate duration
 
-const GenericTable = ({ objArray, columns, actions, entityName, onAction = () => {}, showCount = false, newLink }) => {
+const GenericTable = ({ objArray, columns, actions, entityName, onAction = () => {}, showCount, newLink }) => {
   const [columnSortDirection, setColumnSortDirection] = useState({});
   const [loading, setLoading] = useState(objArray === null);
   const [objArrayState, setObjArrayState] = useState(objArray || []);
-  const [animating, setAnimating] = useState(false);
-  const tableBodyRef = useRef(null);
-  let animationTimeout;
+  const [tableBody, enableAnimations] = useAutoAnimate();
 
-  if (actions.length) {
-    columns = [...columns, 'actions'];
-  }
+  if (actions.length) columns = [...columns, 'actions'];
 
   useEffect(() => {
     sort(columns[0], 'asc'); // Default ascending sort on first column
   }, []);
 
   useEffect(() => {
-    setTimeout(() => tableBodyRef.current && autoAnimate(tableBodyRef.current), 1);
-  }, [objArrayState]);
-
-  useEffect(() => {
     animate(() => {
       setObjArrayState(objArray || []);
       setLoading(objArray === null);
+      if (objArray) sort(columns[0], 'asc'); // Default initial ascending sort on first column
     });
   }, [objArray]);
 
   const sort = (column, direction) => {
-    animate(() => {
-      setObjArrayState((prevObjArrayState) =>
-        prevObjArrayState.sort((a, b) => {
-          if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
-          if (a[column] < b[column]) return direction === 'asc' ? -1 : 1;
-          return 0;
-        })
-      );
-      setColumnSortDirection({ [column]: direction });
-    });
+    setObjArrayState((prevObjArrayState) =>
+      prevObjArrayState.sort((a, b) => {
+        if (a[column] > b[column]) return direction === 'asc' ? 1 : -1;
+        if (a[column] < b[column]) return direction === 'asc' ? -1 : 1;
+        return 0;
+      })
+    );
+    setColumnSortDirection({ [column]: direction });
   };
 
   const animate = (fn) => {
-    setAnimating(true);
-    if (animationTimeout) clearTimeout(animationTimeout);
+    enableAnimations(false);
     fn();
-    animationTimeout = setTimeout(() => setAnimating(false), duration);
+    setTimeout(() => enableAnimations(true), duration);
   };
 
   return (
-    <div
-      className={`flex flex-col items-center overflow-y-hidden ${animating ? 'overflow-x-hidden' : 'overflow-x-auto'}`}
-    >
+    <div className={`flex flex-col items-center overflow-y-hidden`}>
       <table className="relative mx-auto table-auto">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
@@ -87,7 +75,7 @@ const GenericTable = ({ objArray, columns, actions, entityName, onAction = () =>
         </thead>
         <tbody
           className="bg-neutral-50 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-neutral-400 dark:bg-neutral-800"
-          ref={tableBodyRef}
+          ref={tableBody}
         >
           {!objArrayState.length && (
             <tr>
