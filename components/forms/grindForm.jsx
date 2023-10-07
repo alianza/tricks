@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
@@ -39,8 +38,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
   const patchData = async (form) => {
     try {
       const { _id } = router.query;
-      const { data } = await apiCall('grinds', { method: 'PATCH', data: form, _id });
-      mutate(`/api/grinds/${_id}`, data, false); // Update the local data without a revalidation
+      await apiCall('grinds', { method: 'PATCH', data: form, _id });
       await router.back();
     } catch (error) {
       toast.error(`Failed to update grind: ${error.message}`);
@@ -49,8 +47,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
 
   const postData = async (form) => {
     try {
-      const { data } = await apiCall('grinds', { method: 'POST', data: form });
-      mutate('/api/grinds', data, false); // Update the local data without a revalidation
+      await apiCall('grinds', { method: 'POST', data: form });
       await router.back();
       closeAfterAdd();
     } catch (error) {

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import formStyles from './form.module.scss';
-import { capitalize, stanceSelectOptions, VN } from '../../lib/commonUtils';
+import { capitalize, getFullComboName, stanceSelectOptions, VN } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
 import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -75,13 +74,13 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const patchData = async (form) => {
     try {
       const { _id } = router.query;
-      const { data } = await apiCall('combos', {
+      await apiCall('combos', {
         method: 'PATCH',
         _id,
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
-      mutate(`/api/combos/${_id}`, data, false); // Update the local data without a revalidation
       await router.back();
+      toast.success(`Successfully updated combo: ${getFullComboName({ trickArray: combo.trickArray })}`);
     } catch (error) {
       toast.error(`Failed to update combo: ${error.message}`);
     }
@@ -89,11 +88,10 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
   const postData = async (form) => {
     try {
-      const { data } = await apiCall('combos', {
+      await apiCall('combos', {
         method: 'POST',
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
-      mutate('/api/combos', data, false); // Update the local data without a revalidation
       await router.back();
       closeAfterAdd();
     } catch (error) {

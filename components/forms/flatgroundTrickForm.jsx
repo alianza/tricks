@@ -7,7 +7,6 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { mutate } from 'swr';
 import { apiCall } from '../../lib/clientUtils';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
@@ -40,8 +39,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   const patchData = async (form) => {
     try {
       const { _id } = router.query;
-      const { data } = await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
-      mutate(`/api/flatgroundtricks/${_id}`, data, false); // Update the local data without a revalidation
+      await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       await router.back();
     } catch (error) {
       toast.error(`Failed to update flatground trick: ${error.message}`);
@@ -50,8 +48,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
 
   const postData = async (form) => {
     try {
-      const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
-      mutate('/api/flatgroundtricks', data, false); // Update the local data without a revalidation
+      await apiCall('flatgroundtricks', { method: 'POST', data: form });
       await router.back();
       closeAfterAdd();
     } catch (error) {

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { mutate } from 'swr';
 import styles from './form.module.scss';
 import utilStyles from '../../styles/utils.module.scss';
 import { VN } from '../../lib/commonUtils';
@@ -21,8 +20,7 @@ const ProfileForm = ({ profileForm }) => {
 
   const patchData = async (form) => {
     try {
-      const { data } = await apiCall('profiles/mine', { method: 'PATCH', data: form });
-      mutate(`/api/profiles/mine`, data, false); // Update the local data without a revalidation
+      await apiCall('profiles/mine', { method: 'PATCH', data: form });
       toast.success('Profile updated!');
     } catch (error) {
       toast.error(`Failed to update profile: ${error.message}`);

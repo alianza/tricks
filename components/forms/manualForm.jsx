@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
 import styles from './form.module.scss';
 import { capitalize, VN } from '../../lib/commonUtils';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
@@ -30,10 +29,9 @@ const ManualForm = ({ manual, newManual = true }) => {
   const patchData = async (form) => {
     try {
       const { _id } = router.query;
-      const { data } = await apiCall('manuals', { method: 'PATCH', data: form, _id });
-      mutate(`/api/manuals/${_id}`, data, false); // Update the local data without a revalidation
+      await apiCall('manuals', { method: 'PATCH', data: form, _id });
       await router.back();
-      toast.success(`Successfully updated manual: ${data.name}`);
+      toast.success(`Successfully updated manual: ${capitalize(form.type)}`);
     } catch (error) {
       toast.error(`Failed to update manual: ${error.message}`);
     }
@@ -41,8 +39,7 @@ const ManualForm = ({ manual, newManual = true }) => {
 
   const postData = async (form) => {
     try {
-      const { data } = await apiCall('manuals', { method: 'POST', data: form });
-      mutate('/api/manuals', data, false); // Update the local data without a revalidation
+      await apiCall('manuals', { method: 'POST', data: form });
       await router.back();
       closeAfterAdd();
     } catch (error) {
