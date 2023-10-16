@@ -15,28 +15,25 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
     }
   });
 
+  const formatActions = (name, value) =>
+    value.map((actionObj) => {
+      const [[action, elementFunc]] = Object.entries(actionObj);
+      if (typeof elementFunc !== 'function') {
+        console.warn(`No element function provided for action ${actionObj}`);
+        return null;
+      }
+      return cloneElement(elementFunc(obj), { onClick: () => onRowAction(action, obj), key: action });
+    });
+
   return (
     <tr className="relative after:absolute after:left-0 after:h-[2px] after:w-full after:bg-neutral-400">
       {Object.entries(objColumnMap).map(([colName, colData]) => {
         const { value, colProps } = colData;
-        if (colName === 'actions') {
-          return (
-            <td key={colName} className="p-3 sm:p-4">
-              <div className="flex justify-center gap-2">
-                {value.map((actionObj) => {
-                  const [[action, elementFunc]] = Object.entries(actionObj);
-                  if (typeof elementFunc !== 'function') {
-                    console.warn(`No element function provided for action ${actionObj}`);
-                    return null;
-                  }
-                  return cloneElement(elementFunc(obj), { onClick: () => onRowAction(action, obj), key: action });
-                })}
-              </div>
-            </td>
-          );
-        }
-
-        return (
+        return colName === 'actions' ? (
+          <td key={colName} className="p-3 sm:p-4">
+            <div className="flex justify-center gap-2">{formatActions(colName, value)}</div>
+          </td>
+        ) : (
           <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, colPropsToOmit)}>
             {colProps?.capitalize === false ? value.toString() : capitalize(value)}
           </td>
