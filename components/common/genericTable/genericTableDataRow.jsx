@@ -22,7 +22,15 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
         console.warn(`No element function provided for action ${actionObj}`);
         return null;
       }
-      return cloneElement(elementFunc(obj), { onClick: () => onRowAction(action, obj), key: action });
+      return cloneElement(elementFunc(obj), {
+        onClick: elementFunc(obj).props.onClick
+          ? () => {
+              elementFunc(obj).props.onClick();
+              onRowAction(action, obj);
+            }
+          : () => onRowAction(action, obj),
+        key: action,
+      });
     });
 
   return (

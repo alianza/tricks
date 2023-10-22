@@ -67,10 +67,12 @@ const GenericTable = ({ objArray = null, columns, actions, entityName = 'item', 
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
             {columns.map((col) => {
+              let isActionsColumn = false;
               let colName = isString(col) ? col : Object.values(col)[0].alias || Object.keys(col)[0];
               const colProp = isString(col) ? col : Object.keys(col)[0];
               if (colName === 'actions') {
                 colName = actionsColumnName || colName;
+                isActionsColumn = true;
               }
 
               return (
@@ -83,7 +85,7 @@ const GenericTable = ({ objArray = null, columns, actions, entityName = 'item', 
                     {columnSortDirection[colProp] === 'desc' && (
                       <ChevronUpIcon onClick={() => sort(colProp, 'asc')} className="h-6 w-6 cursor-pointer" />
                     )}
-                    {colName !== 'actions' && !columnSortDirection[colProp] && (
+                    {!isActionsColumn && !columnSortDirection[colProp] && (
                       <ChevronUpDownIcon onClick={() => sort(colProp, 'asc')} className="h-6 w-6 cursor-pointer" />
                     )}
                   </div>
