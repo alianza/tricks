@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
-import FlatgroundTrick from './FlatgroundTrick';
-import Grind from './Grind';
-import Manual from './Manual';
+import mongoose from 'mongoose'
+import FlatgroundTrick from './FlatgroundTrick'
+import Grind from './Grind'
+import Manual from './Manual'
+const { ObjectId } = mongoose.Schema.Types
 
 const TRICK_TYPES_ENUM = [FlatgroundTrick.modelName, Grind.modelName, Manual.modelName];
 
@@ -10,7 +11,7 @@ const ComboSchema = new mongoose.Schema(
     trickArray: [
       {
         trick: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: ObjectId,
           refPath: 'trickArray.trickRef',
         },
         trickRef: {
