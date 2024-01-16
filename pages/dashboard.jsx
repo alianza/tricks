@@ -133,7 +133,7 @@ export default function Index() {
         <LinkWithArrow label="Combos" href="/combos" />
         <GenericTable
           objArray={combos}
-          columns={[{ combo: { className: 'text-sm font-bold' } }]}
+          columns={[{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }]}
           actions={getCommonActions('combos')}
           onAction={handleActions}
           entityName="combo"

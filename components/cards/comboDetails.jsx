@@ -43,7 +43,7 @@ export default function ComboDetails({ combo }) {
       <div className="mt-4">
         <h2>
           <b className="mr-1">Full Combo Name:</b>
-          {combo.combo}
+          {combo.trick}
         </h2>
       </div>
       <div className="mt-2">
