@@ -42,8 +42,10 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
             <div className="flex justify-center gap-2">{formatActions(colName, value)}</div>
           </td>
         ) : (
-          <td key={colName} className={`p-3 sm:p-4 ${colProps?.className}`} {...omit(colProps, colPropsToOmit)}>
-            {colProps?.capitalize === false ? value.toString() : capitalize(value)}
+          <td key={colName} className="p-3 sm:p-4" {...omit(colProps, colPropsToOmit)}>
+            <span className={colProps?.className}>
+              {colProps?.capitalize === false ? value.toString() : capitalize(value)}
+            </span>
           </td>
         );
       })}

@@ -10,7 +10,7 @@ const defaultFilters = { grind: false, manual: false, stance: 'all' };
 
 export default function CombosPage() {
   const [combos, setCombos] = useState(null);
-  const comboColumns = [{ combo: { className: 'text-sm font-bold' } }];
+  const comboColumns = [{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }];
   const comboActions = getCommonActions('combos');
   const [filters, setFilters] = useState(defaultFilters);
 
