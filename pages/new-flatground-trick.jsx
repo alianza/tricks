@@ -1,4 +1,4 @@
-import FlatgroundTrickForm from '../components/forms/flatgroundTrickForm';
+import FlatgroundTrickForm from '../components/forms/FlatgroundTrickForm';
 import { DEFAULT_FLATGROUND_TRICK } from '../models/constants/flatgroundTricks';
 
 const NewFlatFlatGroundTrick = () => {

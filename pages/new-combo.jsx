@@ -1,4 +1,4 @@
-import ComboForm from '../components/forms/comboForm';
+import ComboForm from '../components/forms/ComboForm';
 
 export default function NewCombo() {
   const newCombo = {

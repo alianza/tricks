@@ -3,7 +3,7 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import Profile from '../../models/Profile';
 import findAndSerializeDoc from '../../lib/serverUtils';
 import { Model } from 'mongoose';
-import ProfileForm from '../../components/forms/profileForm';
+import ProfileForm from '../../components/forms/ProfileForm';
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);

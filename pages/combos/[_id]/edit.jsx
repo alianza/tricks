@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import ComboForm from '../../../components/forms/comboForm';
+import ComboForm from '../../../components/forms/ComboForm';
 import { useApiCall } from '../../../lib/customHooks';
 
 const EditCombo = () => {

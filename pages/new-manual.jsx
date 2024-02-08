@@ -1,4 +1,4 @@
-import ManualForm from '../components/forms/manualForm';
+import ManualForm from '../components/forms/ManualForm';
 import { DEFAULT_MANUAL } from '../models/constants/manuals';
 
 export default function NewManual() {

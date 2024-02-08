@@ -5,7 +5,7 @@ import { getFullComboName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { TRICK_TYPES_MAP, TRICK_TYPES_MODELS } from '../forms/comboForm';
+import { TRICK_TYPES_MAP, TRICK_TYPES_MODELS } from '../forms/ComboForm';
 import { apiCall, formatDate } from '../../lib/clientUtils';
 
 export default function ComboDetails({ combo }) {

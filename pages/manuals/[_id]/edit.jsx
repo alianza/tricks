@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import ManualForm from '../../../components/forms/manualForm';
+import ManualForm from '../../../components/forms/ManualForm';
 import { useApiCall } from '../../../lib/customHooks';
 
 const EditManual = () => {

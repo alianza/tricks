@@ -1,4 +1,4 @@
-import GrindForm from '../components/forms/grindForm';
+import GrindForm from '../components/forms/GrindForm';
 import { DEFAULT_GRIND } from '../models/constants/grinds';
 
 export default function NewGrind() {
