@@ -74,5 +74,7 @@ ComboDetails.propTypes = {
     trick: PropTypes.string.isRequired,
     trickArray: PropTypes.arrayOf(PropTypes.object).isRequired,
     userId: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
   }).isRequired,
 };

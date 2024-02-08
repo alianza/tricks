@@ -78,5 +78,8 @@ FlatgroundTrickDetails.propTypes = {
     direction: PropTypes.string.isRequired,
     rotation: PropTypes.number.isRequired,
     userId: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    trick: PropTypes.string.isRequired,
   }).isRequired,
 };

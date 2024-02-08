@@ -71,5 +71,8 @@ GrindDetails.propTypes = {
     stance: PropTypes.string.isRequired,
     direction: PropTypes.string.isRequired,
     userId: PropTypes.number.isRequired,
+    createdAt: PropTypes.string.isRequired,
+    updatedAt: PropTypes.string.isRequired,
+    trick: PropTypes.string.isRequired,
   }).isRequired,
 };
