@@ -25,7 +25,7 @@ export default function ComboDetails({ combo }) {
 
   return (
     <div>
-      <h1 className="text-3xl">{combo.trick}</h1>
+      <h1 className="text-3xl mb-1">{combo.trick}</h1>
       <div className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400">
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">

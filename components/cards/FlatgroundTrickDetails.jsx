@@ -21,7 +21,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
 
   return (
     <div>
-      <h1 className="text-3xl">{trick.trick}</h1>
+      <h1 className="text-3xl mb-1">{trick.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {trick.preferred_stance}
       </h3>
