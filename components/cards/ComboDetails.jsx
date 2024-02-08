@@ -71,7 +71,7 @@ export default function ComboDetails({ combo }) {
 ComboDetails.propTypes = {
   combo: PropTypes.shape({
     _id: PropTypes.string.isRequired,
-    combo: PropTypes.string.isRequired,
+    trick: PropTypes.string.isRequired,
     trickArray: PropTypes.arrayOf(PropTypes.object).isRequired,
     userId: PropTypes.number.isRequired,
   }).isRequired,
