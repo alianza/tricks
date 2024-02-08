@@ -1,5 +1,5 @@
 import '../styles/globals.scss';
-import Layout from '../components/layout/layout';
+import Layout from '../components/layout/Layout';
 import dynamic from 'next/dynamic';
 import { SessionProvider } from 'next-auth/react';
 import { useEffect } from 'react';
