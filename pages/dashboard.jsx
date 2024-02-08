@@ -1,5 +1,5 @@
 import LinkWithArrow from '../components/common/LinkWithArrow';
-import GenericTable from '../components/common/genericTable/genericTable';
+import GenericTable from '../components/common/genericTable/GenericTable';
 import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../lib/clientUtils';
 import { toast } from 'react-toastify';
 import { useState } from 'react';

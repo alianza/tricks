@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { apiCall, baseStyle, getCommonActions, hiddenStyle } from '../../lib/clientUtils';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { shallowEqual, stanceSelectOptions } from '../../lib/commonUtils';
-import GenericTable from '../../components/common/genericTable/genericTable';
+import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 
 const defaultFilters = { grind: false, manual: false, stance: 'all' };
