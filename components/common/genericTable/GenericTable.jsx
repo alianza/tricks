@@ -74,7 +74,7 @@ function GenericTable({
   const hasItems = !!objArrayState.length;
 
   return (
-    <div className={`${className} react-generic-table flex flex-col items-center overflow-y-hidden`}>
+    <div className={`${className} react-generic-table flex flex-col items-center overflow-y-hidden drop-shadow`}>
       <table className="relative mx-auto table-auto text-neutral-900 dark:text-neutral-100">
         <thead className="bg-neutral-200 dark:bg-neutral-700">
           <tr>
