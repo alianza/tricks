@@ -1,6 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import { getTricks } from '../../../lib/serverUtils';
-import GrindDetails from '../../../components/cards/grindDetails';
+import GrindDetails from '../../../components/cards/GrindDetails';
 import Grind from '../../../models/Grind';
 import { isValidObjectId, Model } from 'mongoose';
 

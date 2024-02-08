@@ -2,7 +2,7 @@ import dbConnect from '../../../lib/dbConnect';
 import { getTricks } from '../../../lib/serverUtils';
 import Manual from '../../../models/Manual';
 import { isValidObjectId, Model } from 'mongoose';
-import ManualDetails from '../../../components/cards/manualDetails';
+import ManualDetails from '../../../components/cards/ManualDetails';
 
 export async function getServerSideProps({ params: { _id } }) {
   await dbConnect();
