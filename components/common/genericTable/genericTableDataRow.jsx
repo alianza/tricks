@@ -1,9 +1,9 @@
 import { capitalize, deepGet, isString, omit } from '../../../lib/commonUtils';
 import { cloneElement } from 'react';
 
-const colPropsToOmit = ['className', 'key', 'alias', 'capitalize'];
+const colPropsToOmit = ['key', 'alias', 'capitalize', 'onClick'];
 
-const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
+function GenericTableDataRow({ obj, columns, actions, onRowAction }) {
   const objColumnMap = {};
 
   columns.forEach((col) => {
@@ -42,8 +42,11 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
             <div className="flex justify-center gap-2">{formatActions(colName, value)}</div>
           </td>
         ) : (
-          <td key={colName} className="p-3 sm:p-4" {...omit(colProps, colPropsToOmit)}>
-            <span className={colProps?.className}>
+          <td key={colName} className="p-3 sm:p-4">
+            <span
+              {...omit(colProps, colPropsToOmit)}
+              {...(colProps?.onClick && { onClick: () => colProps?.onClick(obj) })}
+            >
               {colProps?.capitalize === false ? value.toString() : capitalize(value)}
             </span>
           </td>
@@ -51,6 +54,6 @@ const genericTableDataRow = ({ obj, columns, actions, onRowAction }) => {
       })}
     </tr>
   );
-};
+}
 
-export default genericTableDataRow;
+export default GenericTableDataRow;
