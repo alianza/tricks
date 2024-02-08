@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, getCommonActions } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle } from '../../lib/clientUtils';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { shallowEqual, stanceSelectOptions } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
+import TransitionScroll from 'react-transition-scroll';
 
 const defaultFilters = { grind: false, manual: false, stance: 'all' };
 
@@ -96,15 +97,17 @@ export default function CombosPage() {
           </div>
         </details>
 
-        <GenericTable
-          objArray={combos}
-          columns={comboColumns}
-          actions={comboActions}
-          onAction={handleAction}
-          entityName="combo"
-          newLink="/new-combo"
-          showCount
-        />
+        <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+          <GenericTable
+            objArray={combos}
+            columns={comboColumns}
+            actions={comboActions}
+            onAction={handleAction}
+            entityName="combo"
+            newLink="/new-combo"
+            showCount
+          />
+        </TransitionScroll>
       </div>
     </div>
   );

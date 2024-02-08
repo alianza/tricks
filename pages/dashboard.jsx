@@ -1,9 +1,11 @@
 import LinkWithArrow from '../components/common/LinkWithArrow';
 import GenericTable from '../components/common/genericTable/genericTable';
-import { apiCall, getCommonActions, trickCol } from '../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../lib/clientUtils';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useAsyncEffect } from '../lib/customHooks';
+import TransitionScroll from 'react-transition-scroll';
+import 'react-transition-scroll/dist/index.css';
 
 // export async function getServerSideProps(context) {
 //   await dbConnect();
@@ -90,7 +92,7 @@ export default function Index() {
         <h1 className="text-center text-5xl">Dashboard</h1>
         <p className="mt-3 text-center">This is a overview of all the tricks you've added to your account.</p>
       </div>
-      <div className="flex flex-col">
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
         <LinkWithArrow label="Flatground Tricks" href="/flatgroundtricks" />
         <GenericTable
           objArray={flatgroundTricks}
@@ -101,9 +103,9 @@ export default function Index() {
           newLink="/new-flatground-trick"
           showCount
         />
-      </div>
+      </TransitionScroll>
 
-      <div className="flex flex-col">
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
         <LinkWithArrow label="Grinds" href="/grinds" />
         <GenericTable
           objArray={grinds}
@@ -114,9 +116,9 @@ export default function Index() {
           newLink="/new-grind"
           showCount
         />
-      </div>
+      </TransitionScroll>
 
-      <div className="flex flex-col">
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
         <LinkWithArrow label="Manuals" href="/manuals" />
         <GenericTable
           objArray={manuals}
@@ -127,9 +129,9 @@ export default function Index() {
           newLink={'/new-manual'}
           showCount
         />
-      </div>
+      </TransitionScroll>
 
-      <div className="flex flex-col">
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
         <LinkWithArrow label="Combos" href="/combos" />
         <GenericTable
           objArray={combos}
@@ -140,7 +142,7 @@ export default function Index() {
           newLink="/new-combo"
           showCount
         />
-      </div>
+      </TransitionScroll>
     </div>
   );
 }

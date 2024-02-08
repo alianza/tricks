@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, getCommonActions, trickCol } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
+import TransitionScroll from 'react-transition-scroll';
 
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState(null);
@@ -43,15 +44,18 @@ export default function FlatgroundTricksPage() {
           This is a overview of all the flatground tricks you've added to your account.
         </p>
       </div>
-      <GenericTable
-        objArray={flatgroundTricks}
-        columns={flatgroundColumns}
-        actions={flatgroundActions}
-        onAction={handleAction}
-        entityName="flatground trick"
-        newLink="/new-flatground-trick"
-        showCount
-      />
+
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <GenericTable
+          objArray={flatgroundTricks}
+          columns={flatgroundColumns}
+          actions={flatgroundActions}
+          onAction={handleAction}
+          entityName="flatground trick"
+          newLink="/new-flatground-trick"
+          showCount
+        />
+      </TransitionScroll>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, getCommonActions } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
+import TransitionScroll from 'react-transition-scroll';
 
 export default function ManualsPage() {
   const [manuals, setManuals] = useState(null);
@@ -40,15 +41,18 @@ export default function ManualsPage() {
         <h1 className="text-center text-5xl">Manuals</h1>
         <p className="mt-3 text-center">This is a overview of all the manuals you've added to your account.</p>
       </div>
-      <GenericTable
-        objArray={manuals}
-        columns={manualColumns}
-        actions={manualActions}
-        onAction={handleAction}
-        entityName="manual"
-        newLink="/new-manual"
-        showCount
-      />
+
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <GenericTable
+          objArray={manuals}
+          columns={manualColumns}
+          actions={manualActions}
+          onAction={handleAction}
+          entityName="manual"
+          newLink="/new-manual"
+          showCount
+        />
+      </TransitionScroll>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, getCommonActions, trickCol } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/genericTable';
+import TransitionScroll from 'react-transition-scroll';
 
 export default function GrindsPage() {
   const [grinds, setGrinds] = useState(null);
@@ -40,15 +41,18 @@ export default function GrindsPage() {
         <h1 className="text-center text-5xl">Grinds</h1>
         <p className="mt-3 text-center">This is a overview of all the grinds you've added to your account.</p>
       </div>
-      <GenericTable
-        objArray={grinds}
-        columns={grindColumns}
-        actions={grindActions}
-        entityName="grind"
-        onAction={handleAction}
-        newLink="/new-grind"
-        showCount
-      />
+
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <GenericTable
+          objArray={grinds}
+          columns={grindColumns}
+          actions={grindActions}
+          entityName="grind"
+          onAction={handleAction}
+          newLink="/new-grind"
+          showCount
+        />
+      </TransitionScroll>
     </div>
   );
 }
