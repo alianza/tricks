@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import ComboForm from '../../../components/forms/comboForm';
 import { useApiCall } from '../../../lib/customHooks';
 
-const EditGrind = () => {
+const EditCombo = () => {
   const router = useRouter();
   const { _id } = router.query;
   const { data, error, isLoading } = useApiCall(_id && 'combos', { method: 'GET', _id });
@@ -14,4 +14,4 @@ const EditGrind = () => {
   return <ComboForm combo={combo} newCombo={false} />;
 };
 
-export default EditGrind;
+export default EditCombo;

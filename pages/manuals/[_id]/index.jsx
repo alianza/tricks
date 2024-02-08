@@ -20,7 +20,9 @@ export async function getServerSideProps({ params: { _id } }) {
   return { props: { manual } };
 }
 
-const grindPage = ({ manual, error }) => {
+const ManualPage = ({ manual, error }) => {
+  console.log(`manual`, manual);
+
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
   }
@@ -32,4 +34,4 @@ const grindPage = ({ manual, error }) => {
   );
 };
 
-export default grindPage;
+export default ManualPage;

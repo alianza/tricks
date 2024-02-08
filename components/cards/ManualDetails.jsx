@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 export default function ManualDetails({ manual }) {
   const router = useRouter();
 
+  console.log(`manual ManualDetails`, manual);
+
   const handleDelete = async () => {
     try {
       if (!confirm(`Are you sure you want to delete "${getFullManualName(manual)}"?`)) return;

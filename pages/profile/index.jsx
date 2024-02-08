@@ -20,7 +20,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-const profilePage = ({ profile }) => {
+const ProfilePage = ({ profile }) => {
   const profileForm = {
     preferred_stance: profile.preferred_stance,
   };
@@ -28,4 +28,4 @@ const profilePage = ({ profile }) => {
   return <ProfileForm profileForm={profileForm} />;
 };
 
-export default profilePage;
+export default ProfilePage;
