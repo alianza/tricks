@@ -1,4 +1,4 @@
-import NavLink from '../common/navLink';
+import NavLink from '../common/NavLink';
 import Link from 'next/link';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
