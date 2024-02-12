@@ -8,6 +8,11 @@ module.exports = {
         xsm: '420px',
         touch: { raw: '(hover: none)' },
       },
+      spacing: {
+        header: '5rem',
+        footer: '3rem',
+        desktopNav: '18rem',
+      },
     },
   },
 };
