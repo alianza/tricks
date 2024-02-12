@@ -6,23 +6,32 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import utilStyles from '../../styles/utils.module.scss';
 import logo from '../../public/logo.webp';
+import { navItems } from '../../lib/clientUtils';
 
 export default function Header() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [menuStyle, setMenuStyle] = useState({});
 
-  const openMobileMenuStyle = {
-    visibility: 'visible',
-    opacity: 1,
-  };
+  const { home, dashboard, profile, new: newNav, signIn: signInNav, signOut: signOutNav } = navItems;
 
   useEffect(() => {
     const html = document.documentElement;
-    open ? html.classList.add('no-scroll') : html.classList.remove('no-scroll');
+    let timeout;
+    if (open) {
+      html.classList.add('no-scroll');
+      setMenuStyle({ display: 'flex' });
+      setTimeout(() => setMenuStyle((prev) => ({ ...prev, visibility: 'visible', opacity: 1 })), 0);
+    } else {
+      html.classList.remove('no-scroll');
+      setMenuStyle((prev) => ({ ...prev, visibility: 'hidden', opacity: 0 }));
+      timeout = setTimeout(() => setMenuStyle({}), 500);
+    }
+    return () => clearTimeout(timeout);
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-10 flex h-20 w-full items-center justify-between bg-blue-600 p-4 text-right text-neutral-50 shadow-xl">
+    <header className="sticky top-0 z-10 flex h-header w-full items-center justify-between bg-blue-600 p-4 text-right text-neutral-50 shadow-xl">
       <Link href={`/${session ? 'dashboard' : ''}`} className="flex shrink-0 items-center gap-3 ">
         <Image
           src={logo}
@@ -34,7 +43,7 @@ export default function Header() {
         <span className={`${utilStyles.link} hidden whitespace-nowrap text-3xl sm:block`}>Trick Tracker</span>
       </Link>
 
-      <div className="ml-auto mr-4">
+      <div className="ml-auto">
         {session ? (
           <>
             <span className="hidden md:inline">Signed in as: </span>
@@ -58,35 +67,40 @@ export default function Header() {
       </div>
 
       <nav
-        className={`invisible absolute bottom-0 left-0 top-0 flex h-screen w-full flex-col flex-wrap items-center justify-center gap-4 whitespace-nowrap bg-neutral-900/80 text-3xl opacity-0 transition-[opacity,visibility] duration-500 dark:decoration-neutral-100`}
-        style={open ? openMobileMenuStyle : {}}
+        className={`hidden invisible absolute bottom-0 left-0 top-0 h-screen w-full flex-col flex-wrap items-center justify-center gap-4 whitespace-nowrap bg-neutral-900/80 text-3xl opacity-0 transition-[opacity,visibility] duration-500 dark:decoration-neutral-100`}
+        style={menuStyle}
         onClick={() => setOpen(false)}
       >
-        <NavLink label="Home" href="/" exact />
+        <NavLink label={home.label} href={home.href} exact />
 
         {session ? (
           <>
-            <NavLink label="Dashboard" href="/dashboard" />
-            <NavLink label="New Flatground Trick" href="/new-flatground-trick" />
-            <NavLink label="New Grind" href="/new-grind" />
-            <NavLink label="New Manual" href="/new-manual" />
-            <NavLink label="New Combo" href="/new-combo" />
-            <NavLink label="Profile" href="/profile" />
-            <a className="cursor-pointer hover:font-bold" href="#" onClick={() => signOut({ callbackUrl: '/' })}>
-              Sign out
+            <NavLink label={dashboard.label} href={dashboard.href} />
+            {newNav.children.map((item) => (
+              <NavLink key={item.label} label={`New ${item.label}`} href={item.href} />
+            ))}
+            <NavLink label={profile.label} href={profile.href} />
+            <a className="cursor-pointer hover:font-bold" href="#" onClick={signOutNav.onClick}>
+              {signOutNav.label}
             </a>
           </>
         ) : (
-          <a className="cursor-pointer hover:font-bold" href="#" onClick={() => signIn()}>
-            Sign in
+          <a className="cursor-pointer hover:font-bold" href="#" onClick={signInNav.onClick}>
+            {signInNav.label}
           </a>
         )}
       </nav>
 
       {open ? (
-        <XMarkIcon onClick={() => setOpen(false)} className="z-10 h-8 w-8 shrink-0 cursor-pointer" />
+        <XMarkIcon
+          onClick={() => setOpen(false)}
+          className="hoverStrong z-10 h-8 w-8 shrink-0 ml-4 cursor-pointer xl:hidden"
+        />
       ) : (
-        <Bars3Icon onClick={() => setOpen(true)} className="z-10 h-8 w-8 shrink-0 cursor-pointer" />
+        <Bars3Icon
+          onClick={() => setOpen(true)}
+          className="hoverStrong z-10 h-8 w-8 shrink-0 ml-4 cursor-pointer xl:hidden"
+        />
       )}
     </header>
   );

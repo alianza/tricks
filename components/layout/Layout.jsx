@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Header from './Header';
 import Footer from './Footer';
+import DesktopNav from './DesktopNav';
 
 export default function Layout({ children }) {
   return (
@@ -29,8 +30,12 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <main className="mx-auto flex max-w-7xl max-w-full grow flex-col p-2 py-12">{children}</main>
-
+      <div className="min-h-full grow flex max-w-full w-full">
+        <DesktopNav />
+        <main className="mx-auto flex max-w-full xl:max-w-[calc(100%-theme(spacing.desktopNav))] flex-col px-4 py-8">
+          {children}
+        </main>
+      </div>
       <Footer />
     </div>
   );
