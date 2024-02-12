@@ -63,16 +63,16 @@ export default function Header() {
         onClick={() => setOpen(false)}
       >
         <NavLink label="Home" href="/" exact />
-        <NavLink label="Dashboard" href="/dashboard" />
 
         {session ? (
           <>
+            <NavLink label="Dashboard" href="/dashboard" />
             <NavLink label="New Flatground Trick" href="/new-flatground-trick" />
             <NavLink label="New Grind" href="/new-grind" />
             <NavLink label="New Manual" href="/new-manual" />
             <NavLink label="New Combo" href="/new-combo" />
             <NavLink label="Profile" href="/profile" />
-            <a className="cursor-pointer hover:font-bold" onClick={() => signOut({ callbackUrl: '/' })}>
+            <a className="cursor-pointer hover:font-bold" href="#" onClick={() => signOut({ callbackUrl: '/' })}>
               Sign out
             </a>
           </>
