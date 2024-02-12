@@ -25,11 +25,7 @@ const GrindPage = ({ grind, error }) => {
     return <h1 className="text-xl">{error}</h1>;
   }
 
-  return (
-    <div className="flex w-full justify-center">
-      <GrindDetails grind={grind} />
-    </div>
-  );
+  return <GrindDetails grind={grind} />;
 };
 
 export default GrindPage;

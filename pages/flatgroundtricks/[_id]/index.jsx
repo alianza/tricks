@@ -25,11 +25,7 @@ const FlatgroundTrickPage = ({ flatgroundTrick, error }) => {
     return <h1 className="text-xl">{error}</h1>;
   }
 
-  return (
-    <div className="flex w-full justify-center">
-      <FlatgroundTrickDetails flatgroundTrick={flatgroundTrick} />
-    </div>
-  );
+  return <FlatgroundTrickDetails flatgroundTrick={flatgroundTrick} />;
 };
 
 export default FlatgroundTrickPage;

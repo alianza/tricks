@@ -25,11 +25,7 @@ const ComboPage = ({ combo, error }) => {
     return <h1 className="text-xl">{error}</h1>;
   }
 
-  return (
-    <div className="flex w-full justify-center">
-      <ComboDetails combo={combo} />
-    </div>
-  );
+  return <ComboDetails combo={combo} />;
 };
 
 export default ComboPage;

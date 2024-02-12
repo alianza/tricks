@@ -21,17 +21,11 @@ export async function getServerSideProps({ params: { _id } }) {
 }
 
 const ManualPage = ({ manual, error }) => {
-  console.log(`manual`, manual);
-
   if (error) {
     return <h1 className="text-xl">{error}</h1>;
   }
 
-  return (
-    <div className="flex w-full justify-center">
-      <ManualDetails manual={manual} />
-    </div>
-  );
+  return <ManualDetails manual={manual} />;
 };
 
 export default ManualPage;

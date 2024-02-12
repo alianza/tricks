@@ -24,7 +24,7 @@ export default function Index() {
   const { data: session } = useSession();
 
   return (
-    <div className={`${utilStyles.responsiveContainer} mx-auto flex flex-col gap-6`}>
+    <>
       <TransitionScroll
         hiddenStyle={hiddenStyle}
         baseStyle={baseStyle}
@@ -87,6 +87,6 @@ export default function Index() {
           </Link>
         </TransitionScroll>
       )}
-    </div>
+    </>
   );
 }
