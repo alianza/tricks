@@ -7,7 +7,8 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import TransitionScroll from 'react-transition-scroll';
 
 const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
@@ -70,61 +71,63 @@ const GrindForm = ({ grind, newGrind = true }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
-      <h1 className="text-3xl">{newGrind ? 'New Grind' : 'Edit Grind'}</h1>
+    <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
+      <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
+        <h1 className="text-3xl">{newGrind ? 'New Grind' : 'Edit Grind'}</h1>
 
-      <label>
-        Preferred stance
-        <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-          <option value="regular">Regular</option>
-          <option value="goofy">Goofy</option>
-        </select>
-      </label>
-
-      <div className="flex justify-between gap-1">
         <label>
-          Stance
-          <select name={VN({ stance })} value={stance} onChange={handleChange} required>
-            <option value="regular">-</option>
-            <option value="fakie">Fakie</option>
-            <option value="switch">Switch</option>
-            <option value="nollie">Nollie</option>
+          Preferred stance
+          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
+            <option value="regular">Regular</option>
+            <option value="goofy">Goofy</option>
           </select>
         </label>
 
-        <label>
-          Direction
-          <select name={VN({ direction })} value={direction} onChange={handleChange}>
-            <option value="frontside">Frontside</option>
-            <option value="backside">Backside</option>
-          </select>
-        </label>
+        <div className="flex justify-between gap-1">
+          <label>
+            Stance
+            <select name={VN({ stance })} value={stance} onChange={handleChange} required>
+              <option value="regular">-</option>
+              <option value="fakie">Fakie</option>
+              <option value="switch">Switch</option>
+              <option value="nollie">Nollie</option>
+            </select>
+          </label>
 
-        <label>
-          Name
-          <select name={VN({ name })} value={name} onChange={handleChange} required>
-            {GRINDS_ENUM.map((trick) => (
-              <option key={trick} value={trick}>
-                {capitalize(trick)}
-              </option>
+          <label>
+            Direction
+            <select name={VN({ direction })} value={direction} onChange={handleChange}>
+              <option value="frontside">Frontside</option>
+              <option value="backside">Backside</option>
+            </select>
+          </label>
+
+          <label>
+            Name
+            <select name={VN({ name })} value={name} onChange={handleChange} required>
+              {GRINDS_ENUM.map((trick) => (
+                <option key={trick} value={trick}>
+                  {capitalize(trick)}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <p className="my-4">
+          Full grind name:{' '}
+          <b ref={trickNameRef}>
+            {fullTrickName?.split('').map((letter, index) => (
+              <span key={index} className="inline-block whitespace-pre">
+                {letter}
+              </span>
             ))}
-          </select>
-        </label>
-      </div>
+          </b>
+        </p>
 
-      <p className="my-4">
-        Full grind name:{' '}
-        <b ref={trickNameRef}>
-          {fullTrickName?.split('').map((letter, index) => (
-            <span key={index} className="inline-block whitespace-pre">
-              {letter}
-            </span>
-          ))}
-        </b>
-      </p>
-
-      <LoaderButton isLoading={loading} />
-    </form>
+        <LoaderButton isLoading={loading} />
+      </form>
+    </TransitionScroll>
   );
 };
 

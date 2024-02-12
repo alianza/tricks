@@ -8,8 +8,9 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { throttle, useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
+import TransitionScroll from 'react-transition-scroll';
 
 export const TRICK_TYPES_MAP = { flatground: 'Flatground Tricks', grind: 'Grinds', manual: 'Manuals' };
 
@@ -112,13 +113,20 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
   const addTrick = (e, trick) => {
     e.preventDefault();
-    setForm({ ...form, trickArray: [...trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }] }); // Add trick to trickArray, and add trickRef to trick
+    setForm((prev) => ({
+      ...form,
+      trickArray: [...prev.trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }],
+    }));
   };
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
 
   return (
-    <div className="flex grow flex-col justify-center md:min-w-[400px]">
+    <TransitionScroll
+      hiddenStyle={hiddenStyle}
+      baseStyle={baseStyle}
+      className="flex grow flex-col justify-center md:min-w-[400px]"
+    >
       <div className="flex items-center justify-between">
         <h1 className="text-3xl">{newCombo ? 'New Combo' : 'Edit Combo'}</h1>
         {trickArray.length > 0 && (
@@ -214,7 +222,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
           />
         </div>
       </form>
-    </div>
+    </TransitionScroll>
   );
 };
 

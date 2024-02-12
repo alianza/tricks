@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
 import { getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
-import { apiCall, formatDate } from '../../lib/clientUtils';
+import { apiCall, baseStyle, formatDate, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
+import TransitionScroll from 'react-transition-scroll';
 
 export default function ManualDetails({ manual }) {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function ManualDetails({ manual }) {
   };
 
   return (
-    <div>
+    <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
       <h1 className="text-3xl mb-1">{manual.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {manual.preferred_stance}
@@ -51,7 +52,7 @@ export default function ManualDetails({ manual }) {
           Delete
         </button>
       </div>
-    </div>
+    </TransitionScroll>
   );
 }
 

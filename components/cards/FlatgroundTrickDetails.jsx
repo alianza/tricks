@@ -4,7 +4,8 @@ import utilStyles from '../../styles/utils.module.scss';
 import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { apiCall, formatDate } from '../../lib/clientUtils';
+import { apiCall, baseStyle, formatDate, hiddenStyle } from '../../lib/clientUtils';
+import TransitionScroll from 'react-transition-scroll';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   };
 
   return (
-    <div>
+    <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
       <h1 className="text-3xl mb-1">{trick.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {trick.preferred_stance}
@@ -65,7 +66,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
           Delete
         </button>
       </div>
-    </div>
+    </TransitionScroll>
   );
 }
 

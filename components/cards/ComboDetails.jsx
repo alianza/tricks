@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { TRICK_TYPES_MAP, TRICK_TYPES_MODELS } from '../forms/ComboForm';
-import { apiCall, formatDate } from '../../lib/clientUtils';
+import { apiCall, baseStyle, formatDate, hiddenStyle } from '../../lib/clientUtils';
+import TransitionScroll from 'react-transition-scroll';
 
 export default function ComboDetails({ combo }) {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function ComboDetails({ combo }) {
   const { trickArray } = combo;
 
   return (
-    <div>
+    <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
       <h1 className="text-3xl mb-1">{combo.trick}</h1>
       <div className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400">
         {trickArray.map((trick, index) => (
@@ -64,7 +65,7 @@ export default function ComboDetails({ combo }) {
           Delete
         </button>
       </div>
-    </div>
+    </TransitionScroll>
   );
 }
 

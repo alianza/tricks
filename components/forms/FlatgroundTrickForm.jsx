@@ -7,7 +7,8 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import TransitionScroll from 'react-transition-scroll';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -75,73 +76,75 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
-      <h1 className="text-3xl">{newFlatgroundTrick ? 'New Flatground Trick' : 'Edit Flatground Trick'}</h1>
-      <label>
-        Preferred stance
-        <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-          <option value="regular">Regular</option>
-          <option value="goofy">Goofy</option>
-        </select>
-      </label>
-      <div className="flex justify-between gap-1">
+    <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
+      <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
+        <h1 className="text-3xl">{newFlatgroundTrick ? 'New Flatground Trick' : 'Edit Flatground Trick'}</h1>
         <label>
-          Stance
-          <select name={VN({ stance })} value={stance} onChange={handleChange} required>
-            <option value="regular">-</option>
-            <option value="fakie">Fakie</option>
-            <option value="switch">Switch</option>
-            <option value="nollie">Nollie</option>
+          Preferred stance
+          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
+            <option value="regular">Regular</option>
+            <option value="goofy">Goofy</option>
           </select>
         </label>
+        <div className="flex justify-between gap-1">
+          <label>
+            Stance
+            <select name={VN({ stance })} value={stance} onChange={handleChange} required>
+              <option value="regular">-</option>
+              <option value="fakie">Fakie</option>
+              <option value="switch">Switch</option>
+              <option value="nollie">Nollie</option>
+            </select>
+          </label>
 
-        <label>
-          Direction
-          <select name={VN({ direction })} value={direction} onChange={handleChange}>
-            <option value="none">-</option>
-            <option value="frontside">Frontside</option>
-            <option value="backside">Backside</option>
-          </select>
-        </label>
+          <label>
+            Direction
+            <select name={VN({ direction })} value={direction} onChange={handleChange}>
+              <option value="none">-</option>
+              <option value="frontside">Frontside</option>
+              <option value="backside">Backside</option>
+            </select>
+          </label>
 
-        <label>
-          Rotation
-          <select name={VN({ rotation })} value={rotation} onChange={handleChange} required>
-            <option value={0}>-</option>
-            <option value={180}>180</option>
-            <option value={360}>360</option>
-            <option value={540}>540</option>
-            <option value={720}>720</option>
-          </select>
-        </label>
+          <label>
+            Rotation
+            <select name={VN({ rotation })} value={rotation} onChange={handleChange} required>
+              <option value={0}>-</option>
+              <option value={180}>180</option>
+              <option value={360}>360</option>
+              <option value={540}>540</option>
+              <option value={720}>720</option>
+            </select>
+          </label>
 
-        <label>
-          Name
-          <select name={VN({ name })} value={name} onChange={handleChange} required>
-            {FLATGROUND_TRICKS_ENUM.map((trick) => (
-              <option key={trick} value={trick}>
-                {capitalize(trick)}
-              </option>
+          <label>
+            Name
+            <select name={VN({ name })} value={name} onChange={handleChange} required>
+              {FLATGROUND_TRICKS_ENUM.map((trick) => (
+                <option key={trick} value={trick}>
+                  {capitalize(trick)}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        {/*<label>*/}
+        {/*  Date*/}
+        {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
+        {/*</label>*/}
+        <p className="my-4">
+          Full trick name:{' '}
+          <b ref={trickNameRef}>
+            {fullTrickName?.split('').map((letter, index) => (
+              <span key={index} className="inline-block whitespace-pre">
+                {letter}
+              </span>
             ))}
-          </select>
-        </label>
-      </div>
-      {/*<label>*/}
-      {/*  Date*/}
-      {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
-      {/*</label>*/}
-      <p className="my-4">
-        Full trick name:{' '}
-        <b ref={trickNameRef}>
-          {fullTrickName?.split('').map((letter, index) => (
-            <span key={index} className="inline-block whitespace-pre">
-              {letter}
-            </span>
-          ))}
-        </b>
-      </p>
-      <LoaderButton isLoading={loading} />
-    </form>
+          </b>
+        </p>
+        <LoaderButton isLoading={loading} />
+      </form>
+    </TransitionScroll>
   );
 };
 

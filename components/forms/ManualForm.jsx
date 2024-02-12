@@ -6,7 +6,8 @@ import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import TransitionScroll from 'react-transition-scroll';
 
 const ManualForm = ({ manual, newManual = true }) => {
   const router = useRouter();
@@ -62,30 +63,32 @@ const ManualForm = ({ manual, newManual = true }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
-      <h1 className="text-3xl">{newManual ? 'New Manual' : 'Edit Manual'}</h1>
+    <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
+      <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
+        <h1 className="text-3xl">{newManual ? 'New Manual' : 'Edit Manual'}</h1>
 
-      <label>
-        Preferred stance
-        <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-          <option value="regular">Regular</option>
-          <option value="goofy">Goofy</option>
-        </select>
-      </label>
+        <label>
+          Preferred stance
+          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
+            <option value="regular">Regular</option>
+            <option value="goofy">Goofy</option>
+          </select>
+        </label>
 
-      <label className="mb-4">
-        Type
-        <select name={VN({ type })} value={type} onChange={handleChange} required>
-          {MANUALS_ENUM.map((manual) => (
-            <option key={manual} value={manual}>
-              {capitalize(manual)}
-            </option>
-          ))}
-        </select>
-      </label>
+        <label className="mb-4">
+          Type
+          <select name={VN({ type })} value={type} onChange={handleChange} required>
+            {MANUALS_ENUM.map((manual) => (
+              <option key={manual} value={manual}>
+                {capitalize(manual)}
+              </option>
+            ))}
+          </select>
+        </label>
 
-      <LoaderButton isLoading={loading} />
-    </form>
+        <LoaderButton isLoading={loading} />
+      </form>
+    </TransitionScroll>
   );
 };
 
