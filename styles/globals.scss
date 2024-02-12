@@ -18,6 +18,14 @@
   .text-shadow-none {
     text-shadow: none;
   }
+
+  .hoverSlight {
+    @apply transition-transform hover:scale-[1.02] active:scale-[.98] #{!important};
+  }
+
+  .hoverStrong {
+    @apply transition-transform hover:scale-110 active:scale-95 #{!important};
+  }
 }
 
 .no-scroll {
@@ -35,6 +43,9 @@ html {
   }
 
   body {
+
+    @apply break-words;
+
     #nprogress {
       .spinner {
         @apply hidden;
