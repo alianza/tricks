@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { FLATGROUND_TRICKS_ENUM } from './constants/flatgroundTricks';
+import { PREFFERED_STANCES_ENUM, STANCES_ENUM } from './constants/stances';
 
 const FlatgroundTrickSchema = new mongoose.Schema(
   {
@@ -11,12 +12,12 @@ const FlatgroundTrickSchema = new mongoose.Schema(
     preferred_stance: {
       type: String,
       required: [true, 'Please provide your preferred stance'],
-      enum: ['regular', 'goofy'],
+      enum: PREFFERED_STANCES_ENUM,
     },
     stance: {
       type: String,
       required: [true, "Please provide the tricks' stance"],
-      enum: ['regular', 'fakie', 'switch', 'nollie'],
+      enum: STANCES_ENUM,
     },
     direction: {
       type: String,
@@ -31,7 +32,7 @@ const FlatgroundTrickSchema = new mongoose.Schema(
       required: [true, 'Authentication error. Please log in again.'],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 FlatgroundTrickSchema.index({ userId: 1, name: 1, stance: 1, direction: 1, rotation: 1 }, { unique: true });

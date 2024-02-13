@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { GRINDS_ENUM } from './constants/grinds';
+import { PREFFERED_STANCES_ENUM, STANCES_ENUM } from './constants/stances';
 
 const GrindSchema = new mongoose.Schema(
   {
@@ -12,12 +13,12 @@ const GrindSchema = new mongoose.Schema(
     preferred_stance: {
       type: String,
       required: [true, 'Please provide your preferred stance'],
-      enum: ['regular', 'goofy'],
+      enum: PREFFERED_STANCES_ENUM,
     },
     stance: {
       type: String,
       required: [true, "Please provide the tricks' stance"],
-      enum: ['regular', 'fakie', 'switch', 'nollie'],
+      enum: STANCES_ENUM,
     },
     direction: {
       type: String,
@@ -29,7 +30,7 @@ const GrindSchema = new mongoose.Schema(
       required: [true, 'Authentication error. Please log in again.'],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 GrindSchema.index({ userId: 1, name: 1, stance: 1, direction: 1 }, { unique: true });
