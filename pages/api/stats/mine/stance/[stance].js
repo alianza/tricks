@@ -13,11 +13,8 @@ const { regular, fakie, nollie, switch: switchStance } = STANCES;
 
 const getStanceCount = async (stance, query, trickType = 'all') => {
   const includeTrickType = (desiredType) => trickType === desiredType || trickType === 'all';
-  const getTrickTypeCount = async (model, query, trickType, desiredType) => {
-    console.log(`includeTrickType(desiredType)`, includeTrickType(desiredType));
-    console.log(`query`, query);
-    return includeTrickType(desiredType) ? await model.countDocuments(query) : 0;
-  };
+  const getTrickTypeCount = async (model, query, trickType, desiredType) =>
+    includeTrickType(desiredType) ? await model.countDocuments(query) : 0;
 
   const flatgroundTrickCount = await getTrickTypeCount(FlatgroundTrick, { stance, ...query }, trickType, FLATGROUND);
   const grindCount = await getTrickTypeCount(Grind, { stance, ...query }, trickType, GRIND);
