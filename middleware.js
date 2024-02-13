@@ -9,9 +9,9 @@ export const config = {
     '/new-manual',
     '/profile',
     '/statistics',
-    '/manuals/*',
-    '/grinds/*',
-    '/flatground-tricks/*',
-    '/combos/*',
+    '/manuals/:id*',
+    '/flatgroundtricks/:id*',
+    '/grinds/:id*',
+    '/combos/:id*',
   ],
 }; // Must be authenticated to access these pages
