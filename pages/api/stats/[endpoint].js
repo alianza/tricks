@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   await dbConnect();
 
   switch (method) {
-    case 'GET':
+    case 'POST':
       switch (endpoint) {
         case 'combos':
           try {

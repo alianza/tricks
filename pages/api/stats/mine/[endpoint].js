@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   const { authQuery } = await requireAuth(req, res, authOptions);
 
   switch (method) {
-    case 'GET':
+    case 'POST':
       switch (endpoint) {
         case 'combos':
           try {
