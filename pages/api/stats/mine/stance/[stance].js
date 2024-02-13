@@ -13,12 +13,15 @@ const { regular, fakie, nollie, switch: switchStance } = STANCES;
 
 const getStanceCount = async (stance, query, trickType = 'all') => {
   const includeTrickType = (desiredType) => trickType === desiredType || trickType === 'all';
-  const getTrickTypeCount = async (model, query, trickType, desiredType) =>
-    includeTrickType(desiredType) ? await model.countDocuments(query) : 0;
+  const getTrickTypeCount = async (model, query, trickType, desiredType) => {
+    console.log(`includeTrickType(desiredType)`, includeTrickType(desiredType));
+    console.log(`query`, query);
+    return includeTrickType(desiredType) ? await model.countDocuments(query) : 0;
+  };
 
   const flatgroundTrickCount = await getTrickTypeCount(FlatgroundTrick, { stance, ...query }, trickType, FLATGROUND);
   const grindCount = await getTrickTypeCount(Grind, { stance, ...query }, trickType, GRIND);
-  const manualCount = await getTrickTypeCount(Manual, { preferred_stance: stance, ...query }, trickType, MANUAL);
+  const manualCount = await getTrickTypeCount(Manual, { stance, ...query }, trickType, MANUAL);
   const userCombos = includeTrickType(COMBO) ? await Combo.find(query).populate('trickArray.trick').lean() : []; // for combo's we need to check the stance of the first trick in the trickArray which are nested documents in the combo document, so we need to populate them to access their properties
   const filteredCombos = userCombos.filter(({ trickArray }) => trickArray[0].trick.stance === stance) || [];
   const comboCount = filteredCombos.length;
