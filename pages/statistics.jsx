@@ -25,7 +25,8 @@ export default function Statistics({}) {
       <Stats
         statsDefinition={stanceStatsDef}
         title="Stances"
-        description="Here are some basic statistics about your progress."
+        description="Here are some statistics about your tricks by stance."
+        showTrickTypes
       />
     </div>
   );
