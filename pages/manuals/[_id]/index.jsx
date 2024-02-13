@@ -1,21 +1,19 @@
 import dbConnect from '../../../lib/dbConnect';
-import { getTricks } from '../../../lib/serverUtils';
+import { getTricks, requireAuth } from '../../../lib/serverUtils';
 import Manual from '../../../models/Manual';
 import { isValidObjectId, Model } from 'mongoose';
 import ManualDetails from '../../../components/cards/ManualDetails';
 
-export async function getServerSideProps({ params: { _id } }) {
+export async function getServerSideProps({ params, req, res }) {
   await dbConnect();
 
-  if (!isValidObjectId(_id)) {
-    return { props: { error: `${_id} is not a valid grind trick id...` } };
-  }
+  const { _id } = params;
+  if (!isValidObjectId(_id)) return { props: { error: `${_id} is not a valid grind trick id...` } };
 
-  const manual = await getTricks(Manual, Model.findById, { _id });
+  const { authQuery } = await requireAuth(req, res);
+  const manual = await getTricks(Manual, Model.findOne, { _id, ...authQuery });
 
-  if (!manual) {
-    return { notFound: true };
-  }
+  if (!manual) return { notFound: true };
 
   return { props: { manual } };
 }

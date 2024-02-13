@@ -9,7 +9,8 @@ const EditFlatGroundTrick = () => {
   const { data, error, loading } = useApiCall(_id && 'flatgroundtricks', { method: 'GET', _id });
   const { data: flatgroundTrick, error: serverError } = data || {};
 
-  if (error || serverError) return <p>Failed to load FlatgroundTrick: {error || serverError}</p>;
+  if (error || serverError)
+    return <p className="text-xl">Failed to load FlatgroundTrick: {(error || serverError).toString()}</p>;
   if (!flatgroundTrick || loading) return <Loader className="mx-auto my-24" />;
 
   return <FlatgroundTrickForm flatgroundTrick={flatgroundTrick} newFlatgroundTrick={false} />;

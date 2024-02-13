@@ -9,7 +9,8 @@ const EditManual = () => {
   const { data, error, loading } = useApiCall(_id && 'manuals', { method: 'GET', _id });
   const { data: manual, error: serverError } = data || {};
 
-  if (error || serverError) return <p>Failed to load Manual: {error || serverError}</p>;
+  if (error || serverError)
+    return <p className="text-xl">Failed to load Manual: {(error || serverError).toString()}</p>;
   if (!manual || loading) return <Loader className="mx-auto my-24" />;
 
   return <ManualForm manual={manual} newManual={false} />;

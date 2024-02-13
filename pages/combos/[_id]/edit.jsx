@@ -9,7 +9,7 @@ const EditCombo = () => {
   const { data, error, isLoading: loading } = useApiCall(_id && 'combos', { method: 'GET', _id });
   const { data: combo, error: serverError } = data || {};
 
-  if (error || serverError) return <p>Failed to load Combo: {error || serverError}</p>;
+  if (error || serverError) return <p className="text-xl">Failed to load Combo: {(error || serverError).toString()}</p>;
   if (!combo || loading) return <Loader className="mx-auto my-24" />;
 
   return <ComboForm combo={combo} newCombo={false} />;

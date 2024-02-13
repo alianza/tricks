@@ -1,21 +1,19 @@
 import dbConnect from '../../../lib/dbConnect';
-import { getTricks } from '../../../lib/serverUtils';
+import { getTricks, requireAuth } from '../../../lib/serverUtils';
 import FlatgroundTrickDetails from '../../../components/cards/FlatgroundTrickDetails';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { isValidObjectId, Model } from 'mongoose';
 
-export async function getServerSideProps({ params: { _id } }) {
+export async function getServerSideProps({ params, req, res }) {
   await dbConnect();
 
-  if (!isValidObjectId(_id)) {
-    return { props: { error: `${_id} is not a valid flatground trick id...` } };
-  }
+  const { _id } = params;
+  if (!isValidObjectId(_id)) return { props: { error: `${_id} is not a valid flatground trick id...` } };
 
-  const flatgroundTrick = await getTricks(FlatGroundTrick, Model.findById, { _id });
+  const { authQuery } = await requireAuth(req, res);
+  const flatgroundTrick = await getTricks(FlatGroundTrick, Model.findOne, { _id, ...authQuery });
 
-  if (!flatgroundTrick) {
-    return { notFound: true };
-  }
+  if (!flatgroundTrick) return { notFound: true };
 
   return { props: { flatgroundTrick } };
 }

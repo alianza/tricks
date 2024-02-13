@@ -9,7 +9,7 @@ const EditGrind = () => {
   const { data, error, isLoading: loading } = useApiCall(_id && 'grinds', { method: 'GET', _id });
   const { data: grind, error: serverError } = data || {};
 
-  if (error || serverError) return <p>Failed to load Grind: {error || serverError}</p>;
+  if (error || serverError) return <p className="text-xl">Failed to load Grind: {(error || serverError).toString()}</p>;
   if (!grind || loading) return <Loader className="mx-auto my-24" />;
 
   return <GrindForm grind={grind} newGrind={false} />;

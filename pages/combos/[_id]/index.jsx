@@ -1,21 +1,19 @@
 import dbConnect from '../../../lib/dbConnect';
-import { getCombos } from '../../../lib/serverUtils';
+import { getCombos, requireAuth } from '../../../lib/serverUtils';
 import Combo from '../../../models/Combo';
 import { isValidObjectId, Model } from 'mongoose';
 import ComboDetails from '../../../components/cards/ComboDetails';
 
-export async function getServerSideProps({ params: { _id } }) {
+export async function getServerSideProps({ params, req, res }) {
   await dbConnect();
 
-  if (!isValidObjectId(_id)) {
-    return { props: { error: `${_id} is not a valid grind trick id...` } };
-  }
+  const { _id } = params;
+  if (!isValidObjectId(_id)) return { props: { error: `${_id} is not a valid grind trick id...` } };
 
-  const combo = await getCombos(Combo, Model.findById, { _id });
+  const { authQuery } = await requireAuth(req, res);
+  const combo = await getCombos(Combo, Model.findOne, { _id, ...authQuery });
 
-  if (!combo) {
-    return { notFound: true };
-  }
+  if (!combo) return { notFound: true };
 
   return { props: { combo } };
 }

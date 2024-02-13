@@ -1,21 +1,19 @@
 import dbConnect from '../../../lib/dbConnect';
-import { getTricks } from '../../../lib/serverUtils';
+import { getTricks, requireAuth } from '../../../lib/serverUtils';
 import GrindDetails from '../../../components/cards/GrindDetails';
 import Grind from '../../../models/Grind';
 import { isValidObjectId, Model } from 'mongoose';
 
-export async function getServerSideProps({ params: { _id } }) {
+export async function getServerSideProps({ params, req, res }) {
   await dbConnect();
 
-  if (!isValidObjectId(_id)) {
-    return { props: { error: `${_id} is not a valid grind trick id...` } };
-  }
+  const { _id } = params;
+  if (!isValidObjectId(_id)) return { props: { error: `${_id} is not a valid grind trick id...` } };
 
-  const grind = await getTricks(Grind, Model.findById, { _id });
+  const { authQuery } = await requireAuth(req, res);
+  const grind = await getTricks(Grind, Model.findOne, { _id, ...authQuery });
 
-  if (!grind) {
-    return { notFound: true };
-  }
+  if (!grind) return { notFound: true };
 
   return { props: { grind } };
 }
