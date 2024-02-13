@@ -1,14 +1,13 @@
 import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
 import { getFullManualName } from '../../../lib/commonUtils';
-import { authOptions } from '../auth/[...nextauth]';
 import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
-  const { authQuery } = await requireAuth(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res);
 
   switch (method) {
     case 'GET':

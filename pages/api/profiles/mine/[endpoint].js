@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   } = req;
 
   await dbConnect();
-  const { authQuery } = await requireAuth(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res);
 
   switch (method) {
     case 'GET':

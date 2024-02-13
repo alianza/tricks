@@ -1,8 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
-import { getFullGrindName } from '../../../lib/commonUtils';
+import { getFullTrickName } from '../../../lib/commonUtils';
 import { checkForUsedCombos, requireAuth, notFoundHandler } from '../../../lib/serverUtils';
-import { authOptions } from '../auth/[...nextauth]';
 import { isValidObjectId } from 'mongoose';
 
 export default async function handler(req, res) {
@@ -14,14 +13,14 @@ export default async function handler(req, res) {
   if (!isValidObjectId(_id)) return notFoundHandler(res, { entity: 'Flatground trick', _id });
 
   await dbConnect();
-  const { authQuery } = await requireAuth(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res);
 
   switch (method) {
     case 'GET':
       try {
         const flatgroundTrick = await FlatGroundTrick.findOne({ _id, ...authQuery }).lean();
-        const data = { ...flatgroundTrick, trick: getFullGrindName(flatgroundTrick) };
         if (!flatgroundTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
+        const data = { ...flatgroundTrick, trick: getFullTrickName(flatgroundTrick) };
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
@@ -32,8 +31,8 @@ export default async function handler(req, res) {
     case 'PATCH':
       try {
         const flatgroundTrick = await FlatGroundTrick.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
-        const data = { ...flatgroundTrick.toObject(), trick: getFullGrindName(flatgroundTrick) };
         if (!flatgroundTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
+        const data = { ...flatgroundTrick.toObject(), trick: getFullTrickName(flatgroundTrick) };
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);

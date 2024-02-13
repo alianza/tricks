@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const { method } = req;
 
   await dbConnect();
-  const { authQuery } = await requireAuth(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res);
 
   switch (method) {
     case 'POST':

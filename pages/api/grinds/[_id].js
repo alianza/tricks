@@ -2,7 +2,6 @@ import dbConnect from '../../../lib/dbConnect';
 import Grind from '../../../models/Grind';
 import { getFullGrindName } from '../../../lib/commonUtils';
 import { checkForUsedCombos, requireAuth, notFoundHandler } from '../../../lib/serverUtils';
-import { authOptions } from '../auth/[...nextauth]';
 import { isValidObjectId } from 'mongoose';
 
 export default async function handler(req, res) {
@@ -14,14 +13,14 @@ export default async function handler(req, res) {
   if (!isValidObjectId(_id)) return notFoundHandler(res, { entity: 'Grind', _id });
 
   await dbConnect();
-  const { authQuery } = await requireAuth(req, res, authOptions);
+  const { authQuery } = await requireAuth(req, res);
 
   switch (method) {
     case 'GET':
       try {
         const grind = await Grind.findOne({ _id, ...authQuery }).lean();
-        const data = { ...grind, trick: getFullGrindName(grind) };
         if (!grind) return notFoundHandler(res, { entity: 'Grind', _id });
+        const data = { ...grind, trick: getFullGrindName(grind) };
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
@@ -32,11 +31,11 @@ export default async function handler(req, res) {
     case 'PATCH':
       try {
         const grind = await Grind.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
+        if (!grind) return notFoundHandler(res, { entity: 'Grind', _id });
         const data = {
           ...grind.toObject(),
           trick: getFullGrindName(grind),
         };
-        if (!grind) return notFoundHandler(res, { entity: 'Grind', _id });
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
