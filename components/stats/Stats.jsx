@@ -3,21 +3,40 @@ import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
+import { capitalize, VN } from '../../lib/commonUtils';
+import { TRICK_TYPES_ENUM } from '../../models/constants/trickTypes';
 
-export default function Stats({ statsDefinition, title, description }) {
-  const [stats, setStats] = useState(Object.entries(statsDefinition).map(([label, { value }]) => [label, value]));
+const detaultTrickType = 'all';
+
+const getDefaultStats = (statsDefinition) =>
+  Object.entries(statsDefinition).map(([label, { value }]) => [label, value]);
+
+export default function Stats({ statsDefinition, title, description, showTrickTypes = false }) {
+  const [stats, setStats] = useState(getDefaultStats(statsDefinition));
+  const [trickType, setTrickType] = useState(detaultTrickType);
 
   useAsyncEffect(async () => {
+    setStats(getDefaultStats(statsDefinition));
     try {
-      const response = await Promise.all(
-        Object.values(statsDefinition).map(({ endpoint }) => apiCall(`stats/${endpoint}`, { method: 'GET' })),
+      const response = await Promise.allSettled(
+        Object.values(statsDefinition).map(({ endpoint }) =>
+          apiCall(`stats/${endpoint}`, {
+            method: 'POST',
+            data: { trickType },
+          }),
+        ),
       );
-      setStats(Object.entries(statsDefinition).map(([label], index) => [label, response[index].data.count]));
+
+      setStats(
+        Object.entries(statsDefinition).map(([label], index) => [
+          label,
+          response[index]?.value?.data?.count ?? statsDefinition[label].value,
+        ]),
+      );
     } catch (error) {
       toast.error(`Failed to fetch stats: ${error.message}`);
-    } finally {
     }
-  }, []);
+  }, [trickType]);
 
   return (
     <TransitionScroll
@@ -28,6 +47,20 @@ export default function Stats({ statsDefinition, title, description }) {
     >
       <h1 className="mb-4 text-4xl font-bold">{title}</h1>
       <p className="my-4">{description}</p>
+      {showTrickTypes && (
+        <select
+          className="bg-neutral-50 dark:bg-neutral-900 rounded w-full my-4 block p-2 text-lg font-medium"
+          name={VN({ trickType })}
+          value={trickType}
+          onChange={({ target }) => setTrickType(target.value)}
+        >
+          {[detaultTrickType, ...TRICK_TYPES_ENUM].map((trickType) => (
+            <option key={trickType} value={trickType}>
+              {`${capitalize(trickType)} tricks`}
+            </option>
+          ))}
+        </select>
+      )}
       <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 dark:bg-neutral-700 sm:grid-cols-2">
         {stats.map(([key, value]) => (
           <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
