@@ -17,7 +17,7 @@ const ComboSchema = new mongoose.Schema(
         trickRef: {
           type: String,
           enum: TRICK_TYPES_ENUM,
-          default: TRICK_TYPES_ENUM[0],
+          default: FlatgroundTrick.modelName,
           required: true,
         },
       },
@@ -34,6 +34,17 @@ const ComboSchema = new mongoose.Schema(
 
 async function validation(next, self, context) {
   if (self.trickArray?.length < 2) next(new Error('Combo must consist of at least 2 tricks'));
+
+  // Combo cannot have 2 flatground tricks in a row in the trickArray
+  if (
+    self.trickArray.some(
+      (_, i, trickArray) =>
+        trickArray[i]?.trickRef === FlatgroundTrick.modelName &&
+        trickArray[i + 1]?.trickRef === FlatgroundTrick.modelName,
+    )
+  ) {
+    next(new Error('Combo cannot have 2 flatground tricks in a row'));
+  }
 
   const query = { userId: context.userId, _id: { $ne: context._id } };
   query['trickArray'] = { $size: self.trickArray.length };
