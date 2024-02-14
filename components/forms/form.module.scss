@@ -6,7 +6,11 @@
   input,
   textarea,
   select {
-    @apply block w-full rounded p-2 text-neutral-900;
+    @apply block w-full rounded p-2 text-neutral-900 font-semibold drop-shadow-sm;
+  }
+
+  button {
+    @apply shadow;
   }
 
   select {

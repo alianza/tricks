@@ -1,12 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import formStyles from './form.module.scss';
-import { capitalize, getFullComboName, stanceSelectOptions, VN } from '../../lib/commonUtils';
+import {
+  capitalize,
+  fuzzy,
+  getFullComboName,
+  stanceSelectOptions,
+  directionSelectOptions,
+  VN,
+} from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
-import { ArrowPathIcon, ArrowRightIcon, ArrowUturnLeftIcon, PlusIcon } from '@heroicons/react/20/solid';
+import {
+  ArrowPathIcon,
+  ArrowRightIcon,
+  ArrowUturnLeftIcon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from '@heroicons/react/20/solid';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { throttle, useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/customHooks';
+import { useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
@@ -35,7 +49,12 @@ export const TRICK_TYPES_NEW_PAGES = {
 };
 
 const trickTypeHasStance = (trickType) =>
-  trickType === TRICK_TYPES_MAP.flatground || trickType === TRICK_TYPES_MAP.grind;
+  trickType === TRICK_TYPES_MAP.flatground ||
+  trickType === TRICK_TYPES_MAP.grind ||
+  trickType === TRICK_TYPES_MAP.manual;
+
+const trickTypeHasDirection = (trickType) =>
+  trickType === TRICK_TYPES_MAP.grind || trickType === TRICK_TYPES_MAP.flatground;
 
 const ComboForm = ({ combo, newCombo = true }) => {
   const router = useRouter();
@@ -44,20 +63,25 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [trickType, setTrickType] = useState(TRICK_TYPES_MAP.flatground);
   const [tricks, setTricks] = useState(TRICK_TYPES.reduce((acc, trickType) => ({ ...acc, [trickType]: [] }), {})); // Fill tricks with empty arrays for each trick type
   const [stance, setStance] = useState('all');
+  const [direction, setDirection] = useState('all');
   const [loading, setLoading] = useState(true);
   const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
   const [form, setForm] = useState({ trickArray: combo.trickArray });
+  const [dots, setDots] = useState('...');
+  const [searchString, setSearchString] = useState('');
+  const [searchActive, setSearchActive] = useState(false);
 
   const { trickArray } = form;
 
   useAsyncEffect(async () => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
+    const interval = setInterval(() => setDots((prev) => (prev === '...' ? '.' : prev + '.')), 1000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (trickTypeHasStance(trickType)) return;
-    setStance('all'); // Set stances to all if trick type is manuals (Manuals don't have a stance)
+    resetFilters();
   }, [trickType]);
 
   const fetchTrickType = async (trickType) => {
@@ -111,8 +135,26 @@ const ComboForm = ({ combo, newCombo = true }) => {
     setLoading(false);
   };
 
+  const resetFilters = () => {
+    setStance('all');
+    setDirection('all');
+    setSearchString('');
+  };
+
   const addTrick = (e, trick) => {
     e.preventDefault();
+    if (
+      trickArray[trickArray.length - 1]?.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
+      TRICK_TYPES_MODELS[trickType] === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground]
+    ) {
+      return toast.error('Combo cannot have 2 flatground tricks in a row');
+    }
+
+    if (trickArray.length === 0) {
+      setTrickType(TRICK_TYPES_MAP.grind); // Switch to grinds after adding first trick
+      resetFilters();
+    }
+
     setForm((prev) => ({
       ...form,
       trickArray: [...prev.trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }],
@@ -120,6 +162,14 @@ const ComboForm = ({ combo, newCombo = true }) => {
   };
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
+  const searchFilter = (trick) => fuzzy(trick.trick, searchString, 0.6);
+  const directionFilter = (trick) => (direction === 'all' ? true : trick.direction === direction);
+  const allFilters = (arr) => arr.filter(stanceFilter).filter(searchFilter).filter(directionFilter);
+
+  const toggleSearch = () => {
+    setSearchActive((prev) => !prev);
+    setSearchString('');
+  };
 
   return (
     <TransitionScroll
@@ -152,18 +202,36 @@ const ComboForm = ({ combo, newCombo = true }) => {
             {trickArray.length === 1 && (
               <span className="font-bold">
                 <ArrowRightIcon title="To" className="mr-1 inline-block h-6 w-6" />
-                ...
+                {dots}
               </span>
             )}
           </div>
         ))}
-        {!trickArray.length && <span className="whitespace-nowrap font-bold">Combo Name...</span>}
+        {!trickArray.length && <span className="whitespace-nowrap font-bold">Select first trick{dots}</span>}
       </div>
       <hr className="my-2 border-neutral-800 dark:border-neutral-400" />
 
       <form onSubmit={handleSubmit} className={`${formStyles.form} flex grow flex-col`}>
         <label>
-          Select type of trick to add
+          <search>
+            <div className="flex mb-1 flex-row justify-between">
+              Select type of trick to add:
+              <MagnifyingGlassIcon
+                title="Search for tricks"
+                onClick={toggleSearch}
+                className={`hoverStrong cursor-pointer h-6 w-6 ${searchActive ? 'opacity-25' : ''}`}
+              />
+            </div>
+            {searchActive && (
+              <input
+                type="search"
+                value={searchString}
+                onChange={({ target }) => setSearchString(target.value)}
+                placeholder="Search tricks..."
+                className="my-2"
+              />
+            )}
+          </search>
           <select name={VN({ trickType })} value={trickType} onChange={({ target }) => setTrickType(target.value)}>
             {Object.keys(TRICK_TYPES_ENDPOINTS).map((trickType) => (
               <option key={trickType} value={trickType}>
@@ -172,34 +240,44 @@ const ComboForm = ({ combo, newCombo = true }) => {
             ))}
           </select>
         </label>
-
-        {trickTypeHasStance(trickType) && (
-          <div className="mt-2">
+        <div className="mt-2 flex flex-row gap-2">
+          {trickTypeHasStance(trickType) && (
             <select name={VN({ stance })} value={stance} onChange={({ target }) => setStance(target.value)} required>
               {stanceSelectOptions}
             </select>
-          </div>
-        )}
+          )}
+          {trickTypeHasDirection(trickType) && (
+            <select
+              name={VN({ direction })}
+              value={direction}
+              onChange={({ target }) => setDirection(target.value)}
+              required
+            >
+              {directionSelectOptions}
+            </select>
+          )}
+        </div>
 
         {/*Show tricks*/}
         <div
           ref={tricksRef}
           className="mt-4 flex max-h-[40vh] flex-col justify-start gap-2 overflow-y-auto overflow-x-hidden"
         >
-          {!tricks[trickType].filter(stanceFilter).length && !loading ? (
+          {!allFilters(tricks[trickType]).length && !loading ? (
             <p>
               No {stance !== 'all' && stance} {trickType}...
             </p>
           ) : (
-            tricks[trickType].filter(stanceFilter).map((trick) => (
-              <div
-                className="group flex cursor-pointer items-center"
-                onClick={(e) => addTrick(e, trick)}
+            allFilters(tricks[trickType]).map((trick) => (
+              <button
+                style={{ boxShadow: 'unset' }}
                 key={trick._id}
+                onClick={(e) => addTrick(e, trick)}
+                className="group flex cursor-pointer items-center text-start"
               >
                 <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
                 <span className={`${utilStyles.link} grow py-1 touch:!decoration-transparent`}>{trick.trick}</span>
-              </div>
+              </button>
             ))
           )}
           <Link
@@ -208,7 +286,10 @@ const ComboForm = ({ combo, newCombo = true }) => {
             className="group flex cursor-pointer items-center"
           >
             <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-            <b className={`${utilStyles.link} grow py-1`}>Add new {TRICK_TYPES_MODELS[trickType]}</b>
+            <b className={`${utilStyles.link} group-hover:decoration-inherit group-hover:duration-100 py-1`}>
+              Add new {TRICK_TYPES_MODELS[trickType]}
+            </b>
+            <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-1" />
           </Link>
         </div>
 
@@ -217,7 +298,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
           <ArrowPathIcon
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-            title="Reload tricks"
+            title="Load new tricks"
             onClick={async () => await fetchTrickType(trickType)}
           />
         </div>
