@@ -10,7 +10,8 @@ const stanceStatsDef = {
 
 // const otherStatsDef = {
 //   average combo length
-
+// number of grind combos
+// number of manual combos
 // }
 
 export default function Statistics({}) {
