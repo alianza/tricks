@@ -4,7 +4,6 @@ import FlatgroundTrick from '../../../../../models/FlatgroundTrick';
 import Grind from '../../../../../models/Grind';
 import Manual from '../../../../../models/Manual';
 import { requireAuth } from '../../../../../lib/serverUtils';
-import { authOptions } from '../../../auth/[...nextauth]';
 import { STANCES } from '../../../../../models/constants/stances';
 import TRICK_TYPES from '../../../../../models/constants/trickTypes';
 const { combo: COMBO, flatground: FLATGROUND, manual: MANUAL, grind: GRIND } = TRICK_TYPES;
