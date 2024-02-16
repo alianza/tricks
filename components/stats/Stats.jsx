@@ -21,7 +21,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
     const fetchAndSetData = async (statsDef, setData) => {
       const [label, stat] = statsDef;
       try {
-        const { data } = await apiCall(`stats/${stat.endpoint}`, { method: 'POST' });
+        const { data } = await apiCall(`stats/${stat.endpoint}`, { method: 'POST', data: { trickType } });
         setData((prev) => prev.map(([key, value]) => (key === label ? [key, data.count] : [key, value])));
       } catch (error) {
         toast.error(`Failed to fetch ${stat.endpoint}: ${error.message}`);
