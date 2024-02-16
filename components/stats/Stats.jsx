@@ -6,36 +6,29 @@ import TransitionScroll from 'react-transition-scroll';
 import { capitalize, VN } from '../../lib/commonUtils';
 import { TRICK_TYPES_ENUM } from '../../models/constants/trickTypes';
 
-const detaultTrickType = 'all';
+const defaultTrickType = 'all';
 
 const getDefaultStats = (statsDefinition) =>
   Object.entries(statsDefinition).map(([label, { value }]) => [label, value]);
 
 export default function Stats({ statsDefinition, title, description, showTrickTypes = false }) {
   const [stats, setStats] = useState(getDefaultStats(statsDefinition));
-  const [trickType, setTrickType] = useState(detaultTrickType);
+  const [trickType, setTrickType] = useState(defaultTrickType);
 
   useAsyncEffect(async () => {
     setStats(getDefaultStats(statsDefinition));
-    try {
-      const response = await Promise.allSettled(
-        Object.values(statsDefinition).map(({ endpoint }) =>
-          apiCall(`stats/${endpoint}`, {
-            method: 'POST',
-            data: { trickType },
-          }),
-        ),
-      );
 
-      setStats(
-        Object.entries(statsDefinition).map(([label], index) => [
-          label,
-          response[index]?.value?.data?.count ?? statsDefinition[label].value,
-        ]),
-      );
-    } catch (error) {
-      toast.error(`Failed to fetch stats: ${error.message}`);
-    }
+    const fetchAndSetData = async (statsDef, setData) => {
+      const [label, stat] = statsDef;
+      try {
+        const { data } = await apiCall(`stats/${stat.endpoint}`, { method: 'POST' });
+        setData((prev) => prev.map(([key, value]) => (key === label ? [key, data.count] : [key, value])));
+      } catch (error) {
+        toast.error(`Failed to fetch ${stat.endpoint}: ${error.message}`);
+      }
+    };
+
+    Object.entries(statsDefinition).forEach((statsDef) => fetchAndSetData(statsDef, setStats));
   }, [trickType]);
 
   return (
@@ -54,7 +47,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
           value={trickType}
           onChange={({ target }) => setTrickType(target.value)}
         >
-          {[detaultTrickType, ...TRICK_TYPES_ENUM].map((trickType) => (
+          {[defaultTrickType, ...TRICK_TYPES_ENUM].map((trickType) => (
             <option key={trickType} value={trickType}>
               {`${capitalize(trickType)} tricks`}
             </option>
