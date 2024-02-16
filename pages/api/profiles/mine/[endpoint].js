@@ -1,6 +1,5 @@
 import dbConnect from '../../../../lib/dbConnect';
 import { ensureProfile, requireAuth } from '../../../../lib/serverUtils';
-import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(req, res) {
   const {

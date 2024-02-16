@@ -4,7 +4,6 @@ import FlatgroundTrick from '../../../../models/FlatgroundTrick';
 import Grind from '../../../../models/Grind';
 import Manual from '../../../../models/Manual';
 import { requireAuth } from '../../../../lib/serverUtils';
-import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(req, res) {
   const {
