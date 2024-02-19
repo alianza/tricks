@@ -1,19 +1,21 @@
 import NavLink from '../common/NavLink';
 import Link from 'next/link';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
+import { Bars3Icon, MinusIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import utilStyles from '../../styles/utils.module.scss';
 import logo from '../../public/logo.webp';
 import { navItems } from '../../lib/clientUtils';
+import { Icon } from './DesktopNav';
 
 export default function Header() {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [menuStyle, setMenuStyle] = useState({});
 
-  const { home, dashboard, profile, new: newNav, signIn: signInNav, signOut: signOutNav } = navItems;
+  const { home, dashboard, profile, new: newNav, signIn: signInNav, signOut: signOutNav, stats } = navItems;
 
   useEffect(() => {
     const html = document.documentElement;
@@ -71,22 +73,40 @@ export default function Header() {
         style={menuStyle}
         onClick={() => setOpen(false)}
       >
-        <NavLink label={home.label} href={home.href} exact />
+        <NavLink label={home.label} icon={home.icon} href={home.href} exact />
 
         {session ? (
           <>
-            <NavLink label={dashboard.label} href={dashboard.href} />
-            {newNav.children.map((item) => (
-              <NavLink key={item.label} label={`New ${item.label}`} href={item.href} />
-            ))}
-            <NavLink label={profile.label} href={profile.href} />
+            <NavLink label={dashboard.label} icon={dashboard.icon} href={dashboard.href} />
+            <details
+              onToggle={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setOpen(true);
+                setDetailsOpen((wasOpen) => !wasOpen);
+              }}
+              open={detailsOpen}
+              className="flex items-center gap-2 marker:content-none"
+            >
+              <summary className="flex justify-center items-center gap-2 cursor-pointer hover:font-semibold">
+                {detailsOpen ? <MinusIcon className="h-6 w-6" /> : newNav.icon} {newNav.label}
+              </summary>
+              <div className="py-2 flex flex-col items-start gap-2">
+                {newNav.children.map((item) => (
+                  <NavLink boldFix key={item.label} icon={newNav.icon} label={item.label} href={item.href} />
+                ))}
+              </div>
+            </details>
+
+            <NavLink label={stats.label} icon={stats.icon} href={stats.href} />
+            <NavLink label={profile.label} icon={profile.icon} href={profile.href} />
             <a className="cursor-pointer hover:font-bold" href="#" onClick={signOutNav.onClick}>
-              {signOutNav.label}
+              <Icon icon={signOutNav.icon} label={signOutNav.label} />
             </a>
           </>
         ) : (
           <a className="cursor-pointer hover:font-bold" href="#" onClick={signInNav.onClick}>
-            {signInNav.label}
+            <Icon icon={signInNav.icon} label={signInNav.label} />
           </a>
         )}
       </nav>

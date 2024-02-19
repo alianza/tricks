@@ -8,7 +8,7 @@ function DesktopNav() {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
 
-  const { home, dashboard, profile, new: newNav, signIn: signInNav, signOut: signOutNav } = navItems;
+  const { home, dashboard, profile, new: newNav, signIn: signInNav, signOut: signOutNav, stats } = navItems;
 
   return (
     <nav className="dark:bg-neutral-800 bg-neutral-200 sticky top-[theme(spacing.header)] min-h-[calc(100vh-theme(spacing.header)-theme(spacing.footer))] min-w-desktopNav hidden left-0 gap-2 xl:flex flex-col text-2xl p-4">
@@ -31,6 +31,7 @@ function DesktopNav() {
               ))}
             </div>
           </details>
+          <NavButton label={<Icon icon={stats.icon} label={stats.label} />} href={stats.href} />
           <NavButton label={<Icon icon={profile.icon} label={profile.label} />} href={profile.href} />
           <NavButton
             className="mt-auto"
@@ -49,10 +50,19 @@ function DesktopNav() {
   );
 }
 
-const Icon = ({ icon, label }) => (
-  <div className="flex items-center gap-2 cursor-pointer hover:font-semibold">
+export const Icon = ({ icon, label, boldFix }) => (
+  <div className="flex items-center gap-2 cursor-pointer hover:font-semibold w-[calc(100%+1rem)]">
     {icon}
-    {label}
+    <span
+      data-text={label}
+      className={
+        boldFix
+          ? 'before:content-[attr(data-text)] before:invisible before:font-semibold before:block before:h-0 before:text-left before:z-[-1] before:opacity-0 before:pointer-events-none'
+          : ''
+      }
+    >
+      {label}
+    </span>
   </div>
 );
 
