@@ -22,7 +22,8 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
       const [label, stat] = statsDef;
       try {
         const { data } = await apiCall(`stats/${stat.endpoint}`, { method: 'POST', data: { trickType } });
-        setData((prev) => prev.map(([key, value]) => (key === label ? [key, data.count] : [key, value])));
+        const suffix = stat.suffix ? ` ${stat.suffix}` : '';
+        setData((prev) => prev.map(([key, value]) => (key === label ? [key, data.count + suffix] : [key, value])));
       } catch (error) {
         toast.error(`Failed to fetch ${stat.endpoint}: ${error.message}`);
       }

@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { getFullManualName } from '../../lib/commonUtils';
+import { formatDate, getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
-import { apiCall, baseStyle, formatDate, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 import TransitionScroll from 'react-transition-scroll';
 

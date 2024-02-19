@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { capitalize, getFullTrickName } from '../../lib/commonUtils';
+import { capitalize, formatDate, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, formatDate, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {

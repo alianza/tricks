@@ -25,6 +25,7 @@ import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
 import TransitionScroll from 'react-transition-scroll';
+import { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 
 export const TRICK_TYPES_MAP = {
   flatground: 'Flatground Tricks',
@@ -40,12 +41,6 @@ const TRICK_TYPES_ENDPOINTS = {
   [TRICK_TYPES_MAP.flatground]: 'flatgroundtricks',
   [TRICK_TYPES_MAP.grind]: 'grinds',
   [TRICK_TYPES_MAP.manual]: 'manuals',
-};
-
-export const TRICK_TYPES_MODELS = {
-  [TRICK_TYPES_MAP.flatground]: 'FlatgroundTrick',
-  [TRICK_TYPES_MAP.grind]: 'Grind',
-  [TRICK_TYPES_MAP.manual]: 'Manual',
 };
 
 export const TRICK_TYPES_NEW_PAGES = {
