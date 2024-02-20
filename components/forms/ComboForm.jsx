@@ -27,7 +27,7 @@ import Link from 'next/link';
 import TransitionScroll from 'react-transition-scroll';
 import { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 
-export const TRICK_TYPES_MAP = {
+const TRICK_TYPES_MAP = {
   flatground: 'Flatground Tricks',
   grind: 'Grinds',
   manual: 'Manuals',
@@ -43,7 +43,7 @@ const TRICK_TYPES_ENDPOINTS = {
   [TRICK_TYPES_MAP.manual]: 'manuals',
 };
 
-export const TRICK_TYPES_NEW_PAGES = {
+const TRICK_TYPES_NEW_PAGES = {
   [TRICK_TYPES_MAP.flatground]: '/new-flatground-trick?closeAfterAdd=true',
   [TRICK_TYPES_MAP.grind]: '/new-grind?closeAfterAdd=true',
   [TRICK_TYPES_MAP.manual]: '/new-manual?closeAfterAdd=true',

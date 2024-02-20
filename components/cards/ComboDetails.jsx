@@ -5,7 +5,7 @@ import { formatDate, getFullComboName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { TRICK_TYPES_MAP, TRICK_TYPES_MODELS } from '../forms/ComboForm';
+import TRICK_TYPES, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 
@@ -34,9 +34,7 @@ export default function ComboDetails({ combo }) {
             {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
             ) : (
-              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] && (
-                <span className="font-bold"> Out </span>
-              )
+              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES.flatground] && <span className="font-bold"> Out </span>
             )}
           </div>
         ))}
