@@ -39,7 +39,7 @@ function GenericTable({
 
   if (actions?.length) columns = [...columns, 'actions'];
 
-  useEffect(() => sort(columns[0], 'asc'), []); // Default ascending sort on first column
+  useEffect(() => sort(getColumnProp(columns[0]), 'asc'), []); // Default ascending sort on first column
 
   useEffect(() => {
     const operations = () => {
@@ -70,6 +70,8 @@ function GenericTable({
     setTimeout(() => enableAnimations(true), duration);
   };
 
+  const getColumnProp = (col) => (isString(col) ? col : Object.keys(col)[0]);
+
   const { showCount, newLink, actionsColumnName, sorting = true, className = '' } = options;
   const hasItems = !!objArrayState.length;
 
@@ -81,7 +83,7 @@ function GenericTable({
             {columns.map((col) => {
               let isActionsColumn = false;
               let colName = isString(col) ? col : Object.values(col)[0].alias || Object.keys(col)[0];
-              const colProp = isString(col) ? col : Object.keys(col)[0];
+              const colProp = getColumnProp(col);
               if (colName === 'actions') {
                 colName = actionsColumnName || colName;
                 isActionsColumn = true;
