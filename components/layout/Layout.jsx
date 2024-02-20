@@ -36,6 +36,7 @@ export default function Layout({ children }) {
           {children}
         </main>
       </div>
+
       <Footer />
     </div>
   );
