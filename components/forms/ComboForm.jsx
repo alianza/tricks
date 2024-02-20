@@ -123,7 +123,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
       await router.back();
-      toast.success(`Successfully updated combo: ${getFullComboName({ trickArray: combo.trickArray })}`);
+      toast.success(`Successfully updated combo: ${getFullComboName(form)}`);
     } catch (error) {
       toast.error(`Failed to update combo: ${error.message}`);
     }
@@ -137,7 +137,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       });
       await router.back();
       closeAfterAdd();
-      toast.success(`Successfully created combo: ${getFullComboName({ trickArray: combo.trickArray })}`);
+      toast.success(`Successfully created combo: ${getFullComboName(form)}`);
     } catch (error) {
       toast.error(`Failed to create combo: ${error.message}`);
     }
