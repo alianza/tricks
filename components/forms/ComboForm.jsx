@@ -25,13 +25,20 @@ import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
 import TransitionScroll from 'react-transition-scroll';
-import { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
+const { TRICK_TYPES_MODELS: TRICK_TYPES_MODELS_CONSTANT } = require('../../models/constants/trickTypes');
 
 const TRICK_TYPES_MAP = {
   flatground: 'Flatground Tricks',
   grind: 'Grinds',
   manual: 'Manuals',
   all: 'All Tricks',
+};
+
+const TRICK_TYPES_MODELS = {
+  [TRICK_TYPES_MAP.flatground]: TRICK_TYPES_MODELS_CONSTANT.flatground,
+  [TRICK_TYPES_MAP.grind]: TRICK_TYPES_MODELS_CONSTANT.grind,
+  [TRICK_TYPES_MAP.manual]: TRICK_TYPES_MODELS_CONSTANT.manual,
+  [TRICK_TYPES_MAP.combo]: TRICK_TYPES_MODELS_CONSTANT.combo,
 };
 
 const TRICK_TYPES = Object.values(TRICK_TYPES_MAP);
@@ -91,7 +98,11 @@ const ComboForm = ({ combo, newCombo = true }) => {
     try {
       setLoading(true);
       const { data } = await apiCall(TRICK_TYPES_ENDPOINTS[trickType], { method: 'GET' });
-      setTricks((previousTricks) => ({ ...previousTricks, [trickType]: data }));
+
+      setTricks((previousTricks) => ({
+        ...previousTricks,
+        [trickType]: data.map((trick) => ({ ...trick, trickRef: TRICK_TYPES_MODELS[trickType] })),
+      }));
     } catch (error) {
       toast.error(`Failed to fetch ${trickType}: ${error.message}`);
     } finally {
@@ -126,6 +137,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       });
       await router.back();
       closeAfterAdd();
+      toast.success(`Successfully created combo: ${getFullComboName({ trickArray: combo.trickArray })}`);
     } catch (error) {
       toast.error(`Failed to create combo: ${error.message}`);
     }
@@ -148,7 +160,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
     e.preventDefault();
     if (
       trickArray[trickArray.length - 1]?.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
-      TRICK_TYPES_MODELS[trickType] === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground]
+      trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground]
     ) {
       return toast.error('Combo cannot have 2 flatground tricks in a row');
     }
@@ -158,10 +170,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       resetFilters();
     }
 
-    setForm((prev) => ({
-      ...prev,
-      trickArray: [...prev.trickArray, { ...trick, trickRef: TRICK_TYPES_MODELS[trickType] }],
-    }));
+    setForm((prev) => ({ ...prev, trickArray: [...prev.trickArray, trick] }));
   };
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
@@ -304,12 +313,13 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
         <div className="mt-4 flex items-center justify-between">
           <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
-
-          <ArrowPathIcon
-            className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-            title="Load new tricks"
-            onClick={async () => await fetchTrickType(trickType)}
-          />
+          {TRICK_TYPES_NEW_PAGES[trickType] && (
+            <ArrowPathIcon
+              className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+              title="Load new tricks"
+              onClick={async () => await fetchTrickType(trickType)}
+            />
+          )}
         </div>
       </form>
     </TransitionScroll>

@@ -41,6 +41,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
       const { _id } = router.query;
       await apiCall('grinds', { method: 'PATCH', data: form, _id });
       await router.back();
+      toast.success(`Successfully updated grind: ${getFullGrindName(form)}`);
     } catch (error) {
       toast.error(`Failed to update grind: ${error.message}`);
     }
@@ -51,6 +52,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
       await apiCall('grinds', { method: 'POST', data: form });
       await router.back();
       closeAfterAdd();
+      toast.success(`Successfully added grind: ${getFullGrindName(form)}`);
     } catch (error) {
       toast.error(`Failed to add grind: ${error.message}`);
     }

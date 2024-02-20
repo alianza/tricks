@@ -43,6 +43,7 @@ const ManualForm = ({ manual, newManual = true }) => {
       await apiCall('manuals', { method: 'POST', data: form });
       await router.back();
       closeAfterAdd();
+      toast.success(`Successfully added manual: ${capitalize(form.type)}`);
     } catch (error) {
       toast.error(`Failed to add Manual: ${error.message}`);
     }

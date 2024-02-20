@@ -42,6 +42,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       const { _id } = router.query;
       await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       await router.back();
+      toast.success(`Successfully updated flatground trick: ${getFullTrickName(form)}`);
     } catch (error) {
       toast.error(`Failed to update flatground trick: ${error.message}`);
     }
@@ -52,6 +53,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       await apiCall('flatgroundtricks', { method: 'POST', data: form });
       await router.back();
       closeAfterAdd();
+      toast.success(`Successfully added flatground trick: ${getFullTrickName(form)}`);
     } catch (error) {
       toast.error(`Failed to add flatground trick: ${error.message}`);
     }
