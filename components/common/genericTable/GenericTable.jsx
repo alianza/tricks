@@ -49,7 +49,11 @@ function GenericTable({
       if (objArray) sort(column, direction); // Sort again if objArray changes
     };
 
-    objArrayState?.length > objArray?.length ? deAnimate(operations) : operations(); // Disable animations if an item was removed
+    if (objArrayState?.length === 0 && objArray?.length > 0) {
+      deAnimate(operations); // if array was empty before
+    } else {
+      objArrayState?.length > objArray?.length ? deAnimate(operations) : operations(); // Disable animations if an item was removed
+    }
   }, [objArray]);
 
   const sort = (column, direction) => {
