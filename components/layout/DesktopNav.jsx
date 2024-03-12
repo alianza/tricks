@@ -11,8 +11,8 @@ function DesktopNav() {
   const { home, dashboard, profile, new: newNav, signIn: signInNav, signOut: signOutNav, stats } = navItems;
 
   return (
-    <nav className="sticky left-0 top-[theme(spacing.header)] hidden min-h-[calc(100vh-theme(spacing.header)-theme(spacing.footer))] min-w-desktopNav flex-col gap-2 bg-neutral-200 p-4 text-2xl xl:flex dark:bg-neutral-800">
-      <h2 className="my-4 p-2 text-3xl font-bold">Menu</h2>
+    <nav className="sticky left-0 top-[theme(spacing.header)] hidden max-h-[calc(100vh-theme(spacing.header))] min-w-desktopNav flex-col gap-2 overflow-auto bg-neutral-200 p-4 text-2xl xl:flex dark:bg-neutral-800">
+      <h2 className="p-2 text-4xl font-bold">Menu</h2>
       <NavButton label={<Icon icon={home.icon} label={home.label} />} href={home.href} exact />
       {session ? (
         <>

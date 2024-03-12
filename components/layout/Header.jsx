@@ -42,7 +42,9 @@ export default function Header() {
           title="Skateboard Trick Tracker Logo"
           className="h-12 w-12 drop-shadow-lg transition-transform hover:scale-110 active:scale-100 sm:h-16 sm:w-16"
         />
-        <span className={`${utilStyles.link} hidden whitespace-nowrap text-3xl sm:block`}>Trick Tracker</span>
+        <span className={`${utilStyles.link} hidden whitespace-nowrap text-4xl font-semibold sm:block`}>
+          Trick Tracker
+        </span>
       </Link>
 
       <div className="ml-auto">
@@ -69,7 +71,7 @@ export default function Header() {
       </div>
 
       <nav
-        className={`hidden invisible absolute bottom-0 left-0 top-0 h-screen w-full flex-col flex-wrap items-center justify-center gap-4 whitespace-nowrap bg-neutral-900/80 text-3xl opacity-0 transition-[opacity,visibility] duration-500 dark:decoration-neutral-100`}
+        className={`invisible absolute bottom-0 left-0 top-0 hidden h-screen w-full flex-col flex-wrap items-center justify-center gap-4 whitespace-nowrap bg-neutral-900/80 text-3xl opacity-0 transition-[opacity,visibility] duration-500 dark:decoration-neutral-100`}
         style={menuStyle}
         onClick={() => setOpen(false)}
       >
@@ -88,10 +90,10 @@ export default function Header() {
               open={detailsOpen}
               className="flex items-center gap-2 marker:content-none"
             >
-              <summary className="flex justify-center items-center gap-2 cursor-pointer hover:font-semibold">
+              <summary className="flex cursor-pointer items-center justify-center gap-2 hover:font-semibold">
                 {detailsOpen ? <MinusIcon className="h-6 w-6" /> : newNav.icon} {newNav.label}
               </summary>
-              <div className="py-2 flex flex-col items-start gap-2">
+              <div className="flex flex-col items-start gap-2 py-2">
                 {newNav.children.map((item) => (
                   <NavLink boldFix key={item.label} icon={newNav.icon} label={item.label} href={item.href} />
                 ))}
@@ -114,12 +116,12 @@ export default function Header() {
       {open ? (
         <XMarkIcon
           onClick={() => setOpen(false)}
-          className="hoverStrong z-10 h-8 w-8 shrink-0 ml-4 cursor-pointer xl:hidden"
+          className="hoverStrong z-10 ml-4 h-8 w-8 shrink-0 cursor-pointer xl:hidden"
         />
       ) : (
         <Bars3Icon
           onClick={() => setOpen(true)}
-          className="hoverStrong z-10 h-8 w-8 shrink-0 ml-4 cursor-pointer xl:hidden"
+          className="hoverStrong z-10 ml-4 h-8 w-8 shrink-0 cursor-pointer xl:hidden"
         />
       )}
     </header>
