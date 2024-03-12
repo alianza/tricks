@@ -43,7 +43,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
       <p className="my-4">{description}</p>
       {showTrickTypes && (
         <select
-          className="bg-neutral-50 dark:bg-neutral-900 rounded w-full my-4 block p-2 text-lg font-medium"
+          className="my-4 block w-full rounded bg-neutral-200 p-2 text-lg font-semibold shadow-sm ring-blue-600/50 focus:ring-2 dark:bg-neutral-700 dark:ring-neutral-700/50"
           name={VN({ trickType })}
           value={trickType}
           onChange={({ target }) => setTrickType(target.value)}
@@ -55,7 +55,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
           ))}
         </select>
       )}
-      <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 dark:bg-neutral-700 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 shadow-sm sm:grid-cols-2 dark:bg-neutral-700">
         {stats.map(([key, value]) => (
           <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
             <h2 className="text-center text-2xl font-bold">{key}</h2>

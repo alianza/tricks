@@ -6,7 +6,7 @@
   input,
   textarea,
   select {
-    @apply block w-full rounded p-2 text-neutral-900 font-semibold drop-shadow-sm;
+    @apply block w-full rounded p-2 text-neutral-900 font-semibold shadow-sm;
   }
 
   button {
@@ -14,10 +14,10 @@
   }
 
   select {
-    @apply dark:bg-neutral-600 dark:text-neutral-50;
+    @apply dark:bg-neutral-700 dark:text-neutral-50 dark:ring-neutral-700/50 ring-blue-600/50;
 
     &:focus {
-      @apply ring-2 ring-neutral-600/50;
+      @apply ring-2;
     }
   }
 }
