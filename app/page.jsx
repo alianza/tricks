@@ -1,9 +1,11 @@
+'use client';
+
 import { signIn, useSession } from 'next-auth/react';
 import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
 import Stats from '../components/stats/Stats';
 import TransitionScroll from 'react-transition-scroll';
-import { baseStyle, hiddenStyle } from '../lib/clientUtils';
+import { baseStyle, hiddenStyle } from '@/lib/clientUtils';
 
 export const statsDef = {
   'Flatground Tricks': { endpoint: '/mine/flatgroundtricks', value: '...' },
@@ -20,7 +22,7 @@ const globalStatsDef = {
   Users: { endpoint: '/users', value: '...' },
 };
 
-export default function Index() {
+function Page() {
   const { data: session } = useSession();
 
   return (
@@ -90,3 +92,5 @@ export default function Index() {
     </>
   );
 }
+
+export default Page;

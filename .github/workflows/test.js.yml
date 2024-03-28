@@ -22,7 +22,6 @@ jobs:
         cache: 'npm'
 
     - name: setup environment
-#      copy .env.local.example to .env.local and set the environment variables MONGODB_URI from the secrets
       run: |
         cp .env.local.example .env.local
         echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env.local
