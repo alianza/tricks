@@ -22,9 +22,10 @@ jobs:
         cache: 'npm'
 
     - name: setup environment
+#      copy .env.local.example to .env.local and set the environment variables MONGODB_URI from the secrets
       run: |
         cp .env.local.example .env.local
-        sed -i "s/MONGODB_URI=.*/MONGODB_URI=${{ secrets.MONGODB_URI }}/g" .env.local
+        echo "MONGODB_URI=${{ secrets.MONGODB_URI }}" >> .env.local
         cat .env.local
 
     - name: npm install, build and test
