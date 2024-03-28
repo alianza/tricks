@@ -21,9 +21,13 @@ jobs:
         node-version: '20.x'
         cache: 'npm'
 
+    - name: setup environment
+      run: |
+        cp .env.local.example .env.local
+        sed -i "s/MONGODB_URI=.*/MONGODB_URI=${{ secrets.MONGODB_URI }}/g" .env.local
+        cat .env.local
+
     - name: npm install, build and test
-      env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
       run: |
         npm ci
         npm run build --if-present
