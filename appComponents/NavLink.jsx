@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { Icon } from '../layout/DesktopNav';
+import { useRouter } from 'next/navigation';
+import { Icon } from '@/components/layout/DesktopNav';
 
 const NavLink = ({ label, icon, href, onClick, exact, boldFix }) => {
   const router = useRouter();

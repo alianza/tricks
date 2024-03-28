@@ -1,12 +1,12 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import { Icon } from '../layout/DesktopNav';
 
 const NavLink = ({ label, icon, href, onClick, exact, boldFix }) => {
-  const router = useRouter();
+  const pathname = usePathname();
 
-  const condition = exact ? router.pathname === href : router.pathname.startsWith(href);
+  const condition = exact ? pathname === href : pathname.startsWith(href);
 
   return (
     <Link
