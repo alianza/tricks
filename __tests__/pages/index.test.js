@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import Page from '../../pages/index';
+import Page from '../../pages/_index';
 
 jest.mock('next-auth/react', () => {
   const originalModule = jest.requireActual('next-auth/react');
