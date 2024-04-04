@@ -17,7 +17,7 @@ export const viewport = {
 
 function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-pt-header">
       <body>
         <Providers>
           <div

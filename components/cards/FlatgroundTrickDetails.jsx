@@ -5,7 +5,7 @@ import { capitalize, formatDate, getFullTrickName } from '../../lib/commonUtils'
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="text-3xl mb-1">{trick.trick}</h1>
+      <h1 className="mb-1 text-3xl">{trick.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {trick.preferred_stance}
       </h3>

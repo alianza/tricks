@@ -1,11 +1,10 @@
-'use client';
-
-import { signIn, useSession } from 'next-auth/react';
 import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
-import Stats from '../components/stats/Stats';
-import TransitionScroll from 'react-transition-scroll';
+import Stats from '@/appComponents/stats/Stats';
 import { baseStyle, hiddenStyle } from '@/lib/clientUtils';
+import { getServerSession } from 'next-auth';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import LogInButton from '@/appComponents/common/LogInButton';
 
 export const statsDef = {
   'Flatground Tricks': { endpoint: '/mine/flatgroundtricks', value: '...' },
@@ -22,11 +21,12 @@ const globalStatsDef = {
   Users: { endpoint: '/users', value: '...' },
 };
 
-function Page() {
-  const { data: session } = useSession();
+async function Page() {
+  const session = await getServerSession();
 
   return (
     <>
+      <div className="invisible absolute opacity-0">Anchor</div>
       <TransitionScroll
         hiddenStyle={hiddenStyle}
         baseStyle={baseStyle}
@@ -39,12 +39,7 @@ function Page() {
           over time.
         </p>
         {!session ? (
-          <button
-            onClick={() => signIn()}
-            className={`${utilStyles.button} w-full bg-gray-700 text-lg text-neutral-50 outline-gray-500 hover:bg-gray-800 focus:ring-gray-600/50 dark:bg-gray-300 dark:text-neutral-900 hover:dark:bg-gray-400`}
-          >
-            Sign in to get started!
-          </button>
+          <LogInButton />
         ) : (
           <Link
             href="/dashboard"
@@ -60,7 +55,19 @@ function Page() {
           statsDefinition={statsDef}
           title="Your statistics"
           description="Here are some basic statistics about your progress."
-        />
+        >
+          <h1 className="mb-4 text-4xl font-bold">Detailed Stats</h1>
+          <p className="mb-4">
+            View more detailed status about your skateboarding tricks progress. You can view your stats by trick type,
+            stance, and more!
+          </p>
+          <Link
+            href="/statistics"
+            className={`${utilStyles.button} block w-full bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
+          >
+            View detailed stats
+          </Link>
+        </Stats>
       )}
 
       <Stats

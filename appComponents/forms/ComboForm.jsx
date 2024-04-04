@@ -24,7 +24,7 @@ import { useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/cust
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 const { TRICK_TYPES_MODELS: TRICK_TYPES_MODELS_CONSTANT } = require('../../models/constants/trickTypes');
 
 const TRICK_TYPES_MAP = {
@@ -230,12 +230,12 @@ const ComboForm = ({ combo, newCombo = true }) => {
       <form onSubmit={handleSubmit} className={`${formStyles.form} flex grow flex-col`}>
         <label>
           <search>
-            <div className="flex mb-1 flex-row justify-between">
+            <div className="mb-1 flex flex-row justify-between">
               Select type of trick to add:
               <MagnifyingGlassIcon
                 title="Search for tricks"
                 onClick={toggleSearch}
-                className={`hoverStrong cursor-pointer h-6 w-6 ${searchActive ? 'opacity-25' : ''}`}
+                className={`hoverStrong h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
               />
             </div>
             {searchActive && (
@@ -303,10 +303,10 @@ const ComboForm = ({ combo, newCombo = true }) => {
               className="group flex cursor-pointer items-center"
             >
               <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-              <b className={`${utilStyles.link} group-hover:decoration-inherit group-hover:duration-100 py-1`}>
+              <b className={`${utilStyles.link} py-1 group-hover:decoration-inherit group-hover:duration-100`}>
                 Add new {TRICK_TYPES_MODELS[trickType]}
               </b>
-              <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-1" />
+              <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
             </Link>
           )}
         </div>

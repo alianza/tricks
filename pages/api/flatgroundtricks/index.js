@@ -1,7 +1,7 @@
 import dbConnect from '../../../lib/dbConnect';
 import FlatgroundTrick from '../../../models/FlatgroundTrick';
-import { getFullTrickName } from '../../../lib/commonUtils';
-import { requireAuth } from '../../../lib/serverUtils';
+import { getFullTrickName } from '@/lib/commonUtils';
+import { requireAuth } from '@/lib/serverUtils';
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -17,6 +17,8 @@ export default async function handler(req, res) {
           ...flatgroundTrick,
           trick: getFullTrickName(flatgroundTrick),
         }));
+        console.log(`data`, data);
+
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);

@@ -1,17 +1,19 @@
+'use client';
+
 import { useState } from 'react';
-import { useAsyncEffect } from '../../lib/customHooks';
+import { useAsyncEffect } from '@/lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
-import { capitalize, VN } from '../../lib/commonUtils';
-import { TRICK_TYPES_ENUM } from '../../models/constants/trickTypes';
+import { apiCall, baseStyle, hiddenStyle } from '@/lib/clientUtils';
+import { capitalize, VN } from '@/lib/commonUtils';
+import { TRICK_TYPES_ENUM } from '@/models/constants/trickTypes';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 const defaultTrickType = 'all';
 
 const getDefaultStats = (statsDefinition) =>
   Object.entries(statsDefinition).map(([label, { value }]) => [label, value]);
 
-export default function Stats({ statsDefinition, title, description, showTrickTypes = false }) {
+export default function Stats({ statsDefinition, title, description, showTrickTypes = false, children }) {
   const [stats, setStats] = useState(getDefaultStats(statsDefinition));
   const [trickType, setTrickType] = useState(defaultTrickType);
 
@@ -41,6 +43,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
     >
       <h1 className="mb-4 text-4xl font-bold">{title}</h1>
       <p className="my-4">{description}</p>
+
       {showTrickTypes && (
         <select
           className="my-4 block w-full rounded bg-neutral-200 p-2 text-lg font-semibold shadow-sm ring-blue-600/50 focus:ring-2 dark:bg-neutral-700 dark:ring-neutral-700/50"
@@ -55,6 +58,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
           ))}
         </select>
       )}
+
       <div className="grid grid-cols-1 gap-8 rounded-lg bg-neutral-200 px-4 py-6 shadow-sm sm:grid-cols-2 dark:bg-neutral-700">
         {stats.map(([key, value]) => (
           <div key={key} className="flex flex-col gap-2 sm:last:odd:col-span-2">
@@ -63,6 +67,8 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
           </div>
         ))}
       </div>
+
+      {children && <div className="mt-4 rounded-lg bg-neutral-200 p-8  dark:bg-neutral-700">{children}</div>}
     </TransitionScroll>
   );
 }

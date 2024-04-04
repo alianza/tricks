@@ -2,7 +2,7 @@ import { signIn, useSession } from 'next-auth/react';
 import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
 import Stats from '../components/stats/Stats';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 import { baseStyle, hiddenStyle } from '@/lib/clientUtils';
 
 export const statsDef = {

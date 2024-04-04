@@ -5,7 +5,7 @@ import { formatDate, getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 export default function ManualDetails({ manual }) {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function ManualDetails({ manual }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="text-3xl mb-1">{manual.trick}</h1>
+      <h1 className="mb-1 text-3xl">{manual.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {manual.preferred_stance}
       </h3>

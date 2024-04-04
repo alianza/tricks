@@ -5,7 +5,7 @@ import { apiCall, baseStyle, getCommonActions, hiddenStyle } from '../../lib/cli
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { shallowEqual, stanceSelectOptions } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 const defaultFilters = { grind: false, manual: false, stance: 'all' };
 

@@ -3,7 +3,7 @@ import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState(null);

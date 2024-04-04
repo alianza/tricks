@@ -5,7 +5,7 @@ import { capitalize, formatDate, getFullGrindName } from '../../lib/commonUtils'
 import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 export default function GrindDetails({ grind }) {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function GrindDetails({ grind }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="text-3xl mb-1">{grind.trick}</h1>
+      <h1 className="mb-1 text-3xl">{grind.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {grind.preferred_stance}
       </h3>

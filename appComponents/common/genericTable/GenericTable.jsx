@@ -1,5 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
-import { capitalize, isString, sOrNoS } from '../../../lib/commonUtils';
+import { capitalize, isString, sOrNoS } from '@/lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import GenericTableDataRow from './GenericTableDataRow';
 import IconLink from '../IconLink';
@@ -122,7 +124,7 @@ function GenericTable({
         >
           {!hasItems && (
             <tr>
-              <td className="sm:p-4 p-2" colSpan={columns.length}>
+              <td className="p-2 sm:p-4" colSpan={columns.length}>
                 <div className="flex justify-center gap-2">
                   {loading ? <Loader className="mx-auto my-24" /> : `No ${entityName}s found.`}
                   {newLink && !loading && <IconLink title={`New ${entityName}`} href={newLink} Icon={PlusIcon} />}

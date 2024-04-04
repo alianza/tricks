@@ -49,4 +49,4 @@ const FlatgroundTrickSchema = new mongoose.Schema(
 
 FlatgroundTrickSchema.index({ userId: 1, name: 1, stance: 1, direction: 1, rotation: 1 }, { unique: true });
 
-export default mongoose.models.FlatgroundTrick || mongoose.model('FlatgroundTrick', FlatgroundTrickSchema);
+export default mongoose.models?.FlatgroundTrick || mongoose.model('FlatgroundTrick', FlatgroundTrickSchema);

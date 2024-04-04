@@ -20,9 +20,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-toastify": "^10.0.4",
-    "react-transition-scroll": "^1.1.1",
+    "react-transition-scroll": "^1.1.2",
     "sass": "^1.71.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.33.2",
+    "aws4": "^1.12.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",

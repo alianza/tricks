@@ -1,0 +1,123 @@
+'use client';
+
+import LinkWithArrow from '@/appComponents/common/LinkWithArrow';
+import GenericTable from '@/appComponents/common/genericTable/GenericTable';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '@/lib/clientUtils';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
+import { useAsyncEffect } from '@/lib/customHooks';
+
+export default function Index() {
+  const [flatgroundTricks, setFlatgroundTricks] = useState(null);
+  const [grinds, setGrinds] = useState(null);
+  const [manuals, setManuals] = useState(null);
+  const [combos, setCombos] = useState(null);
+
+  // const flatgroundTricks = await getMyFlatGroundTricks(); // Server side fetch
+
+  // // Client-side fetch
+  useAsyncEffect(async () => {
+    const fetchAndSetData = async (endpoint, setData) => {
+      try {
+        const { data } = await apiCall(endpoint, { method: 'GET' });
+        setData(data);
+      } catch (error) {
+        toast.error(`Failed to fetch ${endpoint}: ${error.message}`);
+      }
+    };
+
+    const trickTypesAndSetters = [
+      ['flatgroundtricks', setFlatgroundTricks],
+      ['grinds', setGrinds],
+      ['manuals', setManuals],
+      ['combos', setCombos],
+    ];
+
+    (() => trickTypesAndSetters.forEach(([endpoint, setData]) => fetchAndSetData(endpoint, setData)))();
+  }, []);
+
+  const handleActions = async (action, obj, entityType) => {
+    const endpointSetterMap = {
+      'flatground trick': ['flatgroundtricks', setFlatgroundTricks],
+      grind: ['grinds', setGrinds],
+      manual: ['manuals', setManuals],
+      combo: ['combos', setCombos],
+    };
+
+    switch (action) {
+      case 'delete':
+        try {
+          if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
+          const [endpoint, setData] = endpointSetterMap[entityType];
+          if (!endpoint) return toast.error(`Failed to delete ${obj.trick}: Invalid entity type: ${entityType}`);
+          await apiCall(endpoint, { method: 'DELETE', id: obj._id });
+          const { data } = await apiCall(endpoint, { method: 'GET' });
+          setData(data);
+          toast.success(`Successfully deleted ${obj.trick}`);
+        } catch (error) {
+          toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
+        }
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-16">
+      <div>
+        <h1 className="text-center text-5xl">Dashboard</h1>
+        <p className="mt-3 text-center">This is a overview of all the tricks you've added to your account.</p>
+      </div>
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <LinkWithArrow label="Flatground Tricks" href="/flatgroundtricks" />
+        <GenericTable
+          objArray={flatgroundTricks}
+          columns={['stance', 'direction', 'rotation', 'name', trickCol]}
+          // actions={getCommonActions('flatgroundtricks')}
+          onAction={handleActions}
+          entityName="flatground trick"
+          newLink="/new-flatground-trick"
+          showCount
+        />
+      </TransitionScroll>
+
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <LinkWithArrow label="Grinds" href="/grinds" />
+        <GenericTable
+          objArray={grinds}
+          columns={['stance', 'direction', 'name', trickCol]}
+          actions={getCommonActions('grinds')}
+          onAction={handleActions}
+          entityName="grind"
+          newLink="/new-grind"
+          showCount
+        />
+      </TransitionScroll>
+
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <LinkWithArrow label="Manuals" href="/manuals" />
+        <GenericTable
+          objArray={manuals}
+          columns={[{ type: { className: 'text-sm font-bold' } }]}
+          actions={getCommonActions('manuals')}
+          onAction={handleActions}
+          entityName="manual"
+          newLink={'/new-manual'}
+          showCount
+        />
+      </TransitionScroll>
+
+      <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
+        <LinkWithArrow label="Combos" href="/combos" />
+        <GenericTable
+          objArray={combos}
+          columns={[{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }]}
+          actions={getCommonActions('combos')}
+          onAction={handleActions}
+          entityName="combo"
+          newLink="/new-combo"
+          showCount
+        />
+      </TransitionScroll>
+    </div>
+  );
+}

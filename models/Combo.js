@@ -77,4 +77,4 @@ ComboSchema.pre('findOneAndUpdate', async function (next) {
 //   return populateComboTrickName(this.toObject());
 // };
 
-export default mongoose.models.Combo || mongoose.model('Combo', ComboSchema);
+export default mongoose.models?.Combo || mongoose.model('Combo', ComboSchema);
