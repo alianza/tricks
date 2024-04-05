@@ -26,7 +26,7 @@ function TableSection({ title, endpoint, columns, entityName, newLink, showCount
       case 'delete':
         try {
           if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
-          await apiCall(endpoint, { method: 'DELETE', id: obj._id });
+          await apiCall(endpoint, { method: 'DELETE', id: obj.id });
           const { data } = await apiCall(endpoint, { method: 'GET' });
           setTricks(data);
           toast.success(`Successfully deleted ${obj.trick}`);

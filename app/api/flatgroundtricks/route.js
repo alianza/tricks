@@ -4,16 +4,15 @@ import { getFullTrickName } from '@/lib/commonUtils';
 import { appRequireAuth } from '@/lib/serverUtils';
 
 export async function GET(request) {
-  const conn = await dbConnect();
-  console.log(`conn`, conn);
+  await dbConnect();
   const { authQuery } = await appRequireAuth();
 
   try {
     const flatgroundTricks = await FlatgroundTrick.find({ ...authQuery }).lean();
-    console.log(`flatgroundTricks.find result`, flatgroundTricks);
-    const data = flatgroundTricks.map((flatgroundTrick) => ({
+    const data = flatgroundTricks.map(({ _id, ...flatgroundTrick }) => ({
       ...flatgroundTrick,
       trick: getFullTrickName(flatgroundTrick),
+      id: _id.toString(),
     }));
     return Response.json({ success: true, data });
   } catch (error) {

@@ -1,4 +1,4 @@
-import { capitalize, deepGet, isString, omit } from '../../../lib/commonUtils';
+import { capitalize, deepGet, isString, omit } from '@/lib/commonUtils';
 import { cloneElement } from 'react';
 
 const colPropsToOmit = ['key', 'alias', 'capitalize', 'onClick'];

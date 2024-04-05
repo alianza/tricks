@@ -134,7 +134,7 @@ function GenericTable({
           )}
           {objArrayState.map((obj) => (
             <GenericTableDataRow
-              key={obj._id}
+              key={obj.id || obj._id || obj.name || obj.title || JSON.stringify(obj)}
               obj={obj}
               columns={columns}
               actions={actions}
