@@ -14,6 +14,9 @@ jest.mock('next-auth/react', () => {
   };
 });
 
+// mock getComputedStyle to return 1000
+window.getComputedStyle = jest.fn().mockReturnValue({ transitionDuration: '1s' });
+
 describe('Page', () => {
   it('renders a heading', () => {
     render(<Page />);

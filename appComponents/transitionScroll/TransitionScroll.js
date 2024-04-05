@@ -78,7 +78,7 @@ function TransitionScroll({
       if (entry.isIntersecting) {
         setStyle(Object.assign({}, baseStyle, showStyle));
         if (!reAnimate) {
-          observer.unobserve(entry.target);
+          observer?.unobserve(entry.target);
         }
         if (!didCallBack) {
           callBackBefore(entry);
