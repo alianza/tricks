@@ -38,6 +38,7 @@ describe('Should resolve trick names correctly', () => {
       ${{ stance: nollie, direction: backside, rotation: '180', name: varial_heelflip }}   | ${'Nollie Bigspin Heelflip'}
       ${{ stance: fakie, direction: backside, rotation: '180', name: varial_kickflip }}    | ${'Fakie Bigspin Kickflip'}
       ${{ stance: nollie, direction: frontside, rotation: '180', name: varial_kickflip }}  | ${'Nollie Bigspin Kickflip'}
+      ${{ stance: nollie, direction: none, rotation: '0', name: ollie }}                   | ${'Nollie'}
     `('should resolve trick name correctly: $expected', ({ trick, expected }) => {
       expect(getFullTrickName(trick)).toBe(expected);
     });

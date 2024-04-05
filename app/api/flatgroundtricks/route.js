@@ -4,7 +4,8 @@ import { getFullTrickName } from '@/lib/commonUtils';
 import { appRequireAuth } from '@/lib/serverUtils';
 
 export async function GET(request) {
-  await dbConnect();
+  const conn = await dbConnect();
+  console.log(`conn`, conn);
   const { authQuery } = await appRequireAuth();
 
   try {
