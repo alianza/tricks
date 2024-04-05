@@ -1,5 +1,3 @@
-'use client';
-
 import NavLink from '../common/NavLink';
 import Link from 'next/link';
 import { Bars3Icon, MinusIcon, XMarkIcon } from '@heroicons/react/20/solid';

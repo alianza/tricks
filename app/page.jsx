@@ -5,6 +5,7 @@ import { baseStyle, hiddenStyle } from '@/lib/clientUtils';
 import { getServerSession } from 'next-auth';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 import LogInButton from '@/appComponents/common/LogInButton';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export const statsDef = {
   'Flatground Tricks': { endpoint: '/mine/flatgroundtricks', value: '...' },
@@ -22,7 +23,7 @@ const globalStatsDef = {
 };
 
 async function Page() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="flex flex-col gap-8">
