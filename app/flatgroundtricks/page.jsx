@@ -12,7 +12,6 @@ export default function FlatgroundTricksPage() {
       </div>
 
       <TableSection
-        title="Flatground Tricks"
         endpoint="flatgroundtricks"
         columns={['stance', 'direction', 'rotation', 'name', trickCol]}
         newLink="/new-flatground-trick"

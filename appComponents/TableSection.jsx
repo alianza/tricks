@@ -38,7 +38,7 @@ function TableSection({ title, endpoint, columns, entityName, newLink, showCount
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
-      <LinkWithArrow label={title} href={`/${endpoint}`} />
+      {title && <LinkWithArrow label={title} href={`/${endpoint}`} />}
       <GenericTable
         objArray={tricks}
         columns={columns}
