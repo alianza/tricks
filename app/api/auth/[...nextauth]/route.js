@@ -19,8 +19,6 @@ export const authOptions = {
     // attach user id to session (server side)
     async session({ session, user, token }) {
       session.user.id = token.id || token.sub;
-      console.log(`token`, token);
-      console.log(`session session`, session);
       return session;
     },
     // attach user id to token (client side)
