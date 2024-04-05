@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
-import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
+import { capitalize, getFullTrickName, VN } from '@/lib/commonUtils';
+import { FLATGROUND_TRICKS_ENUM } from '@/models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
-import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
+import { useAsyncEffect, useCloseOnUrlParam } from '@/lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, hiddenStyle } from '@/lib/clientUtils';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
@@ -54,6 +54,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       await router.back();
       closeAfterAdd();
       toast.success(`Successfully added flatground trick: ${getFullTrickName(form)}`);
+      console.log(`'success'`, 'success');
     } catch (error) {
       toast.error(`Failed to add flatground trick: ${error.message}`);
     }

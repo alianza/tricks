@@ -39,7 +39,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
       hiddenStyle={hiddenStyle}
       baseStyle={baseStyle}
       as="section"
-      className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
+      className="rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
     >
       <h1 className="mb-4 text-4xl font-bold">{title}</h1>
       <p className="my-4">{description}</p>

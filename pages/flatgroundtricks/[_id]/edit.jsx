@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import FlatgroundTrickForm from '../../../components/forms/FlatgroundTrickForm';
-import { useApiCall } from '../../../lib/customHooks';
+import { useApiCall } from '@/lib/customHooks';
 import Loader from '../../../components/common/loader/loader';
 
 const EditFlatGroundTrick = () => {

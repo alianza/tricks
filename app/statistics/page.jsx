@@ -21,7 +21,7 @@ const comboStatsDef = {
 
 export default function Statistics({}) {
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <h1 className="mb-4 text-4xl font-bold">Detailed Stats</h1>
       <Stats
         statsDefinition={userStatsDef}

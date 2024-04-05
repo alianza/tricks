@@ -28,7 +28,7 @@ function RootLayout({ children }) {
 
             <div className="flex min-h-full w-full max-w-full grow">
               <DesktopNav />
-              <main className="mx-auto flex max-w-full flex-col px-4 py-8 xl:max-w-[calc(100%-theme(spacing.desktopNav))]">
+              <main className="mx-auto flex max-w-full flex-col px-4 py-4 xl:max-w-[calc(100%-theme(spacing.desktopNav))]">
                 {children}
               </main>
             </div>

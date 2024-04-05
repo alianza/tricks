@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]';
+import { authOptions } from '../api/auth/_[...nextauth]';
 import ProfileForm from '../../components/forms/ProfileForm';
-import { ensureProfile, serialize } from '../../lib/serverUtils';
+import { ensureProfile, serialize } from '@/lib/serverUtils';
 import dbConnect from '../../lib/dbConnect';
 
 export async function getServerSideProps(context) {
