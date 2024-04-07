@@ -27,7 +27,7 @@ async function Page() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="invisible absolute opacity-0">Anchor</div>
+      <div className="sr-only">Anchor</div>
       <TransitionScroll
         hiddenStyle={hiddenStyle}
         baseStyle={baseStyle}
