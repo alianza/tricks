@@ -1,4 +1,4 @@
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect, { dbDisconnect } from '../../../lib/dbConnect';
 import { getTricks, requireAuth } from '../../../lib/serverUtils';
 import Manual from '../../../models/Manual';
 import { isValidObjectId, Model } from 'mongoose';
@@ -14,6 +14,8 @@ export async function getServerSideProps({ params, req, res }) {
   const manual = await getTricks(Manual, Model.findOne, { _id, ...authQuery });
 
   if (!manual) return { notFound: true };
+
+  await dbDisconnect();
 
   return { props: { manual } };
 }

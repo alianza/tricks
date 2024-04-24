@@ -1,4 +1,4 @@
-import dbConnect from '../../../../../lib/dbConnect';
+import dbConnect, { dbDisconnect } from '../../../../../lib/dbConnect';
 import { requireAuth } from '../../../../../lib/serverUtils';
 import Profile from '../../../../../models/Profile';
 import { formatDate } from '../../../../../lib/commonUtils';
@@ -44,4 +44,6 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${stat}` });
       break;
   }
+
+  await dbDisconnect();
 }

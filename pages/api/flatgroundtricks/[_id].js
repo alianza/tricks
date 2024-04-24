@@ -1,4 +1,4 @@
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect, { dbDisconnect } from '../../../lib/dbConnect';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { getFullTrickName } from '../../../lib/commonUtils';
 import { checkForUsedCombos, requireAuth, notFoundHandler } from '../../../lib/serverUtils';
@@ -56,4 +56,6 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${method}` });
       break;
   }
+
+  await dbDisconnect();
 }

@@ -1,4 +1,4 @@
-import dbConnect from '../../../../../lib/dbConnect';
+import dbConnect, { dbDisconnect } from '../../../../../lib/dbConnect';
 import Combo from '../../../../../models/Combo';
 import { requireAuth } from '../../../../../lib/serverUtils';
 import { TRICK_TYPES_MODELS } from '../../../../../models/constants/trickTypes';
@@ -61,4 +61,6 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${stat}` });
       break;
   }
+
+  await dbDisconnect();
 }

@@ -1,4 +1,4 @@
-import dbConnect from '../../../lib/dbConnect';
+import dbConnect, { dbDisconnect } from '../../../lib/dbConnect';
 import { getTricks, requireAuth } from '../../../lib/serverUtils';
 import FlatgroundTrickDetails from '../../../components/cards/FlatgroundTrickDetails';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
@@ -14,6 +14,8 @@ export async function getServerSideProps({ params, req, res }) {
   const flatgroundTrick = await getTricks(FlatGroundTrick, Model.findOne, { _id, ...authQuery });
 
   if (!flatgroundTrick) return { notFound: true };
+
+  await dbDisconnect();
 
   return { props: { flatgroundTrick } };
 }
