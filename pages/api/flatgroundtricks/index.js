@@ -17,7 +17,7 @@ export default async function handler(req, res) {
           ...flatgroundTrick,
           trick: getFullTrickName(flatgroundTrick),
         }));
-        return res.status(200).json({ success: true, data });
+        res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
         res.status(400).json({ success: false, error: error.message });
