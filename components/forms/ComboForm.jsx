@@ -89,9 +89,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    resetFilters();
-  }, [trickType]);
+  // useEffect(() => resetFilters(), [trickType]);
 
   const fetchTrickType = async (trickType) => {
     if (trickType === TRICK_TYPES_MAP.all) return; // Skip fetching all tricks
@@ -175,7 +173,8 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
   const searchFilter = (trick) => fuzzy(trick.trick, searchString, 0.6);
-  const directionFilter = (trick) => (direction === 'all' ? true : trick.direction === direction);
+  const directionFilter = (trick) =>
+    direction === 'all' ? true : !trick.direction ? true : trick.direction === direction;
   const allFilters = (arr) => arr.filter(stanceFilter).filter(searchFilter).filter(directionFilter);
   const getTrickArray = () =>
     trickType === TRICK_TYPES_MAP.all
@@ -207,7 +206,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       {/*Trick name*/}
       <div ref={trickArrayRef} className="relative mt-4 flex flex-wrap gap-2">
         {trickArray.map((trick, index) => (
-          <div key={trick._id + index} className="flex gap-2">
+          <div key={(trick._id || trick.id) + index} className="flex gap-2">
             <span className="whitespace-nowrap font-bold">{trick.trick}</span>
             {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
@@ -287,7 +286,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
             allFilters(getTrickArray()).map((trick) => (
               <button
                 style={{ boxShadow: 'unset' }}
-                key={trick._id}
+                key={trick._id || trick.id}
                 onClick={(e) => addTrick(e, trick)}
                 className="group flex cursor-pointer items-center text-start"
               >

@@ -59,7 +59,7 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
         </p>
       </div>
       <div className="mt-4 flex gap-2">
-        <Link href={`/flatgroundtricks/${trick._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>
+        <Link href={`/flatgroundtricks/${trick.id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>
           Edit
         </Link>
         <button onClick={handleDelete} className={`${utilStyles.button} ${utilStyles.red}`}>

@@ -29,7 +29,7 @@ export default function ComboDetails({ combo }) {
       <h1 className="mb-1 text-3xl">{combo.trick}</h1>
       <div className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400">
         {trickArray.map((trick, index) => (
-          <div key={trick._id + index} className="flex gap-2">
+          <div key={(trick._id || trick.id) + index} className="flex gap-2">
             <span className="whitespace-nowrap font-bold">{trick.trick}</span>
             {trickArray[index + 1] ? (
               <ArrowRightIcon title="To" className="h-6 w-6" />
