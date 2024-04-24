@@ -1,5 +1,6 @@
-import dbConnect, { dbDisconnect } from '../../../../lib/dbConnect';
+import dbConnect from '../../../../lib/dbConnect';
 import Combo from '../../../../models/Combo';
+import { authOptions } from '../../auth/[...nextauth]';
 import { populateComboName, populateComboTrickName } from '../../../../lib/commonUtils';
 import { requireAuth } from '../../../../lib/serverUtils';
 import Manual from '../../../../models/Manual';
@@ -43,6 +44,4 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${method}` });
       break;
   }
-
-  await dbDisconnect();
 }

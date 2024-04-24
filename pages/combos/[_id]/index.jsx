@@ -1,4 +1,4 @@
-import dbConnect, { dbDisconnect } from '../../../lib/dbConnect';
+import dbConnect from '../../../lib/dbConnect';
 import { getCombos, requireAuth } from '../../../lib/serverUtils';
 import Combo from '../../../models/Combo';
 import { isValidObjectId, Model } from 'mongoose';
@@ -14,8 +14,6 @@ export async function getServerSideProps({ params, req, res }) {
   const combo = await getCombos(Combo, Model.findOne, { _id, ...authQuery });
 
   if (!combo) return { notFound: true };
-
-  await dbDisconnect();
 
   return { props: { combo } };
 }

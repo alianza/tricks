@@ -1,4 +1,4 @@
-import dbConnect, { dbDisconnect } from '../../../lib/dbConnect';
+import dbConnect from '../../../lib/dbConnect';
 import Manual from '../../../models/Manual';
 import { checkForUsedCombos, requireAuth, notFoundHandler } from '../../../lib/serverUtils';
 import { isValidObjectId } from 'mongoose';
@@ -53,6 +53,4 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${method}` });
       break;
   }
-
-  await dbDisconnect();
 }

@@ -1,5 +1,6 @@
-import dbConnect, { dbDisconnect } from '../../../../lib/dbConnect';
+import dbConnect from '../../../../lib/dbConnect';
 import { ensureProfile, requireAuth, notFoundHandler } from '../../../../lib/serverUtils';
+import { authOptions } from '../../auth/[...nextauth]';
 import Profile from '../../../../models/Profile';
 
 export default async function handler(req, res) {
@@ -32,6 +33,4 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${method}` });
       break;
   }
-
-  await dbDisconnect();
 }

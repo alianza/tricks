@@ -1,4 +1,4 @@
-import dbConnect, { dbDisconnect } from '../../../lib/dbConnect';
+import dbConnect from '../../../lib/dbConnect';
 import { getTricks, requireAuth } from '../../../lib/serverUtils';
 import GrindDetails from '../../../components/cards/GrindDetails';
 import Grind from '../../../models/Grind';
@@ -14,8 +14,6 @@ export async function getServerSideProps({ params, req, res }) {
   const grind = await getTricks(Grind, Model.findOne, { _id, ...authQuery });
 
   if (!grind) return { notFound: true };
-
-  await dbDisconnect();
 
   return { props: { grind } };
 }

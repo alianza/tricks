@@ -1,4 +1,4 @@
-import dbConnect, { dbDisconnect } from '../../../../../lib/dbConnect';
+import dbConnect from '../../../../../lib/dbConnect';
 import Combo from '../../../../../models/Combo';
 import FlatgroundTrick from '../../../../../models/FlatgroundTrick';
 import Grind from '../../../../../models/Grind';
@@ -58,6 +58,4 @@ export default async function handler(req, res) {
       res.status(400).json({ success: false, error: `Unhandled request method: ${stance}` });
       break;
   }
-
-  await dbDisconnect();
 }
