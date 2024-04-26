@@ -87,7 +87,7 @@ const ManualForm = ({ manual, newManual = true }) => {
           </select>
         </label>
 
-        <LoaderButton isLoading={loading} />
+        <LoaderButton isLoading={loading} label="Create Manual" />
       </form>
     </TransitionScroll>
   );

@@ -9,6 +9,8 @@ import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
+import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
+import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -17,6 +19,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
+  const [addAnother, setAddAnother] = useState(false);
   const [form, setForm] = useState({
     name: flatgroundTrick.name,
     preferred_stance: flatgroundTrick.preferred_stance,
@@ -51,7 +54,11 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   const postData = async (form) => {
     try {
       await apiCall('flatgroundtricks', { method: 'POST', data: form });
-      await router.back();
+      if (addAnother) {
+        setForm(newFlatgroundTrickObj);
+      } else {
+        await router.back();
+      }
       closeAfterAdd();
       toast.success(`Successfully added flatground trick: ${getFullTrickName(form)}`);
     } catch (error) {
@@ -144,7 +151,12 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
             ))}
           </b>
         </p>
-        <LoaderButton isLoading={loading} />
+        <div className="flex items-center justify-start gap-4">
+          <LoaderButton isLoading={loading} label="Create Flatground Trick" />
+          {newFlatgroundTrick && (
+            <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
       </form>
     </TransitionScroll>
   );

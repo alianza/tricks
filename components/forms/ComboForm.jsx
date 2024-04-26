@@ -25,6 +25,10 @@ import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
 import TransitionScroll from 'react-transition-scroll';
+import { newComboObj } from '../../pages/new-combo';
+import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
+import GenerateComboName from './GenerateComboName';
+
 const { TRICK_TYPES_MODELS: TRICK_TYPES_MODELS_CONSTANT } = require('../../models/constants/trickTypes');
 
 const TRICK_TYPES_MAP = {
@@ -74,19 +78,16 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [stance, setStance] = useState('all');
   const [direction, setDirection] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
   const [form, setForm] = useState({ trickArray: combo.trickArray });
-  const [dots, setDots] = useState('...');
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
+  const [addAnother, setAddAnother] = useState(false);
 
   const { trickArray } = form;
 
   useAsyncEffect(async () => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
-    const interval = setInterval(() => setDots((prev) => (prev === '...' ? '.' : prev + '.')), 1000);
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -135,7 +136,11 @@ const ComboForm = ({ combo, newCombo = true }) => {
         method: 'POST',
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
-      await router.back();
+      if (addAnother) {
+        setForm(newComboObj);
+      } else {
+        await router.back();
+      }
       closeAfterAdd();
       toast.success(`Successfully created combo: ${getFullComboName(form)}`);
     } catch (error) {
@@ -205,37 +210,18 @@ const ComboForm = ({ combo, newCombo = true }) => {
       </div>
 
       {/*Trick name*/}
-      <div ref={trickArrayRef} className="relative mt-4 flex flex-wrap gap-2">
-        {trickArray.map((trick, index) => (
-          <div key={trick._id + index} className="flex gap-2">
-            <span className="whitespace-nowrap font-bold">{trick.trick}</span>
-            {trickArray[index + 1] ? (
-              <ArrowRightIcon title="To" className="h-6 w-6" />
-            ) : (
-              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
-              trickArray.length > 1 && <span className="font-bold"> Out </span>
-            )}
-            {trickArray.length === 1 && (
-              <span className="font-bold">
-                <ArrowRightIcon title="To" className="mr-1 inline-block h-6 w-6" />
-                {dots}
-              </span>
-            )}
-          </div>
-        ))}
-        {!trickArray.length && <span className="whitespace-nowrap font-bold">Select first trick{dots}</span>}
-      </div>
+      <GenerateComboName trickArray={trickArray} />
       <hr className="my-2 border-neutral-800 dark:border-neutral-400" />
 
       <form onSubmit={handleSubmit} className={`${formStyles.form} flex grow flex-col`}>
         <label>
           <search>
-            <div className="flex mb-1 flex-row justify-between">
+            <div className="mb-1 flex flex-row justify-between">
               Select type of trick to add:
               <MagnifyingGlassIcon
                 title="Search for tricks"
                 onClick={toggleSearch}
-                className={`hoverStrong cursor-pointer h-6 w-6 ${searchActive ? 'opacity-25' : ''}`}
+                className={`hoverStrong h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
               />
             </div>
             {searchActive && (
@@ -303,15 +289,15 @@ const ComboForm = ({ combo, newCombo = true }) => {
               className="group flex cursor-pointer items-center"
             >
               <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-              <b className={`${utilStyles.link} group-hover:decoration-inherit group-hover:duration-100 py-1`}>
+              <b className={`${utilStyles.link} py-1 group-hover:decoration-inherit group-hover:duration-100`}>
                 Add new {TRICK_TYPES_MODELS[trickType]}
               </b>
-              <ArrowTopRightOnSquareIcon className="h-4 w-4 ml-1" />
+              <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
             </Link>
           )}
         </div>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mb-2 mt-4 flex items-center justify-between">
           <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
           {TRICK_TYPES_NEW_PAGES[trickType] && (
             <ArrowPathIcon
@@ -321,6 +307,9 @@ const ComboForm = ({ combo, newCombo = true }) => {
             />
           )}
         </div>
+        {newCombo && (
+          <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+        )}
       </form>
     </TransitionScroll>
   );

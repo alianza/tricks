@@ -9,6 +9,7 @@ import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
+import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 
 const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
+  const [addAnother, setAddAnother] = useState(false);
   const [form, setForm] = useState({
     name: grind.name,
     preferred_stance: grind.preferred_stance,
@@ -50,7 +52,11 @@ const GrindForm = ({ grind, newGrind = true }) => {
   const postData = async (form) => {
     try {
       await apiCall('grinds', { method: 'POST', data: form });
-      await router.back();
+      if (addAnother) {
+        setForm(newGrind);
+      } else {
+        await router.back();
+      }
       closeAfterAdd();
       toast.success(`Successfully added grind: ${getFullGrindName(form)}`);
     } catch (error) {
@@ -127,7 +133,12 @@ const GrindForm = ({ grind, newGrind = true }) => {
           </b>
         </p>
 
-        <LoaderButton isLoading={loading} />
+        <div className="flex items-center justify-start gap-4">
+          <LoaderButton isLoading={loading} label="Create Grind" />
+          {newGrind && (
+            <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
       </form>
     </TransitionScroll>
   );
