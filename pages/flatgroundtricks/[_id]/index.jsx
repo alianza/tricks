@@ -8,7 +8,7 @@ export async function getServerSideProps({ params, req, res }) {
   await dbConnect();
 
   const { _id } = params;
-  if (!isValidObjectId(_id)) return { props: { error: `${_id} is not a valid flatground trick id...` } };
+  if (!isValidObjectId(_id)) return { props: { error: `${_id} is not a valid Flatground Trick id...` } };
 
   const { authQuery } = await requireAuth(req, res);
   const flatgroundTrick = await getTricks(FlatGroundTrick, Model.findOne, { _id, ...authQuery });

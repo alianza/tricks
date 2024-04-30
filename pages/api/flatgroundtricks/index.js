@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         res.status(201).json({ success: true, data: flatgroundTrick });
       } catch (error) {
         if (error.code === 11000) {
-          error.message = 'This flatground trick already exists'; // Return code for unique index constraint violation
+          error.message = 'This Flatground Trick already exists'; // Return code for unique index constraint violation
         }
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

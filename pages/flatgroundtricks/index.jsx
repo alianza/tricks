@@ -16,7 +16,7 @@ export default function FlatgroundTricksPage() {
       setFlatgroundTricks(data);
     } catch (error) {
       setFlatgroundTricks([]);
-      toast.error(`Could not load flatground tricks: ${error.message}`);
+      toast.error(`Could not load Flatground Tricks: ${error.message}`);
     }
   }, []);
 
@@ -41,7 +41,7 @@ export default function FlatgroundTricksPage() {
       <div>
         <h1 className="text-center text-5xl">Flatground Tricks</h1>
         <p className="mt-3 text-center">
-          This is a overview of all the flatground tricks you've added to your account.
+          This is a overview of all the Flatground Tricks you've added to your account.
         </p>
       </div>
 

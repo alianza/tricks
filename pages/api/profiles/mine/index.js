@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       break;
     case 'PATCH':
       try {
-        const profile = await Profile.findOneAndUpdate({ ...authQuery }, req.body, { new: true });
+        const profile = await Profile.findOneAndUpdate({ ...authQuery }, req.body, { new: true }).lean();
         if (!profile) return notFoundHandler(res, { entity: 'Profile', id: authQuery.userId });
         res.status(200).json({ success: true, data: profile });
       } catch (error) {

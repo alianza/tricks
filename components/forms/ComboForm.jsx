@@ -126,7 +126,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       await router.back();
       toast.success(`Successfully updated combo: ${getFullComboName(form)}`);
     } catch (error) {
-      toast.error(`Failed to update combo: ${error.message}`);
+      toast.error(`Failed to update Combo: ${error.message}`);
     }
   };
 
@@ -167,7 +167,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       trickArray[trickArray.length - 1]?.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
       trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground]
     ) {
-      return toast.error('Combo cannot have 2 flatground tricks in a row');
+      return toast.error('Combo cannot have 2 Flatground Tricks in a row');
     }
 
     if (trickArray.length === 0) {
@@ -216,7 +216,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       <form onSubmit={handleSubmit} className={`${formStyles.form} flex grow flex-col`}>
         <label>
           <search>
-            <div className="mb-1 flex flex-row justify-between">
+            <div className="mb-2 flex flex-row justify-between">
               Select type of trick to add:
               <MagnifyingGlassIcon
                 title="Search for tricks"

@@ -134,7 +134,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
         </p>
 
         <div className="flex items-center justify-start gap-4">
-          <LoaderButton isLoading={loading} label="Create Grind" />
+          <LoaderButton isLoading={loading} label={`${newGrind ? 'Create' : 'Update'} Grind`} />
           {newGrind && (
             <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
           )}

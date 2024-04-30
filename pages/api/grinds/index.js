@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         res.status(201).json({ success: true, data: grind });
       } catch (error) {
         if (error.code === 11000) {
-          error.message = 'This grind already exists'; // Return code for unique index constraint violation
+          error.message = 'This Grind already exists'; // Return code for unique index constraint violation
         }
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

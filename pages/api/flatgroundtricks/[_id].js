@@ -30,12 +30,17 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const flatgroundTrick = await FlatGroundTrick.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
+        const flatgroundTrick = await FlatGroundTrick.findOneAndUpdate({ _id, ...authQuery }, req.body, {
+          new: true,
+        }).lean();
         if (!flatgroundTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
         const data = { ...flatgroundTrick.toObject(), trick: getFullTrickName(flatgroundTrick) };
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
+        if (error.code === 11000) {
+          error.message = 'This Flatground Trick already exists'; // Return code for unique index constraint violation
+        }
         res.status(400).json({ success: false, error: error.message });
       }
       break;

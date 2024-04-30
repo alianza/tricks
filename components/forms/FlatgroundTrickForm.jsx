@@ -45,9 +45,9 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       const { _id } = router.query;
       await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       await router.back();
-      toast.success(`Successfully updated flatground trick: ${getFullTrickName(form)}`);
+      toast.success(`Successfully updated Flatground Trick: ${getFullTrickName(form)}`);
     } catch (error) {
-      toast.error(`Failed to update flatground trick: ${error.message}`);
+      toast.error(`Failed to update Flatground Trick: ${error.message}`);
     }
   };
 
@@ -60,9 +60,9 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
         await router.back();
       }
       closeAfterAdd();
-      toast.success(`Successfully added flatground trick: ${getFullTrickName(form)}`);
+      toast.success(`Successfully added Flatground Trick: ${getFullTrickName(form)}`);
     } catch (error) {
-      toast.error(`Failed to add flatground trick: ${error.message}`);
+      toast.error(`Failed to add Flatground Trick: ${error.message}`);
     }
   };
 
@@ -152,7 +152,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
           </b>
         </p>
         <div className="flex items-center justify-start gap-4">
-          <LoaderButton isLoading={loading} label="Create Flatground Trick" />
+          <LoaderButton isLoading={loading} label={`${newFlatgroundTrick ? 'Create' : 'Update'} Flatground Trick`} />
           {newFlatgroundTrick && (
             <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
           )}

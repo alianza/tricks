@@ -28,11 +28,14 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const manual = await Manual.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
+        const manual = await Manual.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true }).lean();
         if (!manual) return notFoundHandler(res, { entity: 'Manual', _id });
         res.status(200).json({ success: true, data: manual });
       } catch (error) {
         console.error(error);
+        if (error.code === 11000) {
+          error.message = 'This Manual already exists'; // Return code for unique index constraint violation
+        }
         res.status(400).json({ success: false, error: error.message });
       }
       break;

@@ -16,13 +16,13 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
       await apiCall(`flatgroundtricks`, { method: 'DELETE', id: router.query._id });
       await router.push('/dashboard');
     } catch (error) {
-      toast.error(`Failed to delete the flatground trick: ${error.message}`);
+      toast.error(`Failed to delete the Flatground Trick: ${error.message}`);
     }
   };
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="text-3xl mb-1">{trick.trick}</h1>
+      <h1 className="mb-1 text-3xl">{trick.trick}</h1>
       <h3 className="text-xl">
         <b>Preferred stance:</b> {trick.preferred_stance}
       </h3>
