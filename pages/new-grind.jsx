@@ -8,6 +8,7 @@ export const newGrindObj = {
   preferred_stance: DEFAULT_PREFFERED_STANCE,
   stance: DEFAULT_STANCE,
   direction: DIRECTIONS.frontside,
+  landed: true,
 };
 
 export default function NewGrind() {

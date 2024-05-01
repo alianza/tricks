@@ -5,6 +5,7 @@ import { DEFAULT_PREFFERED_STANCE } from '../models/constants/stances';
 export const newManualObj = {
   preferred_stance: DEFAULT_PREFFERED_STANCE,
   type: DEFAULT_MANUAL,
+  landed: true,
 };
 
 export default function NewManual() {

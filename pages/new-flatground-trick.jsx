@@ -8,6 +8,7 @@ export const newFlatgroundTrickObj = {
   stance: DEFAULT_STANCE,
   direction: DIRECTIONS.none,
   rotation: 0,
+  landed: true,
 };
 
 const NewFlatFlatGroundTrick = () => {
