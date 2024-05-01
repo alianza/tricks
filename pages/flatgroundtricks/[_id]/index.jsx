@@ -1,6 +1,6 @@
 import dbConnect from '../../../lib/dbConnect';
 import { getTricks, requireAuth } from '../../../lib/serverUtils';
-import FlatgroundTrickDetails from '../../../components/cards/FlatgroundTrickDetails';
+import FlatgroundTrickDetails from '../../../components/details/FlatgroundTrickDetails';
 import FlatGroundTrick from '../../../models/FlatgroundTrick';
 import { isValidObjectId, Model } from 'mongoose';
 

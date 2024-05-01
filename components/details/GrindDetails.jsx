@@ -1,65 +1,67 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { capitalize, formatDate, getFullTrickName } from '../../lib/commonUtils';
+import { capitalize, formatDate, getFullGrindName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { toast } from 'react-toastify';
 import TransitionScroll from 'react-transition-scroll';
 
-export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
+export default function GrindDetails({ grind }) {
   const router = useRouter();
 
   const handleDelete = async () => {
     try {
-      if (!confirm(`Are you sure you want to delete "${getFullTrickName(trick)}"?`)) return;
-      await apiCall(`flatgroundtricks`, { method: 'DELETE', id: router.query._id });
+      if (!confirm(`Are you sure you want to delete "${getFullGrindName(grind)}"?`)) return;
+      await apiCall('grinds', { method: 'DELETE', id: router.query._id });
       await router.push('/dashboard');
     } catch (error) {
-      toast.error(`Failed to delete the Flatground Trick: ${error.message}`);
+      toast.error(`Failed to delete the grind: ${error.message}`);
     }
   };
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{trick.trick}</h1>
+      <h1 className="mb-1 text-3xl">{grind.trick}</h1>
       <h3 className="text-xl">
-        <b>Preferred stance:</b> {trick.preferred_stance}
+        <b>Preferred stance:</b> {grind.preferred_stance}
       </h3>
       <div className="mt-4">
         <p>
           <b className="mr-1">Stance:</b>
-          {capitalize(trick.stance)}
+          {capitalize(grind.stance)}
         </p>
-        {trick.direction !== 'none' && (
+        {grind.direction !== 'none' && (
           <p>
             <b className="mr-1">Direction:</b>
-            {capitalize(trick.direction)}
-          </p>
-        )}
-        {trick.rotation !== 0 && (
-          <p>
-            <b className="mr-1">Rotation:</b>
-            {trick.rotation}
+            {capitalize(grind.direction)}
           </p>
         )}
         <p>
           <b className="mr-1">Trick:</b>
-          {trick.name}
+          {grind.name}
         </p>
       </div>
+      {grind.landed && (
+        <div className="mt-4">
+          <p>
+            <b className="mr-1">Landed: ✅</b>
+            {formatDate(grind.landedAt)}
+          </p>
+        </div>
+      )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(trick.createdAt, { includeTime: true })}
+          {formatDate(grind.createdAt, { includeTime: true })}
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(trick.updatedAt, { includeTime: true })}
+          {formatDate(grind.updatedAt, { includeTime: true })}
         </p>
       </div>
       <div className="mt-4 flex gap-2">
-        <Link href={`/flatgroundtricks/${trick._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>
+        <Link href={`/grinds/${grind._id}/edit`} className={`${utilStyles.button} ${utilStyles.green}`}>
           Edit
         </Link>
         <button onClick={handleDelete} className={`${utilStyles.button} ${utilStyles.red}`}>
@@ -70,17 +72,18 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   );
 }
 
-FlatgroundTrickDetails.propTypes = {
-  flatgroundTrick: PropTypes.shape({
+GrindDetails.propTypes = {
+  grind: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     preferred_stance: PropTypes.string.isRequired,
     stance: PropTypes.string.isRequired,
     direction: PropTypes.string.isRequired,
-    rotation: PropTypes.number.isRequired,
     userId: PropTypes.number.isRequired,
     createdAt: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
     trick: PropTypes.string.isRequired,
+    landed: PropTypes.bool.isRequired,
+    landedAt: PropTypes.string,
   }).isRequired,
 };

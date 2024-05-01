@@ -26,7 +26,7 @@ export default function ComboDetails({ combo }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="text-3xl mb-1">{combo.trick}</h1>
+      <h1 className="mb-1 text-3xl">{combo.trick}</h1>
       <div className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400">
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">
@@ -45,6 +45,14 @@ export default function ComboDetails({ combo }) {
           {combo.trick}
         </h2>
       </div>
+      {combo.landed && (
+        <div className="mt-4">
+          <p>
+            <b className="mr-1">Landed: ✅</b>
+            {formatDate(combo.landedAt)}
+          </p>
+        </div>
+      )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
@@ -75,5 +83,7 @@ ComboDetails.propTypes = {
     userId: PropTypes.number.isRequired,
     createdAt: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
+    landed: PropTypes.bool.isRequired,
+    landedAt: PropTypes.string,
   }).isRequired,
 };

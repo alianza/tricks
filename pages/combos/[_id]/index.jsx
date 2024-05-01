@@ -2,7 +2,7 @@ import dbConnect from '../../../lib/dbConnect';
 import { getCombos, requireAuth } from '../../../lib/serverUtils';
 import Combo from '../../../models/Combo';
 import { isValidObjectId, Model } from 'mongoose';
-import ComboDetails from '../../../components/cards/ComboDetails';
+import ComboDetails from '../../../components/details/ComboDetails';
 
 export async function getServerSideProps({ params, req, res }) {
   await dbConnect();
