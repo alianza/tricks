@@ -24,7 +24,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
     preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
-    landed: grind.landed,
+    landed: grind.landed || false,
   });
 
   const { name, preferred_stance, stance, direction, landed } = form;

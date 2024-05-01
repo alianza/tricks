@@ -26,7 +26,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
-    landed: flatgroundTrick.landed,
+    landed: flatgroundTrick.landed || false,
   });
 
   const { name, preferred_stance, stance, direction, rotation, landed } = form;
@@ -67,7 +67,16 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     }
   };
 
-  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
+  const handleChange = (e) => {
+    const { target } = e;
+    let { value, name } = target;
+
+    if (target.type === 'checkbox') {
+      value = target.checked;
+    }
+
+    setForm({ ...form, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

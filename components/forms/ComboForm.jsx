@@ -79,7 +79,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [direction, setDirection] = useState('all');
   const [loading, setLoading] = useState(true);
   const [tricksRef] = useAutoAnimate();
-  const [form, setForm] = useState({ trickArray: combo.trickArray, landed: combo.landed });
+  const [form, setForm] = useState({ trickArray: combo.trickArray, landed: combo.landed || false });
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
   const [addAnother, setAddAnother] = useState(false);
