@@ -1,16 +1,20 @@
 .form {
+  @apply flex flex-col space-y-3;
+
   label {
-    @apply mt-3 block;
+    @apply block;
+    //@apply mt-3;
   }
 
-  input,
+  //input[:not([type='checkbox'])],
+  input:not([type='checkbox']),
   textarea,
   select {
     @apply block w-full rounded p-2 text-neutral-900 font-semibold shadow-sm;
   }
 
   button {
-    @apply shadow;
+    @apply shadow self-start;
   }
 
   select {
