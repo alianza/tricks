@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { formatDate, getFullComboName } from '../../lib/commonUtils';
+import { getFullComboName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import TRICK_TYPES, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
+import RenderSafeDate from '../common/renderSafeDate';
 
 export default function ComboDetails({ combo }) {
   const router = useRouter();
@@ -49,18 +50,18 @@ export default function ComboDetails({ combo }) {
         <div className="mt-4">
           <p>
             <b className="mr-1">Landed: ✅</b>
-            {formatDate(combo.landedAt)}
+            <RenderSafeDate date={combo.landedAt} />
           </p>
         </div>
       )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(combo.createdAt, { includeTime: true })}
+          <RenderSafeDate date={combo.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(combo.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={combo.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">

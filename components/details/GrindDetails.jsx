@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { capitalize, formatDate, getFullGrindName } from '../../lib/commonUtils';
+import { capitalize, getFullGrindName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 import TransitionScroll from 'react-transition-scroll';
+import RenderSafeDate from '../common/renderSafeDate';
 
 export default function GrindDetails({ grind }) {
   const router = useRouter();
@@ -46,18 +47,18 @@ export default function GrindDetails({ grind }) {
         <div className="mt-4">
           <p>
             <b className="mr-1">Landed: ✅</b>
-            {formatDate(grind.landedAt)}
+            <RenderSafeDate date={grind.landedAt} />
           </p>
         </div>
       )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(grind.createdAt, { includeTime: true })}
+          <RenderSafeDate date={grind.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(grind.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={grind.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">

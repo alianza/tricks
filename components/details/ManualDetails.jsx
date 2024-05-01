@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { formatDate, getFullManualName } from '../../lib/commonUtils';
+import { getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 import TransitionScroll from 'react-transition-scroll';
+import RenderSafeDate from '../common/renderSafeDate';
 
 export default function ManualDetails({ manual }) {
   const router = useRouter();
@@ -36,18 +37,18 @@ export default function ManualDetails({ manual }) {
         <div className="mt-4">
           <p>
             <b className="mr-1">Landed: ✅</b>
-            {formatDate(manual.landedAt)}
+            <RenderSafeDate date={manual.landedAt} />
           </p>
         </div>
       )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(manual.createdAt, { includeTime: true })}
+          <RenderSafeDate date={manual.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(manual.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={manual.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">

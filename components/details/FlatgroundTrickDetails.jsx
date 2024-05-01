@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { capitalize, formatDate, getFullTrickName } from '../../lib/commonUtils';
+import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
+import RenderSafeDate from '../common/renderSafeDate';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();
@@ -52,18 +53,18 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
         <div className="mt-2">
           <p>
             <b className="mr-1">Landed: ✅</b>
-            {formatDate(trick.landedAt)}
+            <RenderSafeDate date={trick.landedAt} />
           </p>
         </div>
       )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(trick.createdAt, { includeTime: true })}
+          <RenderSafeDate date={trick.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(trick.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={trick.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">
