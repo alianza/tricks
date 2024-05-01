@@ -10,6 +10,7 @@ import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
+import { newGrindObj } from '../../pages/new-grind';
 
 const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
@@ -54,7 +55,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
     try {
       const { data } = await apiCall('grinds', { method: 'POST', data: form });
       if (addAnother) {
-        setForm(newGrind);
+        setForm(newGrindObj);
       } else {
         await router.push(`/grinds/${data._id}`);
       }
