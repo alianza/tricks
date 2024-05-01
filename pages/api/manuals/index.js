@@ -4,7 +4,7 @@ import { getFullManualName } from '../../../lib/commonUtils';
 import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  const { method, query } = req;
 
   await dbConnect();
   const { authQuery } = await requireAuth(req, res);
@@ -12,7 +12,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const manuals = await Manual.find({ ...authQuery }).lean();
+        const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+        const manuals = await Manual.find({ ...authQuery, ...extraQuery }).lean();
         const data = manuals.map((manual) => ({ ...manual, trick: getFullManualName(manual) }));
         res.status(200).json({ success: true, data });
       } catch (error) {

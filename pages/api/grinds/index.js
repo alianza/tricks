@@ -4,7 +4,7 @@ import { getFullGrindName } from '../../../lib/commonUtils';
 import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  const { method, query } = req;
 
   await dbConnect();
   const { authQuery } = await requireAuth(req, res);
@@ -12,7 +12,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const grinds = await Grind.find({ ...authQuery }).lean();
+        const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+        const grinds = await Grind.find({ ...authQuery, ...extraQuery }).lean();
         const data = grinds.map((grind) => ({ ...grind, trick: getFullGrindName(grind) }));
         res.status(200).json({ success: true, data });
       } catch (error) {

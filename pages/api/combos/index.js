@@ -4,7 +4,7 @@ import { populateComboName, populateComboTrickName } from '../../../lib/commonUt
 import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  const { method, query } = req;
 
   await dbConnect();
   const { authQuery } = await requireAuth(req, res);
@@ -12,7 +12,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        let combos = await Combo.find({ ...authQuery })
+        const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+        let combos = await Combo.find({ ...authQuery, ...extraQuery })
           .populate('trickArray.trick')
           .lean();
         combos = combos.map(populateComboTrickName); // Populate every trick name in the combo

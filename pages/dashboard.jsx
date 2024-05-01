@@ -45,7 +45,7 @@ export default function Index() {
   useAsyncEffect(async () => {
     const fetchAndSetData = async (endpoint, setData) => {
       try {
-        const { data } = await apiCall(endpoint, { method: 'GET' });
+        const { data } = await apiCall(endpoint + '?landedOnly=true', { method: 'GET' });
         setData(data);
       } catch (error) {
         toast.error(`Failed to fetch ${endpoint}: ${error.message}`);
@@ -90,7 +90,7 @@ export default function Index() {
     <div className="flex flex-col gap-16">
       <div>
         <h1 className="text-center text-5xl">Dashboard</h1>
-        <p className="mt-3 text-center">This is a overview of all the tricks you've added to your account.</p>
+        <p className="mt-3 text-center">This is an overview of all the landed tricks you've added to your account.</p>
       </div>
       <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
         <LinkWithArrow label="Flatground Tricks" href="/flatgroundtricks" />

@@ -4,7 +4,7 @@ import { getFullTrickName } from '../../../lib/commonUtils';
 import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  const { method, query } = req;
 
   await dbConnect();
   const { authQuery } = await requireAuth(req, res);
@@ -12,7 +12,8 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const flatgroundTricks = await FlatgroundTrick.find({ ...authQuery }).lean();
+        const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+        const flatgroundTricks = await FlatgroundTrick.find({ ...authQuery, ...extraQuery }).lean();
         const data = flatgroundTricks.map((flatgroundTrick) => ({
           ...flatgroundTrick,
           trick: getFullTrickName(flatgroundTrick),
