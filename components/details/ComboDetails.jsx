@@ -8,7 +8,7 @@ import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import TRICK_TYPES, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
-import RenderSafeDate from '../common/renderSafeDate';
+import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function ComboDetails({ combo }) {
   const router = useRouter();

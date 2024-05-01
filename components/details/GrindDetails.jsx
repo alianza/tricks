@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 import TransitionScroll from 'react-transition-scroll';
-import RenderSafeDate from '../common/renderSafeDate';
+import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function GrindDetails({ grind }) {
   const router = useRouter();

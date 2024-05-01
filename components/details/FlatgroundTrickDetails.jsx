@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
-import RenderSafeDate from '../common/renderSafeDate';
+import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();
