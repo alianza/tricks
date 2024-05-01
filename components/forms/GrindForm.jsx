@@ -7,7 +7,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 
@@ -24,9 +24,10 @@ const GrindForm = ({ grind, newGrind = true }) => {
     preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
+    landed: grind.landed,
   });
 
-  const { name, preferred_stance, stance, direction } = form;
+  const { name, preferred_stance, stance, direction, landed } = form;
 
   useAsyncEffect(async () => {
     if (!newGrind) return;
@@ -51,11 +52,11 @@ const GrindForm = ({ grind, newGrind = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('grinds', { method: 'POST', data: form });
+      const { data } = await apiCall('grinds', { method: 'POST', data: form });
       if (addAnother) {
         setForm(newGrind);
       } else {
-        await router.back();
+        await router.push(`/grinds/${data._id}`);
       }
       closeAfterAdd();
       toast.success(`Successfully added grind: ${getFullGrindName(form)}`);
@@ -64,16 +65,11 @@ const GrindForm = ({ grind, newGrind = true }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
-    if (target.type === 'checkbox') value = target.checked;
-    setForm({ ...form, [name]: value });
-  };
+  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     newGrind ? await postData(form) : await patchData(form);
     setLoading(false);
   };
@@ -122,7 +118,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
           </label>
         </div>
 
-        <p className="my-4">
+        <p>
           Full grind name:{' '}
           <b ref={trickNameRef}>
             {fullTrickName?.split('').map((letter, index) => (
@@ -132,6 +128,17 @@ const GrindForm = ({ grind, newGrind = true }) => {
             ))}
           </b>
         </p>
+
+        <label title="Did you land this trick?">
+          <input
+            type="checkbox"
+            name={VN({ landed })}
+            checked={landed}
+            onChange={handleChange}
+            className="h-4 w-4 align-middle"
+          />
+          <span className="ml-2 align-middle">Landed</span>
+        </label>
 
         <div className="flex items-center justify-start gap-4">
           <LoaderButton isLoading={loading} label={`${newGrind ? 'Create' : 'Update'} Grind`} />

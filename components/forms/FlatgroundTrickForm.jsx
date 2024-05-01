@@ -7,7 +7,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
@@ -26,9 +26,10 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
+    landed: flatgroundTrick.landed,
   });
 
-  const { name, preferred_stance, stance, direction, rotation } = form;
+  const { name, preferred_stance, stance, direction, rotation, landed } = form;
 
   useAsyncEffect(async () => {
     if (!newFlatgroundTrick) return;
@@ -53,11 +54,11 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
 
   const postData = async (form) => {
     try {
-      await apiCall('flatgroundtricks', { method: 'POST', data: form });
+      const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
       if (addAnother) {
         setForm(newFlatgroundTrickObj);
       } else {
-        await router.back();
+        await router.push(`/flatgroundtricks/${data._id}`);
       }
       closeAfterAdd();
       toast.success(`Successfully added Flatground Trick: ${getFullTrickName(form)}`);
@@ -66,16 +67,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     }
   };
 
-  const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
-
-    if (target.type === 'checkbox') {
-      value = target.checked;
-    }
-
-    setForm({ ...form, [name]: value });
-  };
+  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -151,6 +143,16 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
             ))}
           </b>
         </p>
+        <label title="Did you land this trick?">
+          <input
+            type="checkbox"
+            name={VN({ landed })}
+            checked={landed}
+            onChange={handleChange}
+            className="h-4 w-4 align-middle"
+          />
+          <span className="ml-2 align-middle">Landed</span>
+        </label>
         <div className="flex items-center justify-start gap-4">
           <LoaderButton isLoading={loading} label={`${newFlatgroundTrick ? 'Create' : 'Update'} Flatground Trick`} />
           {newFlatgroundTrick && (

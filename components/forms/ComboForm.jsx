@@ -22,7 +22,7 @@ import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
 import TransitionScroll from 'react-transition-scroll';
 import { newComboObj } from '../../pages/new-combo';
@@ -79,12 +79,12 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [direction, setDirection] = useState('all');
   const [loading, setLoading] = useState(true);
   const [tricksRef] = useAutoAnimate();
-  const [form, setForm] = useState({ trickArray: combo.trickArray });
+  const [form, setForm] = useState({ trickArray: combo.trickArray, landed: combo.landed });
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
   const [addAnother, setAddAnother] = useState(false);
 
-  const { trickArray } = form;
+  const { trickArray, landed } = form;
 
   useAsyncEffect(async () => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
@@ -132,14 +132,14 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('combos', {
+      const { data } = await apiCall('combos', {
         method: 'POST',
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
       if (addAnother) {
         setForm(newComboObj);
       } else {
-        await router.back();
+        await router.push(`/combos/${data._id}`);
       }
       closeAfterAdd();
       toast.success(`Successfully created combo: ${getFullComboName(form)}`);
@@ -191,6 +191,8 @@ const ComboForm = ({ combo, newCombo = true }) => {
     setSearchActive((prev) => !prev);
     setSearchString('');
   };
+
+  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
 
   return (
     <TransitionScroll
@@ -307,9 +309,21 @@ const ComboForm = ({ combo, newCombo = true }) => {
             />
           )}
         </div>
-        {newCombo && (
-          <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
-        )}
+        <div className="flex justify-between">
+          <label title="Did you land this trick?">
+            <input
+              type="checkbox"
+              name={VN({ landed })}
+              checked={landed}
+              onChange={handleChange}
+              className="ml-1 h-4 w-4 align-middle"
+            />
+            <span className="ml-2 align-middle">Landed</span>
+          </label>
+          {newCombo && (
+            <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
       </form>
     </TransitionScroll>
   );

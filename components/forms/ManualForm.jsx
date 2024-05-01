@@ -6,7 +6,7 @@ import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 
 const ManualForm = ({ manual, newManual = true }) => {
@@ -17,9 +17,10 @@ const ManualForm = ({ manual, newManual = true }) => {
   const [form, setForm] = useState({
     preferred_stance: manual.preferred_stance,
     type: manual.type,
+    landed: manual.landed,
   });
 
-  const { preferred_stance, type } = form;
+  const { preferred_stance, type, landed } = form;
 
   useAsyncEffect(async () => {
     if (!newManual) return;
@@ -40,8 +41,8 @@ const ManualForm = ({ manual, newManual = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('manuals', { method: 'POST', data: form });
-      await router.back();
+      const { data } = await apiCall('manuals', { method: 'POST', data: form });
+      await router.push(`/manuals/${data._id}`);
       closeAfterAdd();
       toast.success(`Successfully added manual: ${capitalize(form.type)}`);
     } catch (error) {
@@ -49,16 +50,11 @@ const ManualForm = ({ manual, newManual = true }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
-    if (target.type === 'checkbox') value = target.checked;
-    setForm({ ...form, [name]: value });
-  };
+  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     newManual ? await postData(form) : await patchData(form);
     setLoading(false);
   };
@@ -76,7 +72,7 @@ const ManualForm = ({ manual, newManual = true }) => {
           </select>
         </label>
 
-        <label className="mb-4">
+        <label>
           Type
           <select name={VN({ type })} value={type} onChange={handleChange} required>
             {MANUALS_ENUM.map((manual) => (
@@ -87,7 +83,18 @@ const ManualForm = ({ manual, newManual = true }) => {
           </select>
         </label>
 
-        <LoaderButton isLoading={loading} label="Create Manual" />
+        <label title="Did you land this trick?">
+          <input
+            type="checkbox"
+            name={VN({ landed })}
+            checked={landed}
+            onChange={handleChange}
+            className="h-4 w-4 align-middle"
+          />
+          <span className="ml-2 align-middle">Landed</span>
+        </label>
+
+        <LoaderButton isLoading={loading} label={`${newManual ? 'Create' : 'Update'} Manual`} />
       </form>
     </TransitionScroll>
   );

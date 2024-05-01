@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import Loader from '../common/loader/loader';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 
 const ProfileForm = ({ profileForm }) => {
@@ -28,18 +28,11 @@ const ProfileForm = ({ profileForm }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
-    if (target.type === 'checkbox') {
-      value = target.checked;
-    }
-    setForm({ ...form, [name]: value });
-  };
+  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
     await patchData(form);
     setLoading(false);
   };
