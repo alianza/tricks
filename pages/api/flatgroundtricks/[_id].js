@@ -34,7 +34,7 @@ export default async function handler(req, res) {
           new: true,
         }).lean();
         if (!flatgroundTrick) return notFoundHandler(res, { entity: 'Flatground trick', _id });
-        const data = { ...flatgroundTrick.toObject(), trick: getFullTrickName(flatgroundTrick) };
+        const data = { ...flatgroundTrick, trick: getFullTrickName(flatgroundTrick) };
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
