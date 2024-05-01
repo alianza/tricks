@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import FlatgroundTrick from './FlatgroundTrick';
 import Grind from './Grind';
 import Manual from './Manual';
+import { getUpdate, updateDocLandedAt, updateQueryLandedAt } from './modelUtils';
 const { ObjectId } = mongoose.Schema.Types;
 
 const TRICK_TYPES_ENUM = [FlatgroundTrick.modelName, Grind.modelName, Manual.modelName];
@@ -22,6 +23,13 @@ const ComboSchema = new mongoose.Schema(
         },
       },
     ],
+    landed: {
+      type: Boolean,
+      default: false,
+    },
+    landedAt: {
+      type: Date,
+    },
     userId: {
       type: Number,
       required: [true, 'Authentication error. Please log in again.'],
@@ -35,7 +43,7 @@ const ComboSchema = new mongoose.Schema(
 async function validation(next, self, context) {
   if (self.trickArray?.length < 2) next(new Error('Combo must consist of at least 2 tricks'));
 
-  // Combo cannot have 2 flatground tricks in a row in the trickArray
+  // Combo cannot have 2 Flatground Tricks in a row in the trickArray
   if (
     self.trickArray.some(
       (_, i, trickArray) =>
@@ -43,7 +51,7 @@ async function validation(next, self, context) {
         trickArray[i + 1]?.trickRef === FlatgroundTrick.modelName,
     )
   ) {
-    next(new Error('Combo cannot have 2 flatground tricks in a row'));
+    next(new Error('Combo cannot have 2 Flatground Tricks in a row'));
   }
 
   const query = { userId: context.userId, _id: { $ne: context._id } };
@@ -58,23 +66,33 @@ async function validation(next, self, context) {
     const comboTrickArrayIds = combo.trickArray.map(({ trick: trickId }) => trickId.toString());
     const selfTrickArrayIds = self.trickArray.map(({ trick: trickId }) => trickId.toString());
     if (comboTrickArrayIds.join() === selfTrickArrayIds.join()) {
-      next(new Error('This combo already exists'));
+      next(new Error('This Combo already exists'));
     }
   }
+}
+
+ComboSchema.pre('save', function (next) {
+  updateDocLandedAt.call(this);
 
   next();
-}
+});
 
 ComboSchema.pre('validate', async function (next) {
   await validation(next, this, this);
+
+  next();
 });
 
 ComboSchema.pre('findOneAndUpdate', async function (next) {
-  await validation(next, this.getUpdate(), this.getQuery());
-});
+  const { update, doc, updateObj, query } = await getUpdate.call(this);
 
-// ComboSchema.methods.toResource = function () {
-//   return populateComboTrickName(this.toObject());
-// };
+  await validation(next, update, query);
+  updateQueryLandedAt(update, doc, updateObj);
+
+  if (Object.keys(updateObj).length === 0) return next();
+
+  await this.clone().updateOne({ _id: doc._id }, updateObj);
+  next();
+});
 
 export default mongoose.models.Combo || mongoose.model('Combo', ComboSchema);

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { FLATGROUND_TRICKS_ENUM } from './constants/flatgroundTricks';
 import { PREFFERED_STANCES_ENUM, STANCES_ENUM } from './constants/stances';
+import { getUpdate, updateDocLandedAt, updateQueryLandedAt } from './modelUtils';
 
 const FlatgroundTrickSchema = new mongoose.Schema(
   {
@@ -39,6 +40,13 @@ const FlatgroundTrickSchema = new mongoose.Schema(
         message: 'Must specify a rotation if there is a direction',
       },
     },
+    landed: {
+      type: Boolean,
+      default: false,
+    },
+    landedAt: {
+      type: Date,
+    },
     userId: {
       type: Number,
       required: [true, 'Authentication error. Please log in again.'],
@@ -48,5 +56,22 @@ const FlatgroundTrickSchema = new mongoose.Schema(
 );
 
 FlatgroundTrickSchema.index({ userId: 1, name: 1, stance: 1, direction: 1, rotation: 1 }, { unique: true });
+
+FlatgroundTrickSchema.pre('save', function (next) {
+  updateDocLandedAt.call(this);
+
+  next();
+});
+
+FlatgroundTrickSchema.pre('findOneAndUpdate', async function (next) {
+  const { update, doc, updateObj } = await getUpdate.call(this);
+
+  updateQueryLandedAt(update, doc, updateObj);
+
+  if (Object.keys(updateObj).length === 0) return next();
+
+  await this.clone().updateOne({ _id: doc._id }, updateObj);
+  next();
+});
 
 export default mongoose.models.FlatgroundTrick || mongoose.model('FlatgroundTrick', FlatgroundTrickSchema);
