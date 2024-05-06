@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import { formatDate } from '../../lib/commonUtils';
 
 function RenderSafeDate({ date, options = {} }) {
-  const [dateToRender, setDateToRender] = useState(null);
+  const formattedDate = formatDate(date, options);
+  const [dateToRender, setDateToRender] = useState(formattedDate);
 
   useEffect(() => {
-    setDateToRender(formatDate(date, options));
+    setDateToRender(formattedDate);
   }, []);
 
   if (!dateToRender) return null;
