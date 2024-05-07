@@ -12,6 +12,8 @@ export async function getServerSideProps(context) {
 
   const profile = serialize(await ensureProfile({ ...query }));
 
+  console.log(`server profile`, profile);
+
   return {
     props: {
       profile,
