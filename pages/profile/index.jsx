@@ -14,6 +14,8 @@ export async function getServerSideProps(context) {
 
   console.log(`server profile`, profile);
 
+  if (!profile) return { notFound: true };
+
   return {
     props: {
       profile,
