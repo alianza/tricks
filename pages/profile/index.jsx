@@ -13,8 +13,6 @@ export async function getServerSideProps(context) {
 
   const profile = serialize(await ensureProfile({ ...query }));
 
-  console.log(`server profile`, profile);
-
   if (!profile) return { notFound: true };
 
   return {
@@ -25,8 +23,6 @@ export async function getServerSideProps(context) {
 }
 
 const ProfilePage = ({ profile }) => {
-  console.log(`profile`, profile);
-
   if (!profile) return <Loader className="mx-auto my-24" />;
 
   const profileForm = {
