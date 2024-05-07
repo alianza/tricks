@@ -20,6 +20,8 @@ export async function getServerSideProps(context) {
 }
 
 const ProfilePage = ({ profile }) => {
+  console.log(`profile`, profile);
+
   const profileForm = {
     preferred_stance: profile.preferred_stance,
   };
