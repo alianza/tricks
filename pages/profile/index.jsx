@@ -3,7 +3,7 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import ProfileForm from '../../components/forms/ProfileForm';
 import { ensureProfile, serialize } from '../../lib/serverUtils';
 import dbConnect from '../../lib/dbConnect';
-import Loader from '../../components/common/loader/loader';
+import Loader from '../../components/common/loader';
 
 export async function getServerSideProps(context) {
   await dbConnect();

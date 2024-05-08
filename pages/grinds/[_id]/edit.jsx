@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import GrindForm from '../../../components/forms/GrindForm';
 import { useApiCall } from '../../../lib/customHooks';
-import Loader from '../../../components/common/loader/loader';
+import Loader from '../../../components/common/loader';
 
 const EditGrind = () => {
   const router = useRouter();

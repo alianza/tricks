@@ -1,4 +1,4 @@
-export default function Loader({ className }) {
+function Loader({ className }) {
   return (
     <svg
       className={`${className} h-16 w-16 animate-spin dark:text-white`}
@@ -11,3 +11,5 @@ export default function Loader({ className }) {
     </svg>
   );
 }
+
+export default Loader;
