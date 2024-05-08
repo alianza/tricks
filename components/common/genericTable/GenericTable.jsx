@@ -3,7 +3,7 @@ import { capitalize, isString, sOrNoS } from '../../../lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import GenericTableDataRow from './GenericTableDataRow';
 import IconLink from '../IconLink';
-import Loader from '../loader';
+import Loader from '../Loader';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const duration = 250; // default auto-animate duration
