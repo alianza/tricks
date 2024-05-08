@@ -12,6 +12,11 @@ const duration = 250; // default auto-animate duration
  * Generic table component
  * @param objArray {Array} - Array of objects to display in table
  * @param columns {Array} - Array of column names or objects with key as column name and options as value
+ *    @param [columns.alias] {String} - Alias to display in table header
+ *    @param [columns.className] {String} - Class name to apply to column
+ *    @param [columns.formatDate=false] {Boolean} - Whether to format date (if value is a date)
+ *    @param [columns.capitalize=true] {Boolean} - Whether to capitalize value
+ *    @param [columns.alignHeader] {('start'|'center'|'end')} - Alignment of column header
  * @param actions {Array} - Array of action objects with key as action name and value as element function
  * @param entityName {String} - Name of entity to display in table
  * @param onAction {Function} - Callback function to handle actions
