@@ -45,7 +45,7 @@ export default function CombosPage() {
         <p className="mt-3 text-center">This is an overview of all the combos you've added to your account.</p>
       </div>
       <div className="flex flex-col gap-4">
-        <Filters filters={filters} onReset={() => setFilters(defaultFilters)} defaultFilters={defaultFilters}>
+        <Filters filters={filters} onReset={() => setFilters(defaultFilters)}>
           <label className="flex gap-1">
             <input
               type="checkbox"

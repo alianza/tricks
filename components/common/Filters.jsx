@@ -1,7 +1,14 @@
 import { shallowEqual } from '../../lib/commonUtils';
 import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { useEffect, useState } from 'react';
 
-function Filters({ filters = {}, onReset, children, defaultFilters = {} }) {
+function Filters({ filters = {}, onReset, children }) {
+  const [defaultFilters, setDefaultFilters] = useState(undefined);
+
+  useEffect(() => {
+    if (!defaultFilters) setDefaultFilters(filters);
+  }, []);
+
   return (
     <details className="rounded-lg bg-neutral-50 p-4 shadow-lg dark:bg-neutral-800">
       <summary className="cursor-pointer text-xl font-medium">Filters</summary>

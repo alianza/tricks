@@ -44,7 +44,7 @@ export default function GrindsPage() {
         <p className="mt-3 text-center">This is an overview of all the grinds you've added to your account.</p>
       </div>
       <div className="flex flex-col gap-4">
-        <Filters filters={filters} onReset={() => setFilters(defaultFilters)} defaultFilters={defaultFilters}>
+        <Filters filters={filters} onReset={() => setFilters(defaultFilters)}>
           <label className="flex items-center gap-1">
             Landed:
             <select

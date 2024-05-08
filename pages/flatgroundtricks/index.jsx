@@ -48,7 +48,7 @@ export default function FlatgroundTricksPage() {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Filters filters={filters} onReset={() => setFilters(defaultFilters)} defaultFilters={defaultFilters}>
+        <Filters filters={filters} onReset={() => setFilters(defaultFilters)}>
           <label className="flex items-center gap-1">
             Landed:
             <select
