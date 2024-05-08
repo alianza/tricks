@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
@@ -11,8 +11,6 @@ const defaultFilters = { landed: 'any' };
 export default function FlatgroundTricksPage() {
   const [flatgroundTricks, setFlatgroundTricks] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
-  const flatgroundColumns = ['stance', 'direction', 'rotation', 'name', trickCol];
-  const flatgroundActions = getCommonActions('flatgroundtricks');
 
   useAsyncEffect(async () => {
     try {
@@ -76,12 +74,13 @@ export default function FlatgroundTricksPage() {
                 ? flatgroundTricks
                 : flatgroundTricks?.filter((trick) => filters.landed === (trick.landed ? 'yes' : 'no'))
             }
-            columns={flatgroundColumns}
-            actions={flatgroundActions}
+            columns={['stance', 'direction', 'rotation', 'name', trickCol, landedAtCol]}
+            actions={getCommonActions('flatgroundtricks')}
             onAction={handleAction}
             entityName="flatground trick"
             newLink="/new-flatground-trick"
             showCount
+            defaultSortColumnIndex={4}
           />
         </TransitionScroll>
       </div>

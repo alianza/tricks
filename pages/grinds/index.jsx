@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
@@ -11,8 +11,6 @@ const defaultFilters = { landed: 'any' };
 export default function GrindsPage() {
   const [grinds, setGrinds] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
-  const grindColumns = ['stance', 'direction', 'name', trickCol];
-  const grindActions = getCommonActions('grinds');
 
   useAsyncEffect(async () => {
     try {
@@ -72,12 +70,13 @@ export default function GrindsPage() {
                 ? grinds
                 : grinds.filter((grind) => filters.landed === (grind.landed ? 'yes' : 'no'))
             }
-            columns={grindColumns}
-            actions={grindActions}
+            columns={['stance', 'direction', 'name', trickCol, landedAtCol]}
+            actions={getCommonActions('grinds')}
             entityName="grind"
             onAction={handleAction}
             newLink="/new-grind"
             showCount
+            defaultSortColumnIndex={3}
           />
         </TransitionScroll>
       </div>

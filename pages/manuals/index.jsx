@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
@@ -11,8 +11,6 @@ const defaultFilters = { landed: 'any' };
 export default function ManualsPage() {
   const [manuals, setManuals] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
-  const manualColumns = [{ type: { className: 'text-sm font-bold' } }];
-  const manualActions = getCommonActions('manuals');
 
   useAsyncEffect(async () => {
     try {
@@ -73,8 +71,8 @@ export default function ManualsPage() {
                 ? manuals
                 : manuals.filter((manual) => filters.landed === (manual.landed ? 'yes' : 'no'))
             }
-            columns={manualColumns}
-            actions={manualActions}
+            columns={[{ type: { className: 'text-sm font-bold' } }, landedAtCol]}
+            actions={getCommonActions('manuals')}
             onAction={handleAction}
             entityName="manual"
             newLink="/new-manual"

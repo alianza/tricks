@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol } from '../../lib/clientUtils';
 import { stanceSelectOptions } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
@@ -12,8 +12,6 @@ const defaultFilters = { grind: false, manual: false, stance: 'all', landed: 'an
 export default function CombosPage() {
   const [combos, setCombos] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
-  const comboColumns = [{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }];
-  const comboActions = getCommonActions('combos');
 
   useAsyncEffect(async () => {
     try {
@@ -107,8 +105,8 @@ export default function CombosPage() {
                 ? combos
                 : combos?.filter((combo) => filters.landed === (combo.landed ? 'yes' : 'no'))
             }
-            columns={comboColumns}
-            actions={comboActions}
+            columns={[{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }, landedAtCol]}
+            actions={getCommonActions('combos')}
             onAction={handleAction}
             entityName="combo"
             newLink="/new-combo"

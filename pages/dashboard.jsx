@@ -1,6 +1,6 @@
 import LinkWithArrow from '../components/common/LinkWithArrow';
 import GenericTable from '../components/common/genericTable/GenericTable';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle, trickCol } from '../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCol } from '../lib/clientUtils';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useAsyncEffect } from '../lib/customHooks';
@@ -96,12 +96,14 @@ export default function Index() {
         <LinkWithArrow label="Flatground Tricks" href="/flatgroundtricks" />
         <GenericTable
           objArray={flatgroundTricks}
-          columns={['stance', 'direction', 'rotation', 'name', trickCol]}
+          columns={[trickCol, landedAtCol]}
           actions={getCommonActions('flatgroundtricks')}
           onAction={handleActions}
           entityName="flatground trick"
           newLink="/new-flatground-trick"
           showCount
+          defaultSortColumnIndex={1}
+          defaultSortDirection="desc"
         />
       </TransitionScroll>
 
@@ -109,12 +111,14 @@ export default function Index() {
         <LinkWithArrow label="Grinds" href="/grinds" />
         <GenericTable
           objArray={grinds}
-          columns={['stance', 'direction', 'name', trickCol]}
+          columns={[trickCol, landedAtCol]}
           actions={getCommonActions('grinds')}
           onAction={handleActions}
           entityName="grind"
           newLink="/new-grind"
           showCount
+          defaultSortColumnIndex={1}
+          defaultSortDirection="desc"
         />
       </TransitionScroll>
 
@@ -122,12 +126,14 @@ export default function Index() {
         <LinkWithArrow label="Manuals" href="/manuals" />
         <GenericTable
           objArray={manuals}
-          columns={[{ type: { className: 'text-sm font-bold' } }]}
+          columns={[{ type: { className: 'text-sm font-bold' } }, landedAtCol]}
           actions={getCommonActions('manuals')}
           onAction={handleActions}
           entityName="manual"
           newLink={'/new-manual'}
           showCount
+          defaultSortColumnIndex={1}
+          defaultSortDirection="desc"
         />
       </TransitionScroll>
 
@@ -135,12 +141,14 @@ export default function Index() {
         <LinkWithArrow label="Combos" href="/combos" />
         <GenericTable
           objArray={combos}
-          columns={[{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }]}
+          columns={[{ ...trickCol, trick: { ...trickCol.trick, alias: 'Combo Name' } }, landedAtCol]}
           actions={getCommonActions('combos')}
           onAction={handleActions}
           entityName="combo"
           newLink="/new-combo"
           showCount
+          defaultSortColumnIndex={1}
+          defaultSortDirection="desc"
         />
       </TransitionScroll>
     </div>
