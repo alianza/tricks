@@ -116,12 +116,12 @@ export default function Header() {
       {open ? (
         <XMarkIcon
           onClick={() => setOpen(false)}
-          className="hoverStrong z-10 ml-4 h-8 w-8 shrink-0 cursor-pointer xl:hidden"
+          className="hoverStrong z-10 -m-2 -m-2 ml-4 h-12 w-12 shrink-0 cursor-pointer p-2 xl:hidden"
         />
       ) : (
         <Bars3Icon
           onClick={() => setOpen(true)}
-          className="hoverStrong z-10 ml-4 h-8 w-8 shrink-0 cursor-pointer xl:hidden"
+          className="hoverStrong z-10 -m-2 ml-2 h-12 w-12 shrink-0 cursor-pointer p-2 xl:hidden"
         />
       )}
     </header>
