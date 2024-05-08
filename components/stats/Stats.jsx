@@ -11,7 +11,7 @@ const defaultTrickType = 'all';
 const getDefaultStats = (statsDefinition) =>
   Object.entries(statsDefinition).map(([label, { value }]) => [label, value]);
 
-export default function Stats({ statsDefinition, title, description, showTrickTypes = false }) {
+export default function Stats({ statsDefinition, title, description, showTrickTypes = false, children }) {
   const [stats, setStats] = useState(getDefaultStats(statsDefinition));
   const [trickType, setTrickType] = useState(defaultTrickType);
 
@@ -37,13 +37,15 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
       hiddenStyle={hiddenStyle}
       baseStyle={baseStyle}
       as="section"
-      className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
+      className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
     >
-      <h1 className="mb-4 text-4xl font-bold">{title}</h1>
-      <p className="my-4">{description}</p>
+      <div>
+        <h1 className="mb-1 text-4xl font-bold">{title}</h1>
+        <p>{description}</p>
+      </div>
       {showTrickTypes && (
         <select
-          className="my-4 block w-full rounded bg-neutral-200 p-2 text-lg font-semibold shadow-sm ring-blue-600/50 focus:ring-2 dark:bg-neutral-700 dark:ring-neutral-700/50"
+          className="block w-full rounded bg-neutral-200 p-2 text-lg font-semibold shadow-sm ring-blue-600/50 focus:ring-2 dark:bg-neutral-700 dark:ring-neutral-700/50"
           name={VN({ trickType })}
           value={trickType}
           onChange={({ target }) => setTrickType(target.value)}
@@ -63,6 +65,7 @@ export default function Stats({ statsDefinition, title, description, showTrickTy
           </div>
         ))}
       </div>
+      {children}
     </TransitionScroll>
   );
 }

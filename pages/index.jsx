@@ -24,12 +24,12 @@ export default function Index() {
   const { data: session } = useSession();
 
   return (
-    <>
+    <div className="flex flex-col gap-8">
       <TransitionScroll
         hiddenStyle={hiddenStyle}
         baseStyle={baseStyle}
         as="section"
-        className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
+        className="rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
       >
         <h1 className="mb-4 text-4xl font-bold">Track Your Skateboarding Tricks Progress</h1>
         <p className="mb-4">
@@ -58,7 +58,23 @@ export default function Index() {
           statsDefinition={statsDef}
           title="Your statistics"
           description="Here are some basic statistics about your progress."
-        />
+        >
+          <div className="flex flex-col gap-4 rounded-lg bg-neutral-200 px-4 py-6 shadow-sm dark:bg-neutral-700">
+            <div>
+              <h1 className="mb-1 text-4xl font-bold">Detailed Statistics</h1>
+              <p>
+                View more detailed status about your skateboarding tricks progress. You can view your stats by trick
+                type, stance, and more!
+              </p>
+            </div>
+            <Link
+              href="/statistics"
+              className={`${utilStyles.button} w-full bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
+            >
+              View detailed stats
+            </Link>
+          </div>
+        </Stats>
       )}
 
       <Stats
@@ -72,21 +88,23 @@ export default function Index() {
           hiddenStyle={hiddenStyle}
           baseStyle={baseStyle}
           as="section"
-          className="mb-8 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
+          className="flex flex-col gap-4 rounded-lg bg-neutral-50 p-8 shadow-lg dark:bg-neutral-800"
         >
-          <h1 className="mb-4 text-4xl font-bold">Detailed Stats</h1>
-          <p className="mb-4">
-            View more detailed status about your skateboarding tricks progress. You can view your stats by trick type,
-            stance, and more!
-          </p>
+          <div>
+            <h1 className="mb-1 text-4xl font-bold">Detailed Statistics</h1>
+            <p>
+              View more detailed status about your skateboarding tricks progress. You can view your stats by trick type,
+              stance, and more!
+            </p>
+          </div>
           <Link
             href="/statistics"
-            className={`${utilStyles.button} block w-full bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
+            className={`${utilStyles.button} self-start bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
           >
             View detailed stats
           </Link>
         </TransitionScroll>
       )}
-    </>
+    </div>
   );
 }
