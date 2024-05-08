@@ -3,10 +3,12 @@ import { capitalize, isString, sOrNoS } from '../../../lib/commonUtils';
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon, PlusIcon } from '@heroicons/react/20/solid';
 import GenericTableDataRow from './GenericTableDataRow';
 import IconLink from '../IconLink';
-import Loader from '../loader/loader';
+import Loader from '../loader';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 
 const duration = 250; // default auto-animate duration
+
+const chevronClassName = 'h-6 w-6 shrink-0 cursor-pointer';
 
 /**
  * Generic table component
@@ -18,13 +20,18 @@ const duration = 250; // default auto-animate duration
  *    @param [columns.capitalize=true] {Boolean} - Whether to capitalize value
  *    @param [columns.alignHeader] {('start'|'center'|'end')} - Alignment of column header
  * @param actions {Array} - Array of action objects with key as action name and value as element function
- * @param entityName {String} - Name of entity to display in table
+ * @param [entityName='item'] {String} - Name of entity to display in table
  * @param onAction {Function} - Callback function to handle actions
  * @param [options] {Object} - Options object
- *     @param [options.showCount] {Boolean} - Whether to show count of objects in table
+ *     @param [options.showCount=false] {Boolean} - Whether to show count of objects in table
  *     @param [options.newLink] {String} - Link to create new entity
- *     @param [options.actionsColumnName] {String} - Custom name for the actions column
- *     @param [options.sorting] {Boolean} - Whether to enable sorting on columns
+ *     @param [options.actionsColumnName=] {String} - Custom name for the actions column
+ *     @param [options.sorting=true] {Boolean} - Opt out of sorting
+ *     @param [options.defaultSortColumnIndex=0] {Number} - Index of column to initially sort by
+ *     @param [options.defaultSortDirection='asc'] {('asc'|'desc')} - Direction to initially sort by. Default is 'asc'.
+ *     @param [options.headerColumnClassNames=''] {String} - Class names to apply to header columns
+ *     @param [options.headerColumnStyles={}] {Object} - Styles to apply to header columns
+ *     @param [options.noValuePlaceHolder='-'] {String} - Placeholder to display when value is undefined
  * @returns {JSX.Element} - Generic table component
  * @constructor - GenericTable
  */
@@ -42,9 +49,24 @@ function GenericTable({
   const [objArrayState, setObjArrayState] = useState(objArray || []);
   const [tableBody, enableAnimations] = useAutoAnimate();
 
+  const {
+    showCount = false,
+    newLink,
+    actionsColumnName,
+    sorting = true,
+    className = '',
+    defaultSortDirection = 'asc',
+    defaultSortColumnIndex = 0,
+    headerColumnClassNames = '',
+    headerColumnStyles = {},
+    noValuePlaceHolder = '-',
+  } = options;
+
   if (actions?.length) columns = [...columns, 'actions'];
 
-  useEffect(() => sort(getColumnProp(columns[0]), 'asc'), []); // Default ascending sort on first column
+  useEffect(() => {
+    sort(getColumnProp(columns[defaultSortColumnIndex]), defaultSortDirection); // Default ascending sort on first column
+  }, []);
 
   useEffect(() => {
     const operations = () => {
@@ -81,7 +103,6 @@ function GenericTable({
 
   const getColumnProp = (col) => (isString(col) ? col : Object.keys(col)[0]);
 
-  const { showCount, newLink, actionsColumnName, sorting = true, className = '' } = options;
   const hasItems = !!objArrayState.length;
 
   return (
@@ -99,19 +120,23 @@ function GenericTable({
               }
 
               return (
-                <th key={colName} className="p-3 sm:p-4">
-                  <div className="flex justify-center gap-2">
-                    <p className="font-bold">{capitalize(colName)}</p>
+                <th key={colName} className="px-2 py-3 sm:px-3 sm:py-4">
+                  <div
+                    className={`flex flex-nowrap items-center gap-1 text-sm sm:gap-2 sm:text-base ${isActionsColumn ? 'justify-center' : ''}`}
+                  >
+                    <p className={`font-bold ${headerColumnClassNames}`} style={headerColumnStyles}>
+                      {capitalize(colName)}
+                    </p>
                     {sorting && !loading && hasItems && (
                       <>
                         {columnSortDirection[colProp] === 'asc' && (
-                          <ChevronDownIcon className="h-6 w-6 cursor-pointer" onClick={() => sort(colProp, 'desc')} />
+                          <ChevronDownIcon className={chevronClassName} onClick={() => sort(colProp, 'desc')} />
                         )}
                         {columnSortDirection[colProp] === 'desc' && (
-                          <ChevronUpIcon className="h-6 w-6 cursor-pointer" onClick={() => sort(colProp, 'asc')} />
+                          <ChevronUpIcon className={chevronClassName} onClick={() => sort(colProp, 'asc')} />
                         )}
                         {!isActionsColumn && !columnSortDirection[colProp] && (
-                          <ChevronUpDownIcon className="h-6 w-6 cursor-pointer" onClick={() => sort(colProp, 'asc')} />
+                          <ChevronUpDownIcon className={chevronClassName} onClick={() => sort(colProp, 'asc')} />
                         )}
                       </>
                     )}
@@ -127,7 +152,7 @@ function GenericTable({
         >
           {!hasItems && (
             <tr>
-              <td className="sm:p-4 p-2" colSpan={columns.length}>
+              <td className="p-2 sm:p-4" colSpan={columns.length}>
                 <div className="flex justify-center gap-2">
                   {loading ? <Loader className="mx-auto my-24" /> : `No ${entityName}s found.`}
                   {newLink && !loading && <IconLink title={`New ${entityName}`} href={newLink} Icon={PlusIcon} />}
@@ -142,6 +167,7 @@ function GenericTable({
               columns={columns}
               actions={actions}
               onRowAction={(...params) => onAction(...params, entityName)}
+              noValuePlaceHolder={noValuePlaceHolder}
             />
           ))}
         </tbody>
