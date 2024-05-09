@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { getFullManualName } from '../../lib/commonUtils';
+import { capitalize, getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
@@ -23,17 +23,17 @@ export default function ManualDetails({ manual }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{manual.trick}</h1>
+      <h1 className="mb-1 text-5xl font-bold">{manual.trick}</h1>
       <h3 className="text-xl">
-        <b>Preferred stance:</b> {manual.preferred_stance}
+        <b>Preferred stance:</b> {capitalize(manual.preferred_stance)}
       </h3>
       <div className="mt-4">
         <p>
           <b className="mr-1">Type:</b>
-          {manual.type}
+          {capitalize(manual.type)}
         </p>
       </div>
-      {manual.landed && (
+      {manual.landed && manual.landedAt && (
         <div className="mt-4">
           <p>
             <b className="mr-1">Landed: ✅</b>

@@ -23,9 +23,9 @@ export default function GrindDetails({ grind }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{grind.trick}</h1>
+      <h1 className="mb-1 text-5xl font-bold">{grind.trick}</h1>
       <h3 className="text-xl">
-        <b>Preferred stance:</b> {grind.preferred_stance}
+        <b>Preferred stance:</b> {capitalize(grind.preferred_stance)}
       </h3>
       <div className="mt-4">
         <p>
@@ -43,7 +43,7 @@ export default function GrindDetails({ grind }) {
           {grind.name}
         </p>
       </div>
-      {grind.landed && (
+      {grind.landed && grind.landedAt && (
         <div className="mt-4">
           <p>
             <b className="mr-1">Landed: ✅</b>

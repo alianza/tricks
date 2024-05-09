@@ -23,9 +23,9 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{trick.trick}</h1>
+      <h1 className="mb-1 text-5xl font-bold">{trick.trick}</h1>
       <h3 className="text-xl">
-        <b>Preferred stance:</b> {trick.preferred_stance}
+        <b>Preferred stance:</b> {capitalize(trick.preferred_stance)}
       </h3>
       <div className="mt-4">
         <p>
@@ -46,10 +46,10 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
         )}
         <p>
           <b className="mr-1">Trick:</b>
-          {trick.name}
+          {capitalize(trick.name)}
         </p>
       </div>
-      {trick.landed && (
+      {trick.landed && trick.landedAt && (
         <div className="mt-2">
           <p>
             <b className="mr-1">Landed: ✅</b>
