@@ -8,15 +8,10 @@ import {
   stanceSelectOptions,
   directionSelectOptions,
   VN,
+  getDate,
 } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
-import {
-  ArrowPathIcon,
-  ArrowRightIcon,
-  ArrowUturnLeftIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-} from '@heroicons/react/20/solid';
+import { ArrowPathIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
@@ -28,6 +23,7 @@ import TransitionScroll from 'react-transition-scroll';
 import { newComboObj } from '../../pages/new-combo';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import GenerateComboName from './GenerateComboName';
+import Show from '../common/Show';
 
 const { TRICK_TYPES_MODELS: TRICK_TYPES_MODELS_CONSTANT } = require('../../models/constants/trickTypes');
 
@@ -79,12 +75,16 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [direction, setDirection] = useState('all');
   const [loading, setLoading] = useState(true);
   const [tricksRef] = useAutoAnimate();
-  const [form, setForm] = useState({ trickArray: combo.trickArray, landed: combo.landed || false });
+  const [form, setForm] = useState({
+    trickArray: combo.trickArray,
+    landed: combo.landed || false,
+    landedAt: getDate(combo.landedAt),
+  });
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
   const [addAnother, setAddAnother] = useState(false);
 
-  const { trickArray, landed } = form;
+  const { trickArray, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
@@ -151,7 +151,9 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    newCombo ? await postData(form) : await patchData(form);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newCombo ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -175,7 +177,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       resetFilters();
     }
 
-    setForm((prev) => ({ ...prev, trickArray: [...prev.trickArray, trick] }));
+    setForm((prevForm) => ({ ...prevForm, trickArray: [...prevForm.trickArray, trick] }));
   };
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
@@ -192,7 +194,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
     setSearchString('');
   };
 
-  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
+  const handleChange = (e) => setForm((prevForm) => ({ ...prevForm, ...getEventKeyValue(e) }));
 
   return (
     <TransitionScroll
@@ -206,7 +208,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
           <ArrowUturnLeftIcon
             title="Remove last trick"
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-            onClick={() => setForm({ ...form, trickArray: trickArray.slice(0, -1) })}
+            onClick={() => setForm((prevForm) => ({ ...prevForm, trickArray: trickArray.slice(0, -1) }))}
           />
         )}
       </div>
@@ -298,17 +300,6 @@ const ComboForm = ({ combo, newCombo = true }) => {
             </Link>
           )}
         </div>
-
-        <div className="mb-2 mt-4 flex items-center justify-between">
-          <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
-          {TRICK_TYPES_NEW_PAGES[trickType] && (
-            <ArrowPathIcon
-              className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-              title="Load new tricks"
-              onClick={async () => await fetchTrickType(trickType)}
-            />
-          )}
-        </div>
         <div className="flex justify-between">
           <label title="Did you land this trick?">
             <input
@@ -322,6 +313,23 @@ const ComboForm = ({ combo, newCombo = true }) => {
           </label>
           {newCombo && (
             <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
+
+        <div className="mb-2 mt-4 flex items-center justify-between">
+          <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
+          {TRICK_TYPES_NEW_PAGES[trickType] && (
+            <ArrowPathIcon
+              className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+              title="Load new tricks"
+              onClick={async () => await fetchTrickType(trickType)}
+            />
           )}
         </div>
       </form>

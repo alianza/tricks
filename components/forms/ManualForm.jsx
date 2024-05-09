@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, VN } from '../../lib/commonUtils';
+import { capitalize, getDate, VN } from '../../lib/commonUtils';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
+import Show from '../common/Show';
 
 const ManualForm = ({ manual, newManual = true }) => {
   const router = useRouter();
@@ -18,14 +19,15 @@ const ManualForm = ({ manual, newManual = true }) => {
     preferred_stance: manual.preferred_stance,
     type: manual.type,
     landed: manual.landed || false,
+    landedAt: getDate(manual.landedAt),
   });
 
-  const { preferred_stance, type, landed } = form;
+  const { preferred_stance, type, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     if (!newManual) return;
     const { data } = await apiCall('profiles/mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
-    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+    setForm((prevForm) => ({ ...prevForm, preferred_stance: data.preferred_stance }));
   }, []);
 
   const patchData = async (form) => {
@@ -50,12 +52,14 @@ const ManualForm = ({ manual, newManual = true }) => {
     }
   };
 
-  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
+  const handleChange = (e) => setForm((prevForm) => ({ ...prevForm, ...getEventKeyValue(e) }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    newManual ? await postData(form) : await patchData(form);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newManual ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -93,6 +97,12 @@ const ManualForm = ({ manual, newManual = true }) => {
           />
           <span className="ml-2 align-middle">Landed</span>
         </label>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
 
         <LoaderButton isLoading={loading} label={`${newManual ? 'Create' : 'Update'} Manual`} />
       </form>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
+import { capitalize, getDate, getFullGrindName, VN } from '../../lib/commonUtils';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/cli
 import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newGrindObj } from '../../pages/new-grind';
+import Show from '../common/Show';
 
 const GrindForm = ({ grind, newGrind = true }) => {
   const router = useRouter();
@@ -26,14 +27,15 @@ const GrindForm = ({ grind, newGrind = true }) => {
     stance: grind.stance,
     direction: grind.direction,
     landed: grind.landed || false,
+    landedAt: getDate(grind.landedAt),
   });
 
-  const { name, preferred_stance, stance, direction, landed } = form;
+  const { name, preferred_stance, stance, direction, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     if (!newGrind) return;
     const { data } = await apiCall('profiles/mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
-    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+    setForm((prevForm) => ({ ...prevForm, preferred_stance: data.preferred_stance }));
   }, []);
 
   useEffect(() => {
@@ -66,12 +68,14 @@ const GrindForm = ({ grind, newGrind = true }) => {
     }
   };
 
-  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
+  const handleChange = (e) => setForm((prevForm) => ({ ...prevForm, ...getEventKeyValue(e) }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    newGrind ? await postData(form) : await patchData(form);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newGrind ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -140,6 +144,12 @@ const GrindForm = ({ grind, newGrind = true }) => {
           />
           <span className="ml-2 align-middle">Landed</span>
         </label>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
 
         <div className="flex items-center justify-start gap-4">
           <LoaderButton isLoading={loading} label={`${newGrind ? 'Create' : 'Update'} Grind`} />

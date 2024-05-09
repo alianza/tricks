@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getFullTrickName, VN } from '../../lib/commonUtils';
-import { FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
+import { capitalize, getDate, getFullTrickName, VN } from '../../lib/commonUtils';
+import { DIRECTIONS, FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventNameValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
+import Show from '../common/Show';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -27,14 +28,15 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
     landed: flatgroundTrick.landed || false,
+    landedAt: getDate(flatgroundTrick.landedAt),
   });
 
-  const { name, preferred_stance, stance, direction, rotation, landed } = form;
+  const { name, preferred_stance, stance, direction, rotation, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     if (!newFlatgroundTrick) return;
     const { data } = await apiCall('profiles/mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
-    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+    setForm((prevForm) => ({ ...prevForm, preferred_stance: data.preferred_stance }));
   }, []);
 
   useEffect(() => {
@@ -68,20 +70,21 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   };
 
   const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
+    const { name, value, target } = getEventNameValue(e);
 
-    if (target.type === 'checkbox') {
-      value = target.checked;
+    if (name === VN({ direction })) {
+      setForm((prevForm) => ({ ...prevForm, [name]: value, [VN({ rotation })]: value === DIRECTIONS.none ? 0 : 180 })); // Set rotation to 180 if direction is not none, and unset it if it is
     }
 
-    setForm({ ...form, [name]: value });
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    newFlatgroundTrick ? await postData(form) : await patchData(form);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newFlatgroundTrick ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -138,10 +141,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
             </select>
           </label>
         </div>
-        {/*<label>*/}
-        {/*  Date*/}
-        {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
-        {/*</label>*/}
         <p className="my-4">
           Full trick name:{' '}
           <b ref={trickNameRef}>
@@ -152,6 +151,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
             ))}
           </b>
         </p>
+
         <label title="Did you land this trick?">
           <input
             type="checkbox"
@@ -162,6 +162,13 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
           />
           <span className="ml-2 align-middle">Landed</span>
         </label>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
+
         <div className="flex items-center justify-start gap-4">
           <LoaderButton isLoading={loading} label={`${newFlatgroundTrick ? 'Create' : 'Update'} Flatground Trick`} />
           {newFlatgroundTrick && (

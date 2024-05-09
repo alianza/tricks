@@ -28,7 +28,7 @@ const ProfileForm = ({ profileForm }) => {
     }
   };
 
-  const handleChange = (e) => setForm({ ...form, ...getEventKeyValue(e) });
+  const handleChange = (e) => setForm((prevForm) => ({ ...prevForm, ...getEventKeyValue(e) }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
