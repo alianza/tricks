@@ -34,7 +34,7 @@ function GenericTableDataRow({ obj, columns, actions, onRowAction, noValuePlaceH
     });
 
   const formatColumnValue = (colProps, value) => {
-    if (value === undefined) return noValuePlaceHolder;
+    if (value === undefined || value === null) return noValuePlaceHolder;
     let formattedValue = value.toString();
     if (colProps?.formatDate) return formatDate(value);
     if (colProps?.capitalize !== false) return capitalize(value);
