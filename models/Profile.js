@@ -5,12 +5,15 @@ const ProfileSchema = new mongoose.Schema(
   {
     preferred_stance: {
       type: String,
-      enum: PREFFERED_STANCES_ENUM,
+      enum: {
+        values: PREFFERED_STANCES_ENUM,
+        message: '"{VALUE}" is not a valid preferred stance',
+      },
       default: DEFAULT_PREFFERED_STANCE,
     },
     userId: {
       type: Number,
-      required: [true, 'Authentication error. Please log in again.'],
+      required: [true, 'Authentication error. Please log in and try again.'],
     },
   },
   { timestamps: true },

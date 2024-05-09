@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import FlatgroundTrick from './FlatgroundTrick';
 import Grind from './Grind';
 import Manual from './Manual';
-import { getUpdate, updateDocLandedAt, updateQueryLandedAt } from './modelUtils';
+import { landedAtValidators } from './modelUtils';
 const { ObjectId } = mongoose.Schema.Types;
 
 const TRICK_TYPES_ENUM = [FlatgroundTrick.modelName, Grind.modelName, Manual.modelName];
@@ -17,7 +17,10 @@ const ComboSchema = new mongoose.Schema(
         },
         trickRef: {
           type: String,
-          enum: TRICK_TYPES_ENUM,
+          enum: {
+            values: TRICK_TYPES_ENUM,
+            message: '"{VALUE}" is not a valid trick type',
+          },
           default: FlatgroundTrick.modelName,
           required: true,
         },
@@ -29,10 +32,11 @@ const ComboSchema = new mongoose.Schema(
     },
     landedAt: {
       type: Date,
+      validate: landedAtValidators,
     },
     userId: {
       type: Number,
-      required: [true, 'Authentication error. Please log in again.'],
+      required: [true, 'Authentication error. Please log in and try again.'],
     },
   },
   { timestamps: true },
@@ -71,11 +75,11 @@ async function validation(next, self, context) {
   }
 }
 
-ComboSchema.pre('save', function (next) {
-  updateDocLandedAt.call(this);
-
-  next();
-});
+// ComboSchema.pre('save', function (next) {
+//   updateDocLandedAt.call(this);
+//
+//   next();
+// });
 
 ComboSchema.pre('validate', async function (next) {
   await validation(next, this, this);
@@ -83,16 +87,16 @@ ComboSchema.pre('validate', async function (next) {
   next();
 });
 
-ComboSchema.pre('findOneAndUpdate', async function (next) {
-  const { update, doc, updateObj, query } = await getUpdate.call(this);
-
-  await validation(next, update, query);
-  updateQueryLandedAt(update, doc, updateObj);
-
-  if (Object.keys(updateObj).length === 0) return next();
-
-  await this.clone().updateOne({ _id: doc._id }, updateObj);
-  next();
-});
+// ComboSchema.pre('findOneAndUpdate', async function (next) {
+//   const { update, doc, updateObj, query } = await getUpdate.call(this);
+//
+//   await validation(next, update, query);
+//   updateQueryLandedAt(update, doc, updateObj);
+//
+//   if (Object.keys(updateObj).length === 0) return next();
+//
+//   await this.clone().updateOne({ _id: doc._id }, updateObj);
+//   next();
+// });
 
 export default mongoose.models.Combo || mongoose.model('Combo', ComboSchema);

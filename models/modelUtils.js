@@ -28,4 +28,19 @@ function updateQueryLandedAt(update, doc, updateObj) {
   }
 }
 
-export { getUpdate, updateDocLandedAt, updateQueryLandedAt };
+const landedAtValidators = [
+  {
+    validator: function (value) {
+      if (!value && this.landed) return false;
+    },
+    message: 'Must specify a landing date if the trick is landed',
+  },
+  {
+    validator: function (value) {
+      if (value && !this.landed) return false;
+    },
+    message: 'Cannot specify a landing date if the trick is not landed',
+  },
+];
+
+export { getUpdate, updateDocLandedAt, updateQueryLandedAt, landedAtValidators };
