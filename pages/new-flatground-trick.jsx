@@ -1,6 +1,7 @@
 import FlatgroundTrickForm from '../components/forms/FlatgroundTrickForm';
 import { DEFAULT_FLATGROUND_TRICK, DIRECTIONS } from '../models/constants/flatgroundTricks';
 import { DEFAULT_PREFFERED_STANCE, DEFAULT_STANCE } from '../models/constants/stances';
+import { getDate } from '../lib/commonUtils';
 
 export const newFlatgroundTrickObj = {
   name: DEFAULT_FLATGROUND_TRICK,
@@ -9,6 +10,7 @@ export const newFlatgroundTrickObj = {
   direction: DIRECTIONS.none,
   rotation: 0,
   landed: true,
+  landedAt: getDate(),
 };
 
 const NewFlatFlatGroundTrick = () => {
