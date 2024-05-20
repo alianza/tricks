@@ -70,7 +70,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   };
 
   const handleChange = (e) => {
-    const { name, value, target } = getEventNameValue(e);
+    const { name, value } = getEventNameValue(e);
 
     if (name === VN({ direction })) {
       setForm((prevForm) => ({ ...prevForm, [name]: value, [VN({ rotation })]: value === DIRECTIONS.none ? 0 : 180 })); // Set rotation to 180 if direction is not none, and unset it if it is
