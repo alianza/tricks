@@ -39,14 +39,14 @@ export default function Index() {
         {!session ? (
           <button
             onClick={() => signIn()}
-            className={`${utilStyles.button} w-full bg-gray-700 text-lg text-neutral-50 outline-gray-500 hover:bg-gray-800 focus:ring-gray-600/50 dark:bg-gray-300 dark:text-neutral-900 hover:dark:bg-gray-400`}
+            className={`${utilStyles.button} w-full bg-gray-700 text-lg text-neutral-50  outline-gray-500 hover:bg-gray-800 focus:ring-gray-600/50 dark:bg-gray-300 dark:text-neutral-900 hover:dark:bg-gray-400`}
           >
             Sign in to get started!
           </button>
         ) : (
           <Link
             href="/dashboard"
-            className={`${utilStyles.button} block w-full bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
+            className={`${utilStyles.button} block w-full bg-blue-700 text-center text-lg text-neutral-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
           >
             Go to your dashboard!
           </Link>
@@ -69,7 +69,7 @@ export default function Index() {
             </div>
             <Link
               href="/statistics"
-              className={`${utilStyles.button} w-full bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
+              className={`${utilStyles.button} w-full bg-blue-700 text-center text-lg text-neutral-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
             >
               View detailed stats
             </Link>
@@ -99,7 +99,7 @@ export default function Index() {
           </div>
           <Link
             href="/statistics"
-            className={`${utilStyles.button} self-start bg-blue-700 text-center text-lg text-blue-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
+            className={`${utilStyles.button} self-start bg-blue-700 text-center text-lg text-neutral-50 outline-blue-500 hover:bg-blue-800 focus:ring-blue-600/50`}
           >
             View detailed stats
           </Link>
