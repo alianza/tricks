@@ -10,7 +10,9 @@ const LinkWithArrow = ({ label, href = '', onClick }) => {
       className={`${utilStyles.link} group relative mx-auto mb-6 flex items-center text-4xl`}
     >
       <h1 className="text-4xl">{label}</h1>
-      <span className="absolute left-full w-6 text-right text-2xl transition-[width] group-hover:w-8">→</span>
+      <span className="absolute w-[calc(100%+2rem)] text-right text-3xl transition-[width] group-hover:w-[calc(100%+2.5rem)]">
+        →
+      </span>
     </Link>
   );
 };
