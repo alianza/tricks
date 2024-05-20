@@ -5,6 +5,7 @@ import GenericTableDataRow from './GenericTableDataRow';
 import IconLink from '../IconLink';
 import Loader from '../Loader';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
+import Show from '../Show';
 
 const duration = 250; // default auto-animate duration
 
@@ -24,6 +25,7 @@ const chevronClassName = 'h-6 w-6 shrink-0 cursor-pointer';
  * @param onAction {Function} - Callback function to handle actions
  * @param [options] {Object} - Options object
  *     @param [options.showCount=false] {Boolean} - Whether to show count of objects in table
+ *     @param [options.showCountPrefix=''] {String} - Prefix to display before count
  *     @param [options.newLink] {String} - Link to create new entity
  *     @param [options.actionsColumnName=] {String} - Custom name for the actions column
  *     @param [options.sorting=true] {Boolean} - Opt out of sorting
@@ -32,6 +34,7 @@ const chevronClassName = 'h-6 w-6 shrink-0 cursor-pointer';
  *     @param [options.headerColumnClassNames=''] {String} - Class names to apply to header columns
  *     @param [options.headerColumnStyles={}] {Object} - Styles to apply to header columns
  *     @param [options.noValuePlaceHolder='-'] {String} - Placeholder to display when value is undefined
+ *     @param [options.additionalInfo=''] {String} - Additional info to display at the bottom of the table
  * @returns {JSX.Element} - Generic table component
  * @constructor - GenericTable
  */
@@ -51,6 +54,7 @@ function GenericTable({
 
   const {
     showCount = false,
+    showCountPrefix = '',
     newLink,
     actionsColumnName,
     sorting = true,
@@ -60,6 +64,7 @@ function GenericTable({
     headerColumnClassNames = '',
     headerColumnStyles = {},
     noValuePlaceHolder = '-',
+    additionalInfo = '',
   } = options;
 
   if (actions?.length) columns = [...columns, 'actions'];
@@ -127,19 +132,17 @@ function GenericTable({
                     <p className={`font-bold ${headerColumnClassNames}`} style={headerColumnStyles}>
                       {capitalize(colName)}
                     </p>
-                    {sorting && !loading && hasItems && (
-                      <>
-                        {columnSortDirection[colProp] === 'asc' && (
-                          <ChevronDownIcon className={chevronClassName} onClick={() => sort(colProp, 'desc')} />
-                        )}
-                        {columnSortDirection[colProp] === 'desc' && (
-                          <ChevronUpIcon className={chevronClassName} onClick={() => sort(colProp, 'asc')} />
-                        )}
-                        {!isActionsColumn && !columnSortDirection[colProp] && (
-                          <ChevronUpDownIcon className={chevronClassName} onClick={() => sort(colProp, 'asc')} />
-                        )}
-                      </>
-                    )}
+                    <Show if={sorting && !loading && hasItems}>
+                      <Show if={columnSortDirection[colProp] === 'asc'}>
+                        <ChevronDownIcon className={chevronClassName} onClick={() => sort(colProp, 'desc')} />
+                      </Show>
+                      <Show if={columnSortDirection[colProp] === 'desc'}>
+                        <ChevronUpIcon className={chevronClassName} onClick={() => sort(colProp, 'asc')} />
+                      </Show>
+                      <Show if={!isActionsColumn && !columnSortDirection[colProp]}>
+                        <ChevronUpDownIcon className={chevronClassName} onClick={() => sort(colProp, 'asc')} />
+                      </Show>
+                    </Show>
                   </div>
                 </th>
               );
@@ -150,7 +153,7 @@ function GenericTable({
           className="bg-neutral-50 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-neutral-400 dark:bg-neutral-800"
           ref={tableBody}
         >
-          {!hasItems && (
+          <Show if={!hasItems}>
             <tr>
               <td className="p-2 sm:p-4" colSpan={columns.length}>
                 <div className="flex justify-center gap-2">
@@ -159,7 +162,7 @@ function GenericTable({
                 </div>
               </td>
             </tr>
-          )}
+          </Show>
           {objArrayState.map((obj) => (
             <GenericTableDataRow
               key={obj._id}
@@ -171,25 +174,28 @@ function GenericTable({
             />
           ))}
         </tbody>
-        {(showCount || newLink) && (
+        <Show if={showCount || newLink}>
           <tfoot>
             <tr>
-              {newLink && (
-                <td colSpan={!showCount ? columns.length : 1}>
+              <Show if={newLink}>
+                <td className="flex" colSpan={!showCount ? columns.length : 1}>
                   <IconLink title={`New ${entityName}`} label="Add new" href={newLink} Icon={PlusIcon} />
                 </td>
-              )}
-              {showCount && (
-                <>
-                  {columns.length > 2 && <td colSpan={columns.length - (newLink ? 2 : 1)} />}
-                  <td className="text-end">
-                    {objArrayState.length} {capitalize(entityName) + sOrNoS(objArrayState.length)}
-                  </td>
-                </>
-              )}
+              </Show>
+              <Show if={showCount}>
+                {columns.length > 2 && <td colSpan={columns.length - (newLink ? 2 : 1)} />}
+                <td className="text-end">
+                  <span>
+                    {objArrayState.length} {showCountPrefix} {capitalize(entityName) + sOrNoS(objArrayState.length)}
+                  </span>
+                  <Show if={additionalInfo}>
+                    <span className="block text-sm">{additionalInfo}</span>
+                  </Show>
+                </td>
+              </Show>
             </tr>
           </tfoot>
-        )}
+        </Show>
       </table>
     </div>
   );
