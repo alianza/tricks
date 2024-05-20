@@ -19,7 +19,7 @@ export default function CombosPage() {
       setCombos(data);
     } catch (error) {
       setCombos([]);
-      toast.error(`Could not load combos: ${error.message}`);
+      toast.error(`Failed to load combos: ${error.message}`);
     }
   }, [filters]);
 
@@ -31,6 +31,7 @@ export default function CombosPage() {
           await apiCall('combos', { method: 'DELETE', id: obj._id });
           const { data } = await apiCall('combos', { method: 'GET' });
           setCombos(data);
+          toast.success(`Successfully deleted ${obj.trick}`);
         } catch (error) {
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }

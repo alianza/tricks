@@ -18,7 +18,7 @@ export default function GrindsPage() {
       setGrinds(data);
     } catch (error) {
       setGrinds([]);
-      toast.error(`Could not load grinds: ${error.message}`);
+      toast.error(`Failed to load grinds: ${error.message}`);
     }
   }, []);
 
@@ -30,6 +30,7 @@ export default function GrindsPage() {
           await apiCall('grinds', { method: 'DELETE', id: obj._id });
           const { data } = await apiCall('grinds', { method: 'GET' });
           setGrinds(data);
+          toast.success(`Successfully deleted ${obj.trick}`);
         } catch (error) {
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }

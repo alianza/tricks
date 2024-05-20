@@ -18,7 +18,7 @@ export default function ManualsPage() {
       setManuals(data);
     } catch (error) {
       setManuals([]);
-      toast.error(`Could not load manuals: ${error.message}`);
+      toast.error(`Failed to not load manuals: ${error.message}`);
     }
   }, []);
 
@@ -30,6 +30,7 @@ export default function ManualsPage() {
           await apiCall('manuals', { method: 'DELETE', id: obj._id });
           const { data } = await apiCall('manuals', { method: 'GET' });
           setManuals(data);
+          toast.success(`Successfully deleted ${obj.trick}`);
         } catch (error) {
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }

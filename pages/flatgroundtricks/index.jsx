@@ -18,7 +18,7 @@ export default function FlatgroundTricksPage() {
       setFlatgroundTricks(data);
     } catch (error) {
       setFlatgroundTricks([]);
-      toast.error(`Could not load Flatground Tricks: ${error.message}`);
+      toast.error(`Failed to load Flatground Tricks: ${error.message}`);
     }
   }, []);
 
@@ -30,8 +30,8 @@ export default function FlatgroundTricksPage() {
           await apiCall('flatgroundtricks', { method: 'DELETE', id: obj._id });
           const { data } = await apiCall('flatgroundtricks', { method: 'GET' });
           setFlatgroundTricks(data);
+          toast.success(`Successfully deleted ${obj.trick}`);
         } catch (error) {
-          setFlatgroundTricks([]);
           toast.error(`Failed to delete ${obj.trick}: ${error.message}`);
         }
         break;
