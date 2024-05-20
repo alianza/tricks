@@ -77,7 +77,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [tricksRef] = useAutoAnimate();
   const [form, setForm] = useState({
     trickArray: combo.trickArray,
-    landed: combo.landed || true,
+    landed: combo.landed,
     landedAt: getDate(combo.landedAt) || getDate(),
   });
   const [searchString, setSearchString] = useState('');
@@ -225,7 +225,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
               <MagnifyingGlassIcon
                 title="Search for tricks"
                 onClick={toggleSearch}
-                className={`hoverStrong h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
+                className={`scale-hover-xl h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
               />
             </div>
             {searchActive && (
@@ -282,7 +282,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
                 className="group flex cursor-pointer items-center text-start"
               >
                 <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-                <span className={`${utilStyles.link} grow py-1 touch:!decoration-transparent`}>{trick.trick}</span>
+                <span className="underline-hover grow py-1 touch:!decoration-transparent">{trick.trick}</span>
               </button>
             ))
           )}
@@ -293,7 +293,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
               className="group flex cursor-pointer items-center"
             >
               <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-              <b className={`${utilStyles.link} py-1 group-hover:decoration-inherit group-hover:duration-100`}>
+              <b className="underline-hover py-1 group-hover:decoration-inherit group-hover:duration-100">
                 Add new {TRICK_TYPES_MODELS[trickType]}
               </b>
               <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />

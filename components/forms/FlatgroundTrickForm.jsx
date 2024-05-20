@@ -27,7 +27,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
-    landed: flatgroundTrick.landed || true,
+    landed: flatgroundTrick.landed,
     landedAt: getDate(flatgroundTrick.landedAt) || getDate(),
   });
 

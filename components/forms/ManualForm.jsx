@@ -18,7 +18,7 @@ const ManualForm = ({ manual, newManual = true }) => {
   const [form, setForm] = useState({
     preferred_stance: manual.preferred_stance,
     type: manual.type,
-    landed: manual.landed || true,
+    landed: manual.landed,
     landedAt: getDate(manual.landedAt) || getDate(),
   });
 

@@ -26,7 +26,7 @@ function GrindForm({ grind, newGrind = true }) {
     preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
-    landed: grind.landed || true,
+    landed: grind.landed,
     landedAt: getDate(grind.landedAt) || getDate(),
   });
 
