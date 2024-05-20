@@ -13,6 +13,12 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+
+        if (query.countOnly !== undefined) {
+          const count = await Combo.countDocuments({ ...authQuery, ...extraQuery });
+          return res.status(200).json({ success: true, data: count });
+        }
+
         let combos = await Combo.find({ ...authQuery, ...extraQuery })
           .populate('trickArray.trick')
           .lean();

@@ -13,6 +13,12 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+
+        if (query.countOnly !== undefined) {
+          const count = await Grind.countDocuments({ ...authQuery, ...extraQuery });
+          return res.status(200).json({ success: true, data: count });
+        }
+
         const grinds = await Grind.find({ ...authQuery, ...extraQuery }).lean();
         const data = grinds.map((grind) => ({ ...grind, trick: getFullGrindName(grind) }));
         res.status(200).json({ success: true, data });

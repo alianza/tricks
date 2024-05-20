@@ -13,6 +13,12 @@ export default async function handler(req, res) {
     case 'GET':
       try {
         const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+
+        if (query.countOnly !== undefined) {
+          const count = await FlatgroundTrick.countDocuments({ ...authQuery, ...extraQuery });
+          return res.status(200).json({ success: true, data: count });
+        }
+
         const flatgroundTricks = await FlatgroundTrick.find({ ...authQuery, ...extraQuery }).lean();
         const data = flatgroundTricks.map((flatgroundTrick) => ({
           ...flatgroundTrick,
