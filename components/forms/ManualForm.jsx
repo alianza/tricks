@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
 import { capitalize, getDate, VN } from '../../lib/commonUtils';
-import { MANUALS_ENUM } from '../../models/constants/manuals';
+import { DEFAULT_MANUAL, MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
@@ -18,8 +18,8 @@ const ManualForm = ({ manual, newManual = true }) => {
   const [form, setForm] = useState({
     preferred_stance: manual.preferred_stance,
     type: manual.type,
-    landed: manual.landed || false,
-    landedAt: getDate(manual.landedAt),
+    landed: manual.landed || true,
+    landedAt: getDate(manual.landedAt) || getDate(),
   });
 
   const { preferred_stance, type, landed, landedAt } = form;

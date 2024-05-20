@@ -22,7 +22,7 @@ const ProfileForm = ({ profileForm }) => {
   const patchData = async (form) => {
     try {
       await apiCall('profiles/mine', { method: 'PATCH', data: form });
-      toast.success('Profile updated!');
+      toast.success('Successfully updated profile');
     } catch (error) {
       toast.error(`Failed to update profile: ${error.message}`);
     }

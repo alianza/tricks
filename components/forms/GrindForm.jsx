@@ -13,7 +13,7 @@ import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newGrindObj } from '../../pages/new-grind';
 import Show from '../common/Show';
 
-const GrindForm = ({ grind, newGrind = true }) => {
+function GrindForm({ grind, newGrind = true }) {
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
@@ -26,8 +26,8 @@ const GrindForm = ({ grind, newGrind = true }) => {
     preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
-    landed: grind.landed || false,
-    landedAt: getDate(grind.landedAt),
+    landed: grind.landed || true,
+    landedAt: getDate(grind.landedAt) || getDate(),
   });
 
   const { name, preferred_stance, stance, direction, landed, landedAt } = form;
@@ -160,6 +160,6 @@ const GrindForm = ({ grind, newGrind = true }) => {
       </form>
     </TransitionScroll>
   );
-};
+}
 
 export default GrindForm;

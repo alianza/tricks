@@ -77,8 +77,8 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [tricksRef] = useAutoAnimate();
   const [form, setForm] = useState({
     trickArray: combo.trickArray,
-    landed: combo.landed || false,
-    landedAt: getDate(combo.landedAt),
+    landed: combo.landed || true,
+    landedAt: getDate(combo.landedAt) || getDate(),
   });
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
