@@ -39,8 +39,11 @@ export default function CombosPage() {
     }
   };
 
+  const filteredCombos =
+    filters.landed === 'any' ? combos : combos?.filter((combo) => filters.landed === (combo.landed ? 'yes' : 'no'));
+
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-12">
       <div>
         <h1 className="text-center text-5xl">Combos</h1>
         <p className="mt-3 text-center">This is an overview of all the combos you've added to your account.</p>
@@ -101,17 +104,14 @@ export default function CombosPage() {
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={
-              filters.landed === 'any'
-                ? combos
-                : combos?.filter((combo) => filters.landed === (combo.landed ? 'yes' : 'no'))
-            }
+            objArray={filteredCombos}
             columns={[{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }, landedAtCol]}
             actions={getCommonActions('combos')}
             onAction={handleAction}
             entityName="combo"
             newLink="/new-combo"
             showCount
+            enablePagination
           />
         </TransitionScroll>
       </div>

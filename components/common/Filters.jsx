@@ -16,7 +16,7 @@ function Filters({ filters = {}, onReset, children }) {
   }, []);
 
   return (
-    <details ref={detailsRef} className="rounded-lg bg-neutral-50 p-4 shadow-lg dark:bg-neutral-800">
+    <details ref={detailsRef} className="rounded-lg bg-neutral-50 p-4 shadow-md dark:bg-neutral-800">
       <summary className="cursor-pointer text-xl font-medium">Filters</summary>
       <div data-contents="">
         <hr className="my-4 border-neutral-800 dark:border-neutral-400" />

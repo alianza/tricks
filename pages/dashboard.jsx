@@ -35,10 +35,10 @@ import TransitionScroll from 'react-transition-scroll';
 // }
 
 export default function Index() {
-  const [flatgroundTricks, setFlatgroundTricks] = useState({ data: [], count: 0 });
-  const [grinds, setGrinds] = useState({ data: [], count: 0 });
-  const [manuals, setManuals] = useState({ data: [], count: 0 });
-  const [combos, setCombos] = useState({ data: [], count: 0 });
+  const [flatgroundTricks, setFlatgroundTricks] = useState({ data: null, count: 0 });
+  const [grinds, setGrinds] = useState({ data: null, count: 0 });
+  const [manuals, setManuals] = useState({ data: null, count: 0 });
+  const [combos, setCombos] = useState({ data: null, count: 0 });
 
   useAsyncEffect(async () => {
     const fetchAndSetData = async (endpoint, setData) => {
@@ -97,10 +97,10 @@ export default function Index() {
     }
   };
 
-  const formatAdditionalInfo = (count, data) => (count !== 0 && count !== data.length ? count + ' total' : '');
+  const formatAdditionalInfo = (count, data) => (count !== 0 && count !== data?.length ? count + ' total' : '');
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-12">
       <div>
         <h1 className="text-center text-5xl">Dashboard</h1>
         <p className="mt-3 text-center">This is an overview of all the landed tricks you've added to your account.</p>
@@ -119,6 +119,8 @@ export default function Index() {
           defaultSortColumnIndex={1}
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(flatgroundTricks.count, flatgroundTricks.data)}
+          additionalInfoLink="/flatgroundtricks"
+          enablePagination
         />
       </TransitionScroll>
 
@@ -136,6 +138,8 @@ export default function Index() {
           defaultSortColumnIndex={1}
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(grinds.count, grinds.data)}
+          additionalInfoLink="/grinds"
+          enablePagination
         />
       </TransitionScroll>
 
@@ -153,6 +157,8 @@ export default function Index() {
           defaultSortColumnIndex={1}
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(manuals.count, manuals.data)}
+          additionalInfoLink="/manuals"
+          enablePagination
         />
       </TransitionScroll>
 
@@ -170,6 +176,8 @@ export default function Index() {
           defaultSortColumnIndex={1}
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(combos.count, combos.data)}
+          additionalInfoLink="/combos"
+          enablePagination
         />
       </TransitionScroll>
     </div>

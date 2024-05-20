@@ -38,8 +38,11 @@ export default function ManualsPage() {
     }
   };
 
+  const filteredManuals =
+    filters.landed === 'any' ? manuals : manuals.filter((manual) => filters.landed === (manual.landed ? 'yes' : 'no'));
+
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-12">
       <div>
         <h1 className="text-center text-5xl">Manuals</h1>
         <p className="mt-3 text-center">This is an overview of all the manuals you've added to your account.</p>
@@ -67,17 +70,14 @@ export default function ManualsPage() {
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={
-              filters.landed === 'any'
-                ? manuals
-                : manuals.filter((manual) => filters.landed === (manual.landed ? 'yes' : 'no'))
-            }
+            objArray={filteredManuals}
             columns={[{ type: { className: 'text-sm font-bold' } }, landedAtCol]}
             actions={getCommonActions('manuals')}
             onAction={handleAction}
             entityName="manual"
             newLink="/new-manual"
             showCount
+            enablePagination
           />
         </TransitionScroll>
       </div>

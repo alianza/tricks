@@ -37,9 +37,11 @@ export default function GrindsPage() {
         break;
     }
   };
+  const filteredGrinds =
+    filters.landed === 'any' ? grinds : grinds.filter((grind) => filters.landed === (grind.landed ? 'yes' : 'no'));
 
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-12">
       <div>
         <h1 className="text-center text-5xl">Grinds</h1>
         <p className="mt-3 text-center">This is an overview of all the grinds you've added to your account.</p>
@@ -66,11 +68,7 @@ export default function GrindsPage() {
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={
-              filters.landed === 'any'
-                ? grinds
-                : grinds.filter((grind) => filters.landed === (grind.landed ? 'yes' : 'no'))
-            }
+            objArray={filteredGrinds}
             columns={['stance', 'direction', 'name', trickCol, landedAtCol]}
             actions={getCommonActions('grinds')}
             entityName="grind"
@@ -78,6 +76,7 @@ export default function GrindsPage() {
             newLink="/new-grind"
             showCount
             defaultSortColumnIndex={3}
+            enablePagination
           />
         </TransitionScroll>
       </div>

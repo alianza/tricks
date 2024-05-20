@@ -38,8 +38,13 @@ export default function FlatgroundTricksPage() {
     }
   };
 
+  const filteredFlatgroundTricks =
+    filters.landed === 'any'
+      ? flatgroundTricks
+      : flatgroundTricks?.filter((trick) => filters.landed === (trick.landed ? 'yes' : 'no'));
+
   return (
-    <div className="flex flex-col gap-16">
+    <div className="flex flex-col gap-12">
       <div>
         <h1 className="text-center text-5xl">Flatground Tricks</h1>
         <p className="mt-3 text-center">
@@ -69,11 +74,7 @@ export default function FlatgroundTricksPage() {
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={
-              filters.landed === 'any'
-                ? flatgroundTricks
-                : flatgroundTricks?.filter((trick) => filters.landed === (trick.landed ? 'yes' : 'no'))
-            }
+            objArray={filteredFlatgroundTricks}
             columns={['stance', 'direction', 'rotation', 'name', trickCol, landedAtCol]}
             actions={getCommonActions('flatgroundtricks')}
             onAction={handleAction}
@@ -81,6 +82,7 @@ export default function FlatgroundTricksPage() {
             newLink="/new-flatground-trick"
             showCount
             defaultSortColumnIndex={4}
+            enablePagination
           />
         </TransitionScroll>
       </div>
