@@ -1,0 +1,3 @@
+Better trick name resolution
+Use a top level provider for the user and their preferred stance and remove preferred stance from tricks
+Generic table pagination
