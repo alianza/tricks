@@ -8,23 +8,22 @@ import {
   stanceSelectOptions,
   directionSelectOptions,
   VN,
+  getDate,
 } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
-import {
-  ArrowPathIcon,
-  ArrowRightIcon,
-  ArrowUturnLeftIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-} from '@heroicons/react/20/solid';
+import { ArrowPathIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import { newComboObj } from '../../pages/new-combo';
+import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
+import GenerateComboName from './GenerateComboName';
+import Show from '../common/Show';
 const { TRICK_TYPES_MODELS: TRICK_TYPES_MODELS_CONSTANT } = require('../../models/constants/trickTypes');
 
 const TRICK_TYPES_MAP = {
@@ -74,19 +73,20 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [stance, setStance] = useState('all');
   const [direction, setDirection] = useState('all');
   const [loading, setLoading] = useState(true);
-  const [trickArrayRef] = useAutoAnimate();
   const [tricksRef] = useAutoAnimate();
-  const [form, setForm] = useState({ trickArray: combo.trickArray });
-  const [dots, setDots] = useState('...');
+  const [form, setForm] = useState({
+    trickArray: combo.trickArray,
+    landed: combo.landed,
+    landedAt: getDate(combo.landedAt) || getDate(),
+  });
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
+  const [addAnother, setAddAnother] = useState(false);
 
-  const { trickArray } = form;
+  const { trickArray, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
-    const interval = setInterval(() => setDots((prev) => (prev === '...' ? '.' : prev + '.')), 1000);
-    return () => clearInterval(interval);
   }, []);
 
   // useEffect(() => resetFilters(), [trickType]);
@@ -123,17 +123,21 @@ const ComboForm = ({ combo, newCombo = true }) => {
       await router.back();
       toast.success(`Successfully updated combo: ${getFullComboName(form)}`);
     } catch (error) {
-      toast.error(`Failed to update combo: ${error.message}`);
+      toast.error(`Failed to update Combo: ${error.message}`);
     }
   };
 
   const postData = async (form) => {
     try {
-      await apiCall('combos', {
+      const { data } = await apiCall('combos', {
         method: 'POST',
         data: { ...form, trickArray: trickArray.map(({ _id, trickRef }) => ({ trick: _id, trickRef })) },
       });
-      await router.back();
+      if (addAnother) {
+        setForm(newComboObj);
+      } else {
+        await router.push(`/combos/${data._id}`);
+      }
       closeAfterAdd();
       toast.success(`Successfully created combo: ${getFullComboName(form)}`);
     } catch (error) {
@@ -144,7 +148,9 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    newCombo ? await postData(form) : await patchData(form);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newCombo ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -160,7 +166,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       trickArray[trickArray.length - 1]?.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
       trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground]
     ) {
-      return toast.error('Combo cannot have 2 flatground tricks in a row');
+      return toast.error('Combo cannot have 2 Flatground Tricks in a row');
     }
 
     if (trickArray.length === 0) {
@@ -168,7 +174,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
       resetFilters();
     }
 
-    setForm((prev) => ({ ...prev, trickArray: [...prev.trickArray, trick] }));
+    setForm((prevForm) => ({ ...prevForm, trickArray: [...prevForm.trickArray, trick] }));
   };
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
@@ -186,6 +192,8 @@ const ComboForm = ({ combo, newCombo = true }) => {
     setSearchString('');
   };
 
+  const handleChange = (e) => setForm((prevForm) => ({ ...prevForm, ...getEventKeyValue(e) }));
+
   return (
     <TransitionScroll
       hiddenStyle={hiddenStyle}
@@ -198,43 +206,24 @@ const ComboForm = ({ combo, newCombo = true }) => {
           <ArrowUturnLeftIcon
             title="Remove last trick"
             className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
-            onClick={() => setForm({ ...form, trickArray: trickArray.slice(0, -1) })}
+            onClick={() => setForm((prevForm) => ({ ...prevForm, trickArray: trickArray.slice(0, -1) }))}
           />
         )}
       </div>
 
       {/*Trick name*/}
-      <div ref={trickArrayRef} className="relative mt-4 flex flex-wrap gap-2">
-        {trickArray.map((trick, index) => (
-          <div key={(trick._id || trick.id) + index} className="flex gap-2">
-            <span className="whitespace-nowrap font-bold">{trick.trick}</span>
-            {trickArray[index + 1] ? (
-              <ArrowRightIcon title="To" className="h-6 w-6" />
-            ) : (
-              trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
-              trickArray.length > 1 && <span className="font-bold"> Out </span>
-            )}
-            {trickArray.length === 1 && (
-              <span className="font-bold">
-                <ArrowRightIcon title="To" className="mr-1 inline-block h-6 w-6" />
-                {dots}
-              </span>
-            )}
-          </div>
-        ))}
-        {!trickArray.length && <span className="whitespace-nowrap font-bold">Select first trick{dots}</span>}
-      </div>
+      <GenerateComboName trickArray={trickArray} />
       <hr className="my-2 border-neutral-800 dark:border-neutral-400" />
 
       <form onSubmit={handleSubmit} className={`${formStyles.form} flex grow flex-col`}>
         <label>
           <search>
-            <div className="mb-1 flex flex-row justify-between">
+            <div className="mb-2 flex flex-row justify-between">
               Select type of trick to add:
               <MagnifyingGlassIcon
                 title="Search for tricks"
                 onClick={toggleSearch}
-                className={`hoverStrong h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
+                className={`scale-hover-xl h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
               />
             </div>
             {searchActive && (
@@ -291,7 +280,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
                 className="group flex cursor-pointer items-center text-start"
               >
                 <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-                <span className={`${utilStyles.link} grow py-1 touch:!decoration-transparent`}>{trick.trick}</span>
+                <span className="underline-hover grow py-1 touch:!decoration-transparent">{trick.trick}</span>
               </button>
             ))
           )}
@@ -302,15 +291,36 @@ const ComboForm = ({ combo, newCombo = true }) => {
               className="group flex cursor-pointer items-center"
             >
               <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
-              <b className={`${utilStyles.link} py-1 group-hover:decoration-inherit group-hover:duration-100`}>
+              <b className="underline-hover py-1 group-hover:decoration-inherit group-hover:duration-100">
                 Add new {TRICK_TYPES_MODELS[trickType]}
               </b>
               <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
             </Link>
           )}
         </div>
+        <div className="flex justify-between">
+          <label title="Did you land this trick?">
+            <input
+              type="checkbox"
+              name={VN({ landed })}
+              checked={landed}
+              onChange={handleChange}
+              className="ml-1 h-4 w-4 align-middle"
+            />
+            <span className="ml-2 align-middle">Landed</span>
+          </label>
+          {newCombo && (
+            <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
 
-        <div className="mt-4 flex items-center justify-between">
+        <div className="mb-2 mt-4 flex items-center justify-between">
           <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
           {TRICK_TYPES_NEW_PAGES[trickType] && (
             <ArrowPathIcon

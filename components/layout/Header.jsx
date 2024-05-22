@@ -42,16 +42,14 @@ export default function Header() {
           title="Skateboard Trick Tracker Logo"
           className="h-12 w-12 drop-shadow-lg transition-transform hover:scale-110 active:scale-100 sm:h-16 sm:w-16"
         />
-        <span className={`${utilStyles.link} hidden whitespace-nowrap text-4xl font-semibold sm:block`}>
-          Trick Tracker
-        </span>
+        <span className="underline-hover hidden whitespace-nowrap text-4xl font-semibold sm:block">Trick Tracker</span>
       </Link>
 
       <div className="ml-auto">
         {session ? (
           <>
             <span className="hidden md:inline">Signed in as: </span>
-            <Link className={`${utilStyles.link} inline items-center gap-2 xsm:inline-flex`} href="/profile">
+            <Link className="underline-hover inline items-center gap-2 xsm:inline-flex" href="/profile">
               <b className="hidden xsm:inline">{session.user?.name}</b>
               <Image
                 src={session.user?.image}
@@ -64,7 +62,7 @@ export default function Header() {
             </Link>
           </>
         ) : (
-          <a className={`${utilStyles.link} font-bold`} href="#" onClick={() => signIn()}>
+          <a className="underline-hover font-bold" href="#" onClick={() => signIn()}>
             Sign in
           </a>
         )}
@@ -116,12 +114,12 @@ export default function Header() {
       {open ? (
         <XMarkIcon
           onClick={() => setOpen(false)}
-          className="hoverStrong z-10 ml-4 h-8 w-8 shrink-0 cursor-pointer xl:hidden"
+          className="scale-hover-xl z-10 -m-2 ml-2 h-12 w-12 shrink-0 cursor-pointer p-2 xl:hidden"
         />
       ) : (
         <Bars3Icon
           onClick={() => setOpen(true)}
-          className="hoverStrong z-10 ml-4 h-8 w-8 shrink-0 cursor-pointer xl:hidden"
+          className="scale-hover-xl z-10 -m-2 ml-2 h-12 w-12 shrink-0 cursor-pointer p-2 xl:hidden"
         />
       )}
     </header>

@@ -4,7 +4,7 @@ import { populateComboName, populateComboTrickName } from '../../../lib/commonUt
 import { requireAuth } from '../../../lib/serverUtils';
 
 export default async function handler(req, res) {
-  const { method } = req;
+  const { method, query } = req;
 
   await dbConnect();
   const { authQuery } = await requireAuth(req, res);
@@ -12,7 +12,14 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        let combos = await Combo.find({ ...authQuery })
+        const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+
+        if (query.countOnly !== undefined) {
+          const count = await Combo.countDocuments({ ...authQuery, ...extraQuery });
+          return res.status(200).json({ success: true, data: count });
+        }
+
+        let combos = await Combo.find({ ...authQuery, ...extraQuery })
           .populate('trickArray.trick')
           .lean();
         combos = combos.map(populateComboTrickName); // Populate every trick name in the combo
@@ -29,7 +36,7 @@ export default async function handler(req, res) {
         res.status(201).json({ success: true, data: combo });
       } catch (error) {
         if (error.code === 11000) {
-          error.message = 'This combo already exists'; // Return code for unique index constraint violation
+          error.message = 'This Combo already exists'; // Return code for unique index constraint violation
         }
         console.error(error);
         res.status(400).json({ success: false, error: error.message });

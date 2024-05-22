@@ -1,35 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getFullGrindName, VN } from '../../lib/commonUtils';
+import { capitalize, getDate, getFullGrindName, VN } from '../../lib/commonUtils';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
+import { newGrindObj } from '../../pages/new-grind';
+import Show from '../common/Show';
 
-const GrindForm = ({ grind, newGrind = true }) => {
+function GrindForm({ grind, newGrind = true }) {
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
+  const [addAnother, setAddAnother] = useState(false);
   const [form, setForm] = useState({
     name: grind.name,
     preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
+    landed: grind.landed,
+    landedAt: getDate(grind.landedAt) || getDate(),
   });
 
-  const { name, preferred_stance, stance, direction } = form;
+  const { name, preferred_stance, stance, direction, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     if (!newGrind) return;
     const { data } = await apiCall('profiles/mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
-    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+    setForm((prevForm) => ({ ...prevForm, preferred_stance: data.preferred_stance }));
   }, []);
 
   useEffect(() => {
@@ -49,8 +55,12 @@ const GrindForm = ({ grind, newGrind = true }) => {
 
   const postData = async (form) => {
     try {
-      await apiCall('grinds', { method: 'POST', data: form });
-      await router.back();
+      const { data } = await apiCall('grinds', { method: 'POST', data: form });
+      if (addAnother) {
+        setForm(newGrindObj);
+      } else {
+        await router.push(`/grinds/${data._id}`);
+      }
       closeAfterAdd();
       toast.success(`Successfully added grind: ${getFullGrindName(form)}`);
     } catch (error) {
@@ -58,17 +68,14 @@ const GrindForm = ({ grind, newGrind = true }) => {
     }
   };
 
-  const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
-    if (target.type === 'checkbox') value = target.checked;
-    setForm({ ...form, [name]: value });
-  };
+  const handleChange = (e) => setForm((prevForm) => ({ ...prevForm, ...getEventKeyValue(e) }));
 
   const handleSubmit = async (e) => {
-    setLoading(true);
     e.preventDefault();
-    newGrind ? await postData(form) : await patchData(form);
+    setLoading(true);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newGrind ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -116,7 +123,7 @@ const GrindForm = ({ grind, newGrind = true }) => {
           </label>
         </div>
 
-        <p className="my-4">
+        <p>
           Full grind name:{' '}
           <b ref={trickNameRef}>
             {fullTrickName?.split('').map((letter, index) => (
@@ -127,10 +134,32 @@ const GrindForm = ({ grind, newGrind = true }) => {
           </b>
         </p>
 
-        <LoaderButton isLoading={loading} />
+        <label title="Did you land this trick?">
+          <input
+            type="checkbox"
+            name={VN({ landed })}
+            checked={landed}
+            onChange={handleChange}
+            className="h-4 w-4 align-middle"
+          />
+          <span className="ml-2 align-middle">Landed</span>
+        </label>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
+
+        <div className="flex items-center justify-start gap-4">
+          <LoaderButton isLoading={loading} label={`${newGrind ? 'Create' : 'Update'} Grind`} />
+          {newGrind && (
+            <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
       </form>
     </TransitionScroll>
   );
-};
+}
 
 export default GrindForm;

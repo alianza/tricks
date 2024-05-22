@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { capitalize, formatDate, getFullTrickName } from '../../lib/commonUtils';
+import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
   const router = useRouter();
@@ -16,15 +17,15 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
       await apiCall(`flatgroundtricks`, { method: 'DELETE', id: router.query._id });
       await router.push('/dashboard');
     } catch (error) {
-      toast.error(`Failed to delete the flatground trick: ${error.message}`);
+      toast.error(`Failed to delete the Flatground Trick: ${error.message}`);
     }
   };
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{trick.trick}</h1>
+      <h1 className="mb-1 text-5xl font-bold">{trick.trick}</h1>
       <h3 className="text-xl">
-        <b>Preferred stance:</b> {trick.preferred_stance}
+        <b>Preferred stance:</b> {capitalize(trick.preferred_stance)}
       </h3>
       <div className="mt-4">
         <p>
@@ -45,17 +46,25 @@ export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {
         )}
         <p>
           <b className="mr-1">Trick:</b>
-          {trick.name}
+          {capitalize(trick.name)}
         </p>
       </div>
+      {trick.landed && trick.landedAt && (
+        <div className="mt-2">
+          <p>
+            <b className="mr-1">Landed: ✅</b>
+            <RenderSafeDate date={trick.landedAt} />
+          </p>
+        </div>
+      )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(trick.createdAt, { includeTime: true })}
+          <RenderSafeDate date={trick.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(trick.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={trick.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">
@@ -82,5 +91,7 @@ FlatgroundTrickDetails.propTypes = {
     createdAt: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
     trick: PropTypes.string.isRequired,
+    landed: PropTypes.bool.isRequired,
+    landedAt: PropTypes.string,
   }).isRequired,
 };

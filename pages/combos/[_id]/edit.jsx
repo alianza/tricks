@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import ComboForm from '../../../components/forms/ComboForm';
 import { useApiCall } from '../../../lib/customHooks';
-import Loader from '../../../components/common/loader/loader';
+import Loader from '../../../components/common/Loader';
 
 const EditCombo = () => {
   const router = useRouter();

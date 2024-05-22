@@ -1,25 +1,33 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/_[...nextauth]';
 import ProfileForm from '../../components/forms/ProfileForm';
-import { ensureProfile, serialize } from '@/lib/serverUtils';
-import dbConnect from '../../lib/dbConnect';
+import Loader from '@/components/common/Loader';
+import { useApiCall } from '../../lib/customHooks';
 
-export async function getServerSideProps(context) {
-  await dbConnect();
+// For some reason doesn't work when navigating to /profile using router nav link
+// export async function getServerSideProps(context) {
+//   await dbConnect();
+//
+//   const session = await getServerSession(context.req, context.res, authOptions);
+//   const query = { userId: session.user.id };
+//
+//   const profile = serialize(await ensureProfile({ ...query }));
+//
+//   if (!profile) return { notFound: true };
+//
+//   return {
+//     props: {
+//       profile,
+//     },
+//   };
+// }
 
-  const session = await getServerSession(context.req, context.res, authOptions);
-  const query = { userId: session.user.id };
+const ProfilePage = () => {
+  const { data, error, loading } = useApiCall('profiles/mine', { method: 'GET' });
+  const { data: profile, error: serverError } = data || {};
 
-  const profile = serialize(await ensureProfile({ ...query }));
+  if (error || serverError)
+    return <p className="text-xl">Failed to load Profile: {(error || serverError).toString()}</p>;
+  if (!profile || loading) return <Loader className="mx-auto my-24" />;
 
-  return {
-    props: {
-      profile,
-    },
-  };
-}
-
-const ProfilePage = ({ profile }) => {
   const profileForm = {
     preferred_stance: profile.preferred_stance,
   };

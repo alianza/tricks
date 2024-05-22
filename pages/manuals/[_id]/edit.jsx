@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import ManualForm from '../../../components/forms/ManualForm';
 import { useApiCall } from '../../../lib/customHooks';
-import Loader from '../../../components/common/loader/loader';
+import Loader from '../../../components/common/Loader';
 
 const EditManual = () => {
   const router = useRouter();

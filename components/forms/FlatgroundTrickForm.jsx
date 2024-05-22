@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getFullTrickName, VN } from '@/lib/commonUtils';
-import { FLATGROUND_TRICKS_ENUM } from '@/models/constants/flatgroundTricks';
+import { capitalize, getDate, getFullTrickName, VN } from '@/lib/commonUtils';
+import { DIRECTIONS, FLATGROUND_TRICKS_ENUM } from '@/models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '@/lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, hiddenStyle } from '@/lib/clientUtils';
+import { apiCall, baseStyle, getEventNameValue, hiddenStyle } from '@/lib/clientUtils';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
+import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
+import Show from '../common/Show';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -17,20 +20,23 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
+  const [addAnother, setAddAnother] = useState(false);
   const [form, setForm] = useState({
     name: flatgroundTrick.name,
     preferred_stance: flatgroundTrick.preferred_stance,
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
+    landed: flatgroundTrick.landed,
+    landedAt: getDate(flatgroundTrick.landedAt) || getDate(),
   });
 
-  const { name, preferred_stance, stance, direction, rotation } = form;
+  const { name, preferred_stance, stance, direction, rotation, landed, landedAt } = form;
 
   useAsyncEffect(async () => {
     if (!newFlatgroundTrick) return;
     const { data } = await apiCall('profiles/mine/preferred_stance'); // Set the preferred stance to the user's preferred stance
-    setForm((oldForm) => ({ ...oldForm, preferred_stance: data.preferred_stance }));
+    setForm((prevForm) => ({ ...prevForm, preferred_stance: data.preferred_stance }));
   }, []);
 
   useEffect(() => {
@@ -42,39 +48,44 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
       const { _id } = router.query;
       await apiCall('flatgroundtricks', { _id, method: 'PATCH', data: form });
       await router.back();
-      toast.success(`Successfully updated flatground trick: ${getFullTrickName(form)}`);
+      toast.success(`Successfully updated Flatground Trick: ${getFullTrickName(form)}`);
     } catch (error) {
-      toast.error(`Failed to update flatground trick: ${error.message}`);
+      toast.error(`Failed to update Flatground Trick: ${error.message}`);
     }
   };
 
   const postData = async (form) => {
     try {
-      await apiCall('flatgroundtricks', { method: 'POST', data: form });
-      await router.back();
+      const { data } = await apiCall('flatgroundtricks', { method: 'POST', data: form });
+      if (addAnother) {
+        setForm(newFlatgroundTrickObj);
+      } else {
+        await router.push(`/flatgroundtricks/${data._id}`);
+      }
       closeAfterAdd();
-      toast.success(`Successfully added flatground trick: ${getFullTrickName(form)}`);
+      toast.success(`Successfully added Flatground Trick: ${getFullTrickName(form)}`);
       console.log(`'success'`, 'success');
     } catch (error) {
-      toast.error(`Failed to add flatground trick: ${error.message}`);
+      toast.error(`Failed to add Flatground Trick: ${error.message}`);
     }
   };
 
   const handleChange = (e) => {
-    const { target } = e;
-    let { value, name } = target;
+    const { name, value } = getEventNameValue(e);
 
-    if (target.type === 'checkbox') {
-      value = target.checked;
+    if (name === VN({ direction })) {
+      setForm((prevForm) => ({ ...prevForm, [name]: value, [VN({ rotation })]: value === DIRECTIONS.none ? 0 : 180 })); // Set rotation to 180 if direction is not none, and unset it if it is
     }
 
-    setForm({ ...form, [name]: value });
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    newFlatgroundTrick ? await postData(form) : await patchData(form);
+    const data = { ...form };
+    if (!landed) data.landedAt = null;
+    newFlatgroundTrick ? await postData(data) : await patchData(data);
     setLoading(false);
   };
 
@@ -131,10 +142,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
             </select>
           </label>
         </div>
-        {/*<label>*/}
-        {/*  Date*/}
-        {/*  <input type="date" name={VN({date})} value={date} onChange={handleChange} />*/}
-        {/*</label>*/}
         <p className="my-4">
           Full trick name:{' '}
           <b ref={trickNameRef}>
@@ -145,7 +152,30 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
             ))}
           </b>
         </p>
-        <LoaderButton isLoading={loading} />
+
+        <label title="Did you land this trick?">
+          <input
+            type="checkbox"
+            name={VN({ landed })}
+            checked={landed}
+            onChange={handleChange}
+            className="h-4 w-4 align-middle"
+          />
+          <span className="ml-2 align-middle">Landed</span>
+        </label>
+        <Show if={landed}>
+          <label>
+            Date Landed
+            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+          </label>
+        </Show>
+
+        <div className="flex items-center justify-start gap-4">
+          <LoaderButton isLoading={loading} label={`${newFlatgroundTrick ? 'Create' : 'Update'} Flatground Trick`} />
+          {newFlatgroundTrick && (
+            <AddAnotherCheckBox checked={addAnother} onChange={({ target }) => setAddAnother(target.checked)} />
+          )}
+        </div>
       </form>
     </TransitionScroll>
   );

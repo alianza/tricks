@@ -1,9 +1,9 @@
-import { capitalize, deepGet, isString, omit } from '../../../lib/commonUtils';
+import { capitalize, deepGet, formatDate, isString, omit } from '../../../lib/commonUtils';
 import { cloneElement } from 'react';
 
-const colPropsToOmit = ['key', 'alias', 'capitalize', 'onClick'];
+const colPropsToOmit = ['key', 'alias', 'capitalize', 'onClick', 'formatDate'];
 
-function GenericTableDataRow({ obj, columns, actions, onRowAction }) {
+function GenericTableDataRow({ obj, columns, actions, onRowAction, noValuePlaceHolder }) {
   const objColumnMap = {};
 
   columns.forEach((col) => {
@@ -33,21 +33,29 @@ function GenericTableDataRow({ obj, columns, actions, onRowAction }) {
       });
     });
 
+  const formatColumnValue = (colProps, value) => {
+    if (value === undefined || value === null) return noValuePlaceHolder;
+    let formattedValue = value.toString();
+    if (colProps?.formatDate) return formatDate(value);
+    if (colProps?.capitalize !== false) return capitalize(value);
+    return formattedValue;
+  };
+
   return (
     <tr className="relative after:absolute after:left-0 after:h-[2px] after:w-full after:bg-neutral-400">
       {Object.entries(objColumnMap).map(([colName, colData]) => {
         const { value, colProps } = colData;
         return colName === 'actions' ? (
-          <td key={colName} className="p-3 sm:p-4">
+          <td key={colName} className="px-2 py-3 sm:px-3 sm:py-4">
             <div className="flex justify-center gap-2">{formatActions(colName, value)}</div>
           </td>
         ) : (
-          <td key={colName} className="p-3 sm:p-4">
+          <td key={colName} className="px-2 py-3 sm:px-3 sm:py-4">
             <span
               {...omit(colProps, colPropsToOmit)}
               {...(colProps?.onClick && { onClick: () => colProps?.onClick(obj) })}
             >
-              {colProps?.capitalize === false ? value.toString() : capitalize(value)}
+              {formatColumnValue(colProps, value)}
             </span>
           </td>
         );

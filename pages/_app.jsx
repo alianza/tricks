@@ -8,6 +8,7 @@ const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.
   loading: () => <div />,
   ssr: false,
 });
+import 'react-transition-scroll/dist/index.css';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   useEffect(() => {

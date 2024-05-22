@@ -1,23 +1,27 @@
 .form {
+  @apply flex flex-col space-y-3;
+
   label {
-    @apply mt-3 block;
+    @apply block;
+    //@apply mt-3;
   }
 
-  input,
+  input:not([type='checkbox']),
   textarea,
   select {
-    @apply block w-full rounded p-2 text-neutral-900 font-semibold shadow-sm;
-  }
+    @apply block w-full rounded p-2 text-neutral-900 font-semibold shadow-sm dark:bg-neutral-700 dark:text-neutral-50 dark:ring-neutral-700/50 ring-blue-600/50;
+    color-scheme: light;
 
-  button {
-    @apply shadow;
-  }
-
-  select {
-    @apply dark:bg-neutral-700 dark:text-neutral-50 dark:ring-neutral-700/50 ring-blue-600/50;
+    @media (prefers-color-scheme: dark) {
+      color-scheme: dark;
+    }
 
     &:focus {
       @apply ring-2;
     }
+  }
+
+  button {
+    @apply shadow self-start;
   }
 }

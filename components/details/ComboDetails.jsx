@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { formatDate, getFullComboName } from '@/lib/commonUtils';
+import { getFullComboName } from '@/lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import TRICK_TYPES, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 import { apiCall, baseStyle, hiddenStyle } from '@/lib/clientUtils';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function ComboDetails({ combo }) {
   const router = useRouter();
@@ -26,7 +27,7 @@ export default function ComboDetails({ combo }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{combo.trick}</h1>
+      <h1 className="mb-1 text-5xl font-bold">{combo.trick}</h1>
       <div className="relative flex flex-wrap gap-2 after:absolute after:-bottom-2 after:w-full after:border-[1px] after:border-neutral-800 after:dark:border-neutral-400">
         {trickArray.map((trick, index) => (
           <div key={trick._id + index} className="flex gap-2">
@@ -45,14 +46,22 @@ export default function ComboDetails({ combo }) {
           {combo.trick}
         </h2>
       </div>
+      {combo.landed && combo.landedAt && (
+        <div className="mt-4">
+          <p>
+            <b className="mr-1">Landed: ✅</b>
+            <RenderSafeDate date={combo.landedAt} />
+          </p>
+        </div>
+      )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(combo.createdAt, { includeTime: true })}
+          <RenderSafeDate date={combo.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(combo.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={combo.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">
@@ -75,5 +84,7 @@ ComboDetails.propTypes = {
     userId: PropTypes.number.isRequired,
     createdAt: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
+    landed: PropTypes.bool.isRequired,
+    landedAt: PropTypes.string,
   }).isRequired,
 };

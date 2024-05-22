@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import utilStyles from '../../styles/utils.module.scss';
-import { formatDate, getFullManualName } from '../../lib/commonUtils';
+import { capitalize, getFullManualName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import { toast } from 'react-toastify';
 import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
+import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function ManualDetails({ manual }) {
   const router = useRouter();
@@ -22,24 +23,32 @@ export default function ManualDetails({ manual }) {
 
   return (
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
-      <h1 className="mb-1 text-3xl">{manual.trick}</h1>
+      <h1 className="mb-1 text-5xl font-bold">{manual.trick}</h1>
       <h3 className="text-xl">
-        <b>Preferred stance:</b> {manual.preferred_stance}
+        <b>Preferred stance:</b> {capitalize(manual.preferred_stance)}
       </h3>
       <div className="mt-4">
         <p>
           <b className="mr-1">Type:</b>
-          {manual.type}
+          {capitalize(manual.type)}
         </p>
       </div>
+      {manual.landed && manual.landedAt && (
+        <div className="mt-4">
+          <p>
+            <b className="mr-1">Landed: ✅</b>
+            <RenderSafeDate date={manual.landedAt} />
+          </p>
+        </div>
+      )}
       <div className="mt-2">
         <p>
           <b className="mr-1">Created at:</b>
-          {formatDate(manual.createdAt, { includeTime: true })}
+          <RenderSafeDate date={manual.createdAt} options={{ includeTime: true }} />
         </p>
         <p>
           <b className="mr-1">Updated at:</b>
-          {formatDate(manual.updatedAt, { includeTime: true })}
+          <RenderSafeDate date={manual.updatedAt} options={{ includeTime: true }} />
         </p>
       </div>
       <div className="mt-4 flex gap-2">
@@ -63,5 +72,7 @@ ManualDetails.propTypes = {
     createdAt: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
     trick: PropTypes.string.isRequired,
+    landed: PropTypes.bool.isRequired,
+    landedAt: PropTypes.string,
   }).isRequired,
 };

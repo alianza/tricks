@@ -17,19 +17,3 @@
         @apply text-neutral-100 bg-red-700 hover:bg-red-800 focus:ring-red-700/50; // For accessibility reasons, the red button is darker than the others
     }
 }
-
-.link {
-    @apply underline decoration-transparent transition-colors duration-300 ease-in-out;
-
-    &:hover {
-        @apply duration-100 decoration-inherit;
-    }
-
-    @media (hover: none) {
-        @apply decoration-inherit;
-    }
-}
-
-.responsiveContainer {
-    @apply sm:px-12 md:px-32 lg:px-48;
-}

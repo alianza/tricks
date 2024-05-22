@@ -30,15 +30,15 @@ export default async function handler(req, res) {
 
     case 'PATCH':
       try {
-        const grind = await Grind.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true });
+        const grind = await Grind.findOneAndUpdate({ _id, ...authQuery }, req.body, { new: true }).lean();
         if (!grind) return notFoundHandler(res, { entity: 'Grind', _id });
-        const data = {
-          ...grind.toObject(),
-          trick: getFullGrindName(grind),
-        };
+        const data = { ...grind, trick: getFullGrindName(grind) };
         res.status(200).json({ success: true, data });
       } catch (error) {
         console.error(error);
+        if (error.code === 11000) {
+          error.message = 'This Grind already exists'; // Return code for unique index constraint violation
+        }
         res.status(400).json({ success: false, error: error.message });
       }
       break;
