@@ -87,6 +87,10 @@ function GenericTable({
 
   useEffect(() => {
     setMaxPaginationWidth(tableRef.current?.clientWidth);
+
+    if (enablePagination && currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
   }, [currentPage, objArrayState]);
 
   useEffect(() => {
@@ -131,9 +135,9 @@ function GenericTable({
 
   const handleNext = () => deAnimate(() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages)));
 
-  const paginatedData = enablePagination ? paginate(objArrayState, currentPage, itemsPerPage) : objArrayState;
-
   const hasItems = !!objArrayState.length;
+
+  const paginatedData = enablePagination ? paginate(objArrayState, currentPage, itemsPerPage) : objArrayState;
 
   return (
     <div className={`${className} react-generic-table flex flex-col gap-2`}>
