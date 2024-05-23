@@ -6,7 +6,7 @@ import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import utilStyles from '../../styles/utils.module.scss';
 import logo from '../../public/logo.webp';
-import { navItems } from '../../lib/clientUtils';
+import { navItems } from '@/lib/clientUtils';
 import { Icon } from './DesktopNav';
 
 export default function Header() {

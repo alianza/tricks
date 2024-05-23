@@ -1,5 +1,5 @@
-import { getFullTrickName } from '../../lib/commonUtils';
-import { FLATGROUND_TRICKS, DIRECTIONS } from '../../models/constants/flatgroundTricks';
+import { getFullTrickName } from '@/lib/commonUtils';
+import { FLATGROUND_TRICKS, DIRECTIONS } from '@/models/constants/flatgroundTricks';
 import STANCES from '../../models/constants/stances';
 
 const {

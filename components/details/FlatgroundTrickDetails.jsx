@@ -5,7 +5,7 @@ import { capitalize, getFullTrickName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function FlatgroundTrickDetails({ flatgroundTrick: trick }) {

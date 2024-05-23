@@ -1,5 +1,5 @@
 import ProfileForm from '../../components/forms/ProfileForm';
-import Loader from '../../components/common/Loader';
+import Loader from '@/components/common/Loader';
 import { useApiCall } from '../../lib/customHooks';
 
 // For some reason doesn't work when navigating to /profile using router nav link

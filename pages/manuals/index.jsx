@@ -3,7 +3,7 @@ import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 import Filters from '../../components/common/Filters';
 
 const defaultFilters = { landed: 'any' };

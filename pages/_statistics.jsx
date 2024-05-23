@@ -1,5 +1,5 @@
 import Stats from '../components/stats/Stats';
-import { statsDef } from './index';
+import { statsDef } from './_index';
 
 const userStatsDef = {
   'Account Age': { endpoint: '/mine/profile/account-age', value: '...', suffix: 'Days' },

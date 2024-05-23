@@ -99,4 +99,4 @@ ComboSchema.pre('validate', async function (next) {
 //   next();
 // });
 
-export default mongoose.models.Combo || mongoose.model('Combo', ComboSchema);
+export default mongoose.models?.Combo || mongoose.model('Combo', ComboSchema);

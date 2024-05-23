@@ -19,12 +19,11 @@ import { useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/cust
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import Link from 'next/link';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 import { newComboObj } from '../../pages/new-combo';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import GenerateComboName from './GenerateComboName';
 import Show from '../common/Show';
-
 const { TRICK_TYPES_MODELS: TRICK_TYPES_MODELS_CONSTANT } = require('../../models/constants/trickTypes');
 
 const TRICK_TYPES_MAP = {
@@ -90,9 +89,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
     for (const trickType of TRICK_TYPES) await fetchTrickType(trickType); // Fetch all trick types
   }, []);
 
-  useEffect(() => {
-    resetFilters();
-  }, [trickType]);
+  // useEffect(() => resetFilters(), [trickType]);
 
   const fetchTrickType = async (trickType) => {
     if (trickType === TRICK_TYPES_MAP.all) return; // Skip fetching all tricks
@@ -182,7 +179,8 @@ const ComboForm = ({ combo, newCombo = true }) => {
 
   const stanceFilter = (trick) => (stance === 'all' ? true : trick.stance === stance);
   const searchFilter = (trick) => fuzzy(trick.trick, searchString, 0.6);
-  const directionFilter = (trick) => (direction === 'all' ? true : trick.direction === direction);
+  const directionFilter = (trick) =>
+    direction === 'all' ? true : !trick.direction ? true : trick.direction === direction;
   const allFilters = (arr) => arr.filter(stanceFilter).filter(searchFilter).filter(directionFilter);
   const getTrickArray = () =>
     trickType === TRICK_TYPES_MAP.all
@@ -277,7 +275,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
             allFilters(getTrickArray()).map((trick) => (
               <button
                 style={{ boxShadow: 'unset' }}
-                key={trick._id}
+                key={trick._id || trick.id}
                 onClick={(e) => addTrick(e, trick)}
                 className="group flex cursor-pointer items-center text-start"
               >

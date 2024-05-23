@@ -1,8 +1,10 @@
+'use client';
+
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { MinusIcon } from '@heroicons/react/20/solid';
 import NavButton from '../common/NavButton';
 import { useState } from 'react';
-import { navItems } from '../../lib/clientUtils';
+import { navItems } from '@/lib/clientUtils';
 
 function DesktopNav() {
   const [open, setOpen] = useState(false);

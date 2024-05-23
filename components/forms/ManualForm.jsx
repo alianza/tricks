@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '@/appComponents/transitionScroll/TransitionScroll';
 import Show from '../common/Show';
 
 const ManualForm = ({ manual, newManual = true }) => {

@@ -1,7 +1,7 @@
 import dbConnect from '../../../../lib/dbConnect';
 import Combo from '../../../../models/Combo';
-import { populateComboName, populateComboTrickName } from '../../../../lib/commonUtils';
-import { requireAuth } from '../../../../lib/serverUtils';
+import { populateComboName, populateComboTrickName } from '@/lib/commonUtils';
+import { requireAuth } from '@/lib/serverUtils';
 import Manual from '../../../../models/Manual';
 import Grind from '../../../../models/Grind';
 

@@ -22,6 +22,7 @@ export default function Layout({ children }) {
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/x-icon" href="/_favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
@@ -30,9 +31,9 @@ export default function Layout({ children }) {
 
       <Header />
 
-      <div className="min-h-full grow flex max-w-full w-full">
+      <div className="flex min-h-full w-full max-w-full grow">
         <DesktopNav />
-        <main className="mx-auto flex max-w-full xl:max-w-[calc(100%-theme(spacing.desktopNav))] flex-col px-4 py-8">
+        <main className="mx-auto flex max-w-full flex-col px-4 py-8 xl:max-w-[calc(100%-theme(spacing.desktopNav))]">
           {children}
         </main>
       </div>

@@ -84,4 +84,4 @@ ManualSchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
-export default mongoose.models.Manual || mongoose.model('Manual', ManualSchema);
+export default mongoose.models?.Manual || mongoose.model('Manual', ManualSchema);

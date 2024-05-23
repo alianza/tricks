@@ -12,7 +12,7 @@ const NavLink = ({ label, icon, href, onClick, exact, boldFix }) => {
     <Link
       href={href}
       onClick={onClick}
-      className={`drop-shadow-2xl hover:font-semibold text-start ${condition ? 'underline' : 'no-underline'}`}
+      className={`text-start drop-shadow-2xl hover:font-semibold ${condition ? 'underline' : 'no-underline'}`}
     >
       <Icon boldFix={boldFix} icon={icon} label={label} />
     </Link>
