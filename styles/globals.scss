@@ -38,6 +38,14 @@
         @apply decoration-inherit;
       }
   }
+
+  .hover-focus-visible {
+    @apply visible opacity-100 scale-y-100 [transition:opacity_300ms,visibility_300ms,transform_0s_0s];
+  }
+
+  .hover-focus-transition {
+    @apply [transition:opacity_350ms,visibility_350ms,transform_0ms_350ms];
+  }
 }
 
 .no-scroll {
