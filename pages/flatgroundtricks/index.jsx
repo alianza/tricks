@@ -81,7 +81,8 @@ export default function FlatgroundTricksPage() {
             entityName="flatground trick"
             newLink="/new-flatground-trick"
             showCount
-            defaultSortColumnIndex={4}
+            defaultSortColumnIndex={5}
+            defaultSortDirection="desc"
             enablePagination
           />
         </TransitionScroll>

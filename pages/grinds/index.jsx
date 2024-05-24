@@ -76,6 +76,7 @@ export default function GrindsPage() {
             newLink="/new-grind"
             showCount
             defaultSortColumnIndex={3}
+            defaultSortDirection="desc"
             enablePagination
           />
         </TransitionScroll>
