@@ -4,7 +4,6 @@ import { Bars3Icon, MinusIcon, XMarkIcon } from '@heroicons/react/20/solid';
 import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import utilStyles from '../../styles/utils.module.scss';
 import logo from '../../public/logo.webp';
 import { navItems } from '../../lib/clientUtils';
 import { Icon } from './DesktopNav';
@@ -89,7 +88,7 @@ export default function Header() {
               className="flex items-center gap-2 marker:content-none"
             >
               <summary className="flex cursor-pointer items-center justify-center gap-2 hover:font-semibold">
-                {detailsOpen ? <MinusIcon className="h-6 w-6" /> : newNav.icon} {newNav.label}
+                {detailsOpen ? <MinusIcon className="size-6" /> : newNav.icon} {newNav.label}
               </summary>
               <div className="flex flex-col items-start gap-2 py-2">
                 {newNav.children.map((item) => (

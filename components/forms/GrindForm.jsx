@@ -140,7 +140,7 @@ function GrindForm({ grind, newGrind = true }) {
             name={VN({ landed })}
             checked={landed}
             onChange={handleChange}
-            className="h-4 w-4 align-middle"
+            className="size-4 align-middle"
           />
           <span className="ml-2 align-middle">Landed</span>
         </label>

@@ -1,5 +1,5 @@
 import { shallowEqual } from '../../lib/commonUtils';
-import { ArrowPathIcon } from '@heroicons/react/20/solid';
+import { ArrowPathIcon } from '@heroicons/react/24/solid';
 import { useEffect, useRef, useState } from 'react';
 import Accordion from '../../lib/accordion';
 
@@ -29,7 +29,7 @@ function Filters({ filters = {}, onReset, children }) {
               className="ml-auto p-2 transition-transform hover:scale-110 hover:duration-100 active:scale-95"
               onClick={onReset}
             >
-              <ArrowPathIcon className="h-6 w-6" />
+              <ArrowPathIcon className="size-6" />
             </button>
           )}
         </div>

@@ -11,7 +11,7 @@ import {
   getDate,
 } from '../../lib/commonUtils';
 import utilStyles from '../../styles/utils.module.scss';
-import { ArrowPathIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/20/solid';
+import { ArrowPathIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
@@ -207,7 +207,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         {trickArray.length > 0 && (
           <ArrowUturnLeftIcon
             title="Remove last trick"
-            className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+            className="size-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
             onClick={() => setForm((prevForm) => ({ ...prevForm, trickArray: trickArray.slice(0, -1) }))}
           />
         )}
@@ -225,7 +225,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
               <MagnifyingGlassIcon
                 title="Search for tricks"
                 onClick={toggleSearch}
-                className={`scale-hover-xl h-6 w-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
+                className={`scale-hover-xl size-6 cursor-pointer ${searchActive ? 'opacity-25' : ''}`}
               />
             </div>
             {searchActive && (
@@ -281,7 +281,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
                 onClick={(e) => addTrick(e, trick)}
                 className="group flex cursor-pointer items-center text-start"
               >
-                <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
+                <PlusIcon className="size-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
                 <span className="underline-hover grow py-1 touch:!decoration-transparent">{trick.trick}</span>
               </button>
             ))
@@ -292,11 +292,11 @@ const ComboForm = ({ combo, newCombo = true }) => {
               target="_blank"
               className="group flex cursor-pointer items-center"
             >
-              <PlusIcon className="h-6 w-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
+              <PlusIcon className="size-6 shrink-0 transition-transform group-hover:scale-125 group-hover:duration-100 group-active:scale-95" />
               <b className="underline-hover py-1 group-hover:decoration-inherit group-hover:duration-100">
                 Add new {TRICK_TYPES_MODELS[trickType]}
               </b>
-              <ArrowTopRightOnSquareIcon className="ml-1 h-4 w-4" />
+              <ArrowTopRightOnSquareIcon className="ml-1 size-4" />
             </Link>
           )}
         </div>
@@ -307,7 +307,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
               name={VN({ landed })}
               checked={landed}
               onChange={handleChange}
-              className="ml-1 h-4 w-4 align-middle"
+              className="ml-1 size-4 align-middle"
             />
             <span className="ml-2 align-middle">Landed</span>
           </label>
@@ -326,7 +326,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
           <LoaderButton isLoading={loading} label={`${newCombo ? 'Create' : 'Update'} Combo`} />
           {TRICK_TYPES_NEW_PAGES[trickType] && (
             <ArrowPathIcon
-              className="h-6 w-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
+              className="size-6 cursor-pointer transition-transform hover:scale-110 active:scale-95 active:duration-75"
               title="Load new tricks"
               onClick={async () => await fetchTrickType(trickType)}
             />

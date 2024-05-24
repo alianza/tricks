@@ -1,5 +1,5 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { MinusIcon } from '@heroicons/react/20/solid';
+import { MinusIcon } from '@heroicons/react/24/solid';
 import NavButton from '../common/NavButton';
 import { useState } from 'react';
 import { navItems } from '../../lib/clientUtils';
@@ -23,7 +23,7 @@ function DesktopNav() {
             className="flex items-center gap-2 p-2 marker:content-none"
           >
             <summary className="flex cursor-pointer items-center gap-2 hover:font-semibold">
-              {open ? <MinusIcon className="h-6 w-6" /> : newNav.icon} {newNav.label}
+              {open ? <MinusIcon className="size-6" /> : newNav.icon} {newNav.label}
             </summary>
             <div className="flex flex-col gap-2 py-2 indent-8">
               {newNav.children.map((item) => (

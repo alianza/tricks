@@ -4,7 +4,7 @@ import utilStyles from '../../styles/utils.module.scss';
 import { getFullComboName } from '../../lib/commonUtils';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import TRICK_TYPES, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
@@ -33,7 +33,7 @@ export default function ComboDetails({ combo }) {
           <div key={trick._id + index} className="flex gap-2">
             <span className="whitespace-nowrap font-bold">{trick.trick}</span>
             {trickArray[index + 1] ? (
-              <ArrowRightIcon title="To" className="h-6 w-6" />
+              <ArrowRightIcon title="To" className="size-6" />
             ) : (
               trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES.flatground] && <span className="font-bold"> Out </span>
             )}

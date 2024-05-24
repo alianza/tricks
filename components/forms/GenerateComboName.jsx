@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { useEffect, useState } from 'react';
 import TRICK_TYPES_MAP, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
@@ -18,14 +18,14 @@ function GenerateComboName({ trickArray }) {
         <div key={trick._id + index} className="flex gap-2">
           <span className="whitespace-nowrap font-bold">{trick.trick}</span>
           {trickArray[index + 1] ? (
-            <ArrowRightIcon title="To" className="h-6 w-6" />
+            <ArrowRightIcon title="To" className="size-6" />
           ) : (
             trick.trickRef === TRICK_TYPES_MODELS[TRICK_TYPES_MAP.flatground] &&
             trickArray.length > 1 && <span className="font-bold"> Out </span>
           )}
           {trickArray.length === 1 && (
             <span className="font-bold">
-              <ArrowRightIcon title="To" className="mr-1 inline-block h-6 w-6" />
+              <ArrowRightIcon title="To" className="mr-1 inline-block size-6" />
               {dots}
             </span>
           )}

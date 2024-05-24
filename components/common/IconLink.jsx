@@ -12,7 +12,7 @@ const IconLink = ({ href = '', onClick, Icon, title, label, ...props }) => {
       {...props}
     >
       {label && <span className="text-nowrap">{label}</span>}
-      <Icon className="h-6 w-6 transition-transform duration-300 active:scale-95 group-hover:scale-[120%] group-hover:duration-75" />
+      <Icon className="size-6 transition-transform duration-300 active:scale-95 group-hover:scale-[120%] group-hover:duration-75" />
     </Link>
   );
 };
