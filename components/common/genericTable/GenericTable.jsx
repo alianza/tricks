@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 const duration = 250; // default auto-animate duration
 
-const chevronClassName = 'h-6 w-6 shrink-0 cursor-pointer';
+const chevronClassName = 'size-6 shrink-0 cursor-pointer';
 
 /**
  * Generic table component
@@ -39,6 +39,7 @@ const chevronClassName = 'h-6 w-6 shrink-0 cursor-pointer';
  *     @param [options.additionalInfoLink=''] {String} - Link to additional info
  *     @param [options.itemsPerPage=10] {Number} - Number of items to display per page
  *     @param [options.enablePagination=false] {Boolean} - Whether to enable pagination
+ *     @param [options.flipCollapsedActionsFromRowToLast=2] {Number} - Position from last row to flip collapsed actions to above actions button instead of below (to prevent overflow)
  * @returns {JSX.Element} - Generic table component
  * @constructor - GenericTable
  */
@@ -75,6 +76,7 @@ function GenericTable({
     additionalInfoLink = '',
     itemsPerPage = 10,
     enablePagination = false,
+    flipCollapsedActionsFromRowToLast = 2,
   } = options;
 
   const totalPages = Math.ceil(objArrayState.length / itemsPerPage);
@@ -141,7 +143,7 @@ function GenericTable({
 
   return (
     <div className={`${className} react-generic-table flex flex-col gap-2`}>
-      <div className={`flex flex-col items-center overflow-y-hidden drop-shadow`}>
+      <div className="flex flex-col items-center overflow-x-auto overflow-y-visible drop-shadow">
         <table ref={tableRef} className="relative mx-auto table-auto text-neutral-900 dark:text-neutral-100">
           <thead className="bg-neutral-200 dark:bg-neutral-700">
             <tr>
@@ -193,7 +195,7 @@ function GenericTable({
                 </td>
               </tr>
             </Show>
-            {paginatedData.map((obj) => (
+            {paginatedData.map((obj, index) => (
               <GenericTableDataRow
                 key={obj._id}
                 obj={obj}
@@ -201,6 +203,9 @@ function GenericTable({
                 actions={actions}
                 onRowAction={(...params) => onAction(...params, entityName)}
                 noValuePlaceHolder={noValuePlaceHolder}
+                index={index}
+                dataLength={paginatedData.length}
+                flipActionsFromToLast={flipCollapsedActionsFromRowToLast}
               />
             ))}
           </tbody>
@@ -214,20 +219,22 @@ function GenericTable({
                   </td>
                 </Show>
                 <Show if={showCount}>
-                  {columns.length > 2 && <td colSpan={columns.length - (newLink ? 2 : 1)} />}
-                  <td className="flex flex-col items-end">
-                    <span>
-                      {objArrayState.length} {showCountPrefix} {capitalize(entityName) + sOrNoS(objArrayState.length)}
-                    </span>
-                    <Show if={additionalInfo}>
-                      {additionalInfoLink ? (
-                        <Link href={additionalInfoLink} className="underline-hover text-sm">
-                          {additionalInfo}
-                        </Link>
-                      ) : (
-                        <span className="block text-sm">{additionalInfo}</span>
-                      )}
-                    </Show>
+                  <td colSpan={newLink ? columns.length - 1 : columns.length}>
+                    <div className="flex flex-col items-end">
+                      <span>
+                        {objArrayState.length} {showCountPrefix} {capitalize(entityName) + sOrNoS(objArrayState.length)}
+                      </span>
+
+                      <Show if={additionalInfo}>
+                        {additionalInfoLink ? (
+                          <Link href={additionalInfoLink} className="underline-hover text-sm">
+                            {additionalInfo}
+                          </Link>
+                        ) : (
+                          <span className="block text-sm">{additionalInfo}</span>
+                        )}
+                      </Show>
+                    </div>
                   </td>
                 </Show>
               </tr>
