@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
 import { capitalize, getDate, VN } from '../../lib/commonUtils';
-import { DEFAULT_MANUAL, MANUALS_ENUM } from '../../models/constants/manuals';
+import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
 import TransitionScroll from 'react-transition-scroll';
 import Show from '../common/Show';
+import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
 
 const ManualForm = ({ manual, newManual = true }) => {
   const router = useRouter();
@@ -16,7 +17,6 @@ const ManualForm = ({ manual, newManual = true }) => {
 
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    preferred_stance: manual.preferred_stance,
     type: manual.type,
     landed: manual.landed,
     landedAt: getDate(manual.landedAt) || getDate(),
@@ -68,13 +68,7 @@ const ManualForm = ({ manual, newManual = true }) => {
       <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
         <h1 className="text-3xl">{newManual ? 'New Manual' : 'Edit Manual'}</h1>
 
-        <label>
-          Preferred stance
-          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-            <option value="regular">Regular</option>
-            <option value="goofy">Goofy</option>
-          </select>
-        </label>
+        <PreferredStanceSelect preferredStance={preferred_stance} onChange={handleChange} />
 
         <label>
           Type

@@ -12,6 +12,7 @@ import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
 import Show from '../common/Show';
+import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
@@ -23,7 +24,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   const [addAnother, setAddAnother] = useState(false);
   const [form, setForm] = useState({
     name: flatgroundTrick.name,
-    preferred_stance: flatgroundTrick.preferred_stance,
     stance: flatgroundTrick.stance,
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
@@ -92,13 +92,9 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle}>
       <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
         <h1 className="text-3xl">{newFlatgroundTrick ? 'New Flatground Trick' : 'Edit Flatground Trick'}</h1>
-        <label>
-          Preferred stance
-          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-            <option value="regular">Regular</option>
-            <option value="goofy">Goofy</option>
-          </select>
-        </label>
+
+        <PreferredStanceSelect preferredStance={preferred_stance} onChange={handleChange} />
+
         <div className="flex justify-between gap-1">
           <label>
             Stance

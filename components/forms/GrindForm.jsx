@@ -12,6 +12,7 @@ import TransitionScroll from 'react-transition-scroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newGrindObj } from '../../pages/new-grind';
 import Show from '../common/Show';
+import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
 
 function GrindForm({ grind, newGrind = true }) {
   const router = useRouter();
@@ -23,7 +24,6 @@ function GrindForm({ grind, newGrind = true }) {
   const [addAnother, setAddAnother] = useState(false);
   const [form, setForm] = useState({
     name: grind.name,
-    preferred_stance: grind.preferred_stance,
     stance: grind.stance,
     direction: grind.direction,
     landed: grind.landed,
@@ -84,13 +84,7 @@ function GrindForm({ grind, newGrind = true }) {
       <form onSubmit={handleSubmit} className={`${styles.form} max-w-xl`}>
         <h1 className="text-3xl">{newGrind ? 'New Grind' : 'Edit Grind'}</h1>
 
-        <label>
-          Preferred stance
-          <select name={VN({ preferred_stance })} value={preferred_stance} onChange={handleChange} required>
-            <option value="regular">Regular</option>
-            <option value="goofy">Goofy</option>
-          </select>
-        </label>
+        <PreferredStanceSelect preferredStance={preferred_stance} onChange={handleChange} />
 
         <div className="flex justify-between gap-1">
           <label>
