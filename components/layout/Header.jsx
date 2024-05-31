@@ -48,8 +48,8 @@ export default function Header() {
         {session ? (
           <>
             <span className="hidden md:inline">Signed in as: </span>
-            <Link className="underline-hover inline items-center gap-2 xsm:inline-flex" href="/profile">
-              <b className="hidden xsm:inline">{session.user?.name}</b>
+            <Link className="underline-hover xs:inline-flex inline items-center gap-2" href="/profile">
+              <b className="xs:inline hidden">{session.user?.name}</b>
               <Image
                 src={session.user?.image}
                 className="rounded-full drop-shadow transition-transform hover:scale-110 active:scale-100"
