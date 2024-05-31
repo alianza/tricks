@@ -7,6 +7,7 @@ import Loader from '../Loader';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Show from '../Show';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const duration = 250; // default auto-animate duration
 
@@ -59,6 +60,7 @@ function GenericTable({
   const [currentPage, setCurrentPage] = useState(1);
   const tableRef = useRef(null);
   const [maxPaginationWidth, setMaxPaginationWidth] = useState(tableRef.current?.clientWidth);
+  const router = useRouter();
 
   const {
     showCount = false,
@@ -86,6 +88,10 @@ function GenericTable({
   useEffect(() => {
     sort(getColumnProp(columns[defaultSortColumnIndex]), defaultSortDirection); // Default ascending sort on first column
   }, []);
+
+  useEffect(() => {
+    if (router.query.page) setCurrentPage(parseInt(router.query.page));
+  }, [router.query]);
 
   useEffect(() => {
     setMaxPaginationWidth(tableRef.current?.clientWidth);
@@ -130,12 +136,21 @@ function GenericTable({
 
   const getColumnProp = (col) => (isString(col) ? col : Object.keys(col)[0]);
 
-  const paginate = (array, page_number, page_size) =>
-    array.slice((page_number - 1) * page_size, page_number * page_size);
+  const paginate = (data, pageNumber, pageSize) => data.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 
-  const handlePrevious = () => deAnimate(() => setCurrentPage((prevPage) => Math.max(prevPage - 1, 1)));
+  const handlePrevious = () =>
+    deAnimate(async () => {
+      const page = Math.max(currentPage - 1, 1);
+      setCurrentPage(page);
+      await router.push({ query: { ...router.query, page } });
+    });
 
-  const handleNext = () => deAnimate(() => setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages)));
+  const handleNext = () =>
+    deAnimate(async () => {
+      const page = Math.min(currentPage + 1, totalPages);
+      setCurrentPage(page);
+      await router.push({ query: { ...router.query, page } });
+    });
 
   const hasItems = !!objArrayState.length;
 
@@ -143,7 +158,7 @@ function GenericTable({
 
   return (
     <div className={`${className} react-generic-table flex flex-col gap-2`}>
-      <div className="flex flex-col items-center overflow-x-auto overflow-y-visible drop-shadow">
+      <div className="flex flex-col items-center overflow-y-hidden drop-shadow">
         <table ref={tableRef} className="relative mx-auto table-auto text-neutral-900 dark:text-neutral-100">
           <thead className="bg-neutral-200 dark:bg-neutral-700">
             <tr>
@@ -181,10 +196,7 @@ function GenericTable({
               })}
             </tr>
           </thead>
-          <tbody
-            className="bg-neutral-50 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:bg-neutral-400 dark:bg-neutral-800"
-            ref={tableBody}
-          >
+          <tbody className="border-b-2 border-neutral-400 bg-neutral-50 dark:bg-neutral-800" ref={tableBody}>
             <Show if={!hasItems}>
               <tr>
                 <td className="p-2 sm:p-4" colSpan={columns.length}>
