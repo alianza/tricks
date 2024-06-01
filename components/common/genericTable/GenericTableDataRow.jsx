@@ -57,7 +57,7 @@ function GenericTableDataRow({
         <Show
           if={colName === 'actions'}
           show={() => (
-            <td key={colName} className="p-0 md:px-3 md:py-2">
+            <td key={colName} className="p-0 md:p-2">
               <div className="-mb-[2px] flex flex-col justify-center border-2 border-neutral-400 md:flex-row md:gap-2 md:border-none">
                 {formatActions(colName, value)}
               </div>
