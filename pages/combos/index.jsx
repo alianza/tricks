@@ -41,6 +41,7 @@ export default function CombosPage() {
   }, [filters]);
 
   useEffect(() => {
+    if (!router.isReady) return;
     setFilters({ ...defaultFilters, ...pick(parseUrlQueryParams(router.query), Object.keys(defaultFilters)) }); // set filters from url params
     router.push({ query: { ...filters, ...router.query } }, undefined, { shallow: true }); // set new url params with filters including current params E.g. page number
   }, [router.isReady]);
