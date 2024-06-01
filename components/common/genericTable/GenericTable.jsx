@@ -98,7 +98,7 @@ function GenericTable({
 
     if (enablePagination && currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
-      // router.push({ query: { ...router.query, page: totalPages } });
+      router.push({ query: { ...router.query, page: totalPages } }); // Update url params if page is out of bounds
     }
   }, [currentPage, objArrayState]);
 

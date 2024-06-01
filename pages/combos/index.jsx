@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import {
@@ -7,10 +7,11 @@ import {
   getCommonActions,
   hiddenStyle,
   landedAtCol,
+  parseUrlQueryParams,
   stanceSelectOptions,
   triggerLoader,
 } from '../../lib/clientUtils';
-import { stringifyValues } from '../../lib/commonUtils';
+import { pick, stringifyValues } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
@@ -29,11 +30,20 @@ export default function CombosPage() {
       const searchParams = new URLSearchParams(stringifyValues(filters));
       const { data } = await apiCall(`combos`, { method: 'GET', searchParams });
       setCombos(data);
+
+      if (router.isReady) {
+        router.push({ query: { ...router.query, ...filters } }, undefined, { shallow: true }); // set new url params with filters including current params E.g. page number
+      }
     } catch (error) {
       setCombos([]);
       toast.error(`Failed to load combos: ${error.message}`);
     }
   }, [filters]);
+
+  useEffect(() => {
+    setFilters({ ...defaultFilters, ...pick(parseUrlQueryParams(router.query), Object.keys(defaultFilters)) }); // set filters from url params
+    router.push({ query: { ...filters, ...router.query } }, undefined, { shallow: true }); // set new url params with filters including current params E.g. page number
+  }, [router.isReady]);
 
   const handleAction = async (action, obj) => {
     switch (action) {
