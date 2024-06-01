@@ -98,6 +98,7 @@ function GenericTable({
 
     if (enablePagination && currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
+      // router.push({ query: { ...router.query, page: totalPages } });
     }
   }, [currentPage, objArrayState]);
 
@@ -215,9 +216,6 @@ function GenericTable({
                 actions={actions}
                 onRowAction={(...params) => onAction(...params, entityName)}
                 noValuePlaceHolder={noValuePlaceHolder}
-                index={index}
-                dataLength={paginatedData.length}
-                flipActionsFromToLast={flipCollapsedActionsFromRowToLast}
               />
             ))}
           </tbody>

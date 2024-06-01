@@ -1,19 +1,9 @@
 import { capitalize, deepGet, formatDate, isString, omit } from '../../../lib/commonUtils';
 import { cloneElement } from 'react';
-import Show from '../Show';
 
 const colPropsToOmit = ['key', 'alias', 'capitalize', 'onClick', 'formatDate'];
 
-function GenericTableDataRow({
-  obj,
-  columns,
-  actions,
-  onRowAction,
-  noValuePlaceHolder,
-  index = 0,
-  dataLength = 0,
-  flipActionsFromToLast = 2,
-}) {
+function GenericTableDataRow({ obj, columns, actions, onRowAction, noValuePlaceHolder }) {
   const objColumnMap = {};
 
   columns.forEach((col) => {
@@ -53,28 +43,24 @@ function GenericTableDataRow({
 
   return (
     <tr className="after:absolute after:left-0 after:h-[2px] after:w-full after:bg-neutral-400">
-      {Object.entries(objColumnMap).map(([colName, { value, colProps }]) => (
-        <Show
-          if={colName === 'actions'}
-          show={() => (
-            <td key={colName} className="p-0 md:p-2">
-              <div className="-mb-[2px] flex flex-col justify-center border-2 border-neutral-400 md:flex-row md:gap-2 md:border-none">
-                {formatActions(colName, value)}
-              </div>
-            </td>
-          )}
-          else={() => (
-            <td key={colName} className="px-2 py-3">
-              <span
-                {...omit(colProps, colPropsToOmit)}
-                {...(colProps?.onClick && { onClick: () => colProps?.onClick(obj) })}
-              >
-                {formatColumnValue(colProps, value)}
-              </span>
-            </td>
-          )}
-        />
-      ))}
+      {Object.entries(objColumnMap).map(([colName, { value, colProps }]) =>
+        colName === 'actions' ? (
+          <td key={colName} className="p-0 md:p-2">
+            <div className="-mb-[2px] flex flex-col justify-center border-2 border-neutral-400 md:flex-row md:gap-2 md:border-none">
+              {formatActions(colName, value)}
+            </div>
+          </td>
+        ) : (
+          <td key={colName} className="px-2 py-3">
+            <span
+              {...omit(colProps, colPropsToOmit)}
+              {...(colProps?.onClick && { onClick: () => colProps?.onClick(obj) })}
+            >
+              {formatColumnValue(colProps, value)}
+            </span>
+          </td>
+        ),
+      )}
     </tr>
   );
 }
