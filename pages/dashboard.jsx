@@ -43,8 +43,8 @@ export default function Index() {
   useAsyncEffect(async () => {
     const fetchAndSetData = async (endpoint, setData) => {
       try {
-        const params = new URLSearchParams({ landed: 'true' });
-        const { data } = await apiCall(`${endpoint}?${params}`, { method: 'GET' });
+        const searchParams = new URLSearchParams({ landed: 'true' });
+        const { data } = await apiCall(`${endpoint}`, { method: 'GET', searchParams });
         setData((prevData) => ({ ...prevData, data }));
       } catch (error) {
         toast.error(`Failed to fetch ${endpoint}: ${error.message}`);
@@ -53,8 +53,8 @@ export default function Index() {
 
     const fetchAndSetCount = async (endpoint, setData) => {
       try {
-        const params = new URLSearchParams({ countOnly: 'true' });
-        const { data } = await apiCall(`${endpoint}?${params}`, { method: 'GET' });
+        const searchParams = new URLSearchParams({ countOnly: 'true' });
+        const { data } = await apiCall(`${endpoint}`, { method: 'GET', searchParams });
         setData((prevData) => ({ ...prevData, count: data }));
       } catch (error) {
         toast.error(`Failed to fetch total ${endpoint} count: ${error.message}`);
@@ -89,9 +89,9 @@ export default function Index() {
           if (!confirm(`Are you sure you want to delete "${obj.trick}"?`)) return;
           const [endpoint, setData] = endpointSetterMap[entityType];
           if (!endpoint) return toast.error(`Failed to delete ${obj.trick}: Invalid entity type: ${entityType}`);
-          const params = new URLSearchParams({ landed: 'true' });
+          const searchParams = new URLSearchParams({ landed: 'true' });
           await apiCall(endpoint, { method: 'DELETE', id: obj._id });
-          const { data } = await apiCall(`${endpoint}?${params}`, { method: 'GET' });
+          const { data } = await apiCall(`${endpoint}`, { method: 'GET', searchParams });
           setData((prevData) => ({ ...prevData, data }));
           toast.success(`Successfully deleted ${obj.trick}`);
         } catch (error) {

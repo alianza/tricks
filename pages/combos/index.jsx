@@ -26,8 +26,8 @@ export default function CombosPage() {
   useAsyncEffect(async () => {
     try {
       triggerLoader(router);
-      const params = new URLSearchParams(stringifyValues(filters));
-      const { data } = await apiCall(`combos?${params}`, { method: 'GET' });
+      const searchParams = new URLSearchParams(stringifyValues(filters));
+      const { data } = await apiCall(`combos`, { method: 'GET', searchParams });
       setCombos(data);
     } catch (error) {
       setCombos([]);
