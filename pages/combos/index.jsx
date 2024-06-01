@@ -22,7 +22,8 @@ export default function CombosPage() {
 
   useAsyncEffect(async () => {
     try {
-      const { data } = await apiCall('combos/search', { method: 'POST', body: JSON.stringify(filters) });
+      const params = new URLSearchParams(stringifyValues(filters));
+      const { data } = await apiCall(`combos?${params}`, { method: 'GET' });
       setCombos(data);
     } catch (error) {
       setCombos([]);
@@ -45,9 +46,6 @@ export default function CombosPage() {
         break;
     }
   };
-
-  const filteredCombos =
-    filters.landed === 'any' ? combos : combos?.filter((combo) => filters.landed === (combo.landed ? 'yes' : 'no'));
 
   return (
     <div className="flex flex-col gap-12">
@@ -103,15 +101,15 @@ export default function CombosPage() {
                 Any
               </option>
               <hr />
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
           </label>
         </Filters>
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={filteredCombos}
+            objArray={combos}
             columns={[{ trick: { className: 'text-sm font-bold', alias: 'Combo name' } }, landedAtCol]}
             actions={getCommonActions('combos')}
             onAction={handleAction}

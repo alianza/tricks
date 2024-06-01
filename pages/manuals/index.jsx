@@ -5,6 +5,7 @@ import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol } from '
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
+import { stringifyValues } from '../../lib/commonUtils';
 
 const defaultFilters = { landed: 'any' };
 
@@ -14,13 +15,14 @@ export default function ManualsPage() {
 
   useAsyncEffect(async () => {
     try {
-      const { data } = await apiCall('manuals', { method: 'GET' });
+      const searchParams = new URLSearchParams(stringifyValues(filters));
+      const { data } = await apiCall('manuals', { method: 'GET', searchParams });
       setManuals(data);
     } catch (error) {
       setManuals([]);
       toast.error(`Failed to not load manuals: ${error.message}`);
     }
-  }, []);
+  }, [filters]);
 
   const handleAction = async (action, obj) => {
     switch (action) {
@@ -37,9 +39,6 @@ export default function ManualsPage() {
         break;
     }
   };
-
-  const filteredManuals =
-    filters.landed === 'any' ? manuals : manuals.filter((manual) => filters.landed === (manual.landed ? 'yes' : 'no'));
 
   return (
     <div className="flex flex-col gap-12">
@@ -62,15 +61,15 @@ export default function ManualsPage() {
                 Any
               </option>
               <hr />
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
           </label>
         </Filters>
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={filteredManuals}
+            objArray={manuals}
             columns={[{ type: { className: 'text-sm font-bold' } }, landedAtCol]}
             actions={getCommonActions('manuals')}
             onAction={handleAction}

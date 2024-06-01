@@ -12,14 +12,18 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const extraQuery = { ...(query.landedOnly !== undefined && { landed: true }) };
+        const where = { ...authQuery };
 
-        if (query.countOnly !== undefined) {
-          const count = await Grind.countDocuments({ ...authQuery, ...extraQuery });
+        if (query.landed && query.landed !== 'any') {
+          query.landed === 'true' ? (where.landed = true) : (where.landed = { $ne: true }); // If landed is true, set landed to true, otherwise set landed to not true (if landed is false or undefined)
+        }
+
+        if (query.countOnly === 'true') {
+          const count = await Grind.countDocuments(where);
           return res.status(200).json({ success: true, data: count });
         }
 
-        const grinds = await Grind.find({ ...authQuery, ...extraQuery }).lean();
+        const grinds = await Grind.find(where).lean();
         const data = grinds.map((grind) => ({ ...grind, trick: getFullGrindName(grind) }));
         res.status(200).json({ success: true, data });
       } catch (error) {

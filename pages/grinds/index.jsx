@@ -5,6 +5,7 @@ import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCo
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
+import { stringifyValues } from '../../lib/commonUtils';
 
 const defaultFilters = { landed: 'any' };
 
@@ -14,13 +15,14 @@ export default function GrindsPage() {
 
   useAsyncEffect(async () => {
     try {
-      const { data } = await apiCall('grinds', { method: 'GET' });
+      const searchParams = new URLSearchParams(stringifyValues(filters));
+      const { data } = await apiCall('grinds', { method: 'GET', searchParams });
       setGrinds(data);
     } catch (error) {
       setGrinds([]);
       toast.error(`Failed to load grinds: ${error.message}`);
     }
-  }, []);
+  }, [filters]);
 
   const handleAction = async (action, obj) => {
     switch (action) {
@@ -37,8 +39,6 @@ export default function GrindsPage() {
         break;
     }
   };
-  const filteredGrinds =
-    filters.landed === 'any' ? grinds : grinds.filter((grind) => filters.landed === (grind.landed ? 'yes' : 'no'));
 
   return (
     <div className="flex flex-col gap-12">
@@ -60,15 +60,15 @@ export default function GrindsPage() {
                 Any
               </option>
               <hr />
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
           </label>
         </Filters>
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={filteredGrinds}
+            objArray={grinds}
             columns={['stance', 'direction', 'name', trickCol, landedAtCol]}
             actions={getCommonActions('grinds')}
             entityName="grind"

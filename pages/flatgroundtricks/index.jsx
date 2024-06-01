@@ -5,6 +5,7 @@ import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCo
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
+import { stringifyValues } from '../../lib/commonUtils';
 
 const defaultFilters = { landed: 'any' };
 
@@ -14,13 +15,14 @@ export default function FlatgroundTricksPage() {
 
   useAsyncEffect(async () => {
     try {
-      const { data } = await apiCall('flatgroundtricks', { method: 'GET' });
+      const searchParams = new URLSearchParams(stringifyValues(filters));
+      const { data } = await apiCall(`flatgroundtricks`, { method: 'GET', searchParams });
       setFlatgroundTricks(data);
     } catch (error) {
       setFlatgroundTricks([]);
       toast.error(`Failed to load Flatground Tricks: ${error.message}`);
     }
-  }, []);
+  }, [filters]);
 
   const handleAction = async (action, obj) => {
     switch (action) {
@@ -37,11 +39,6 @@ export default function FlatgroundTricksPage() {
         break;
     }
   };
-
-  const filteredFlatgroundTricks =
-    filters.landed === 'any'
-      ? flatgroundTricks
-      : flatgroundTricks?.filter((trick) => filters.landed === (trick.landed ? 'yes' : 'no'));
 
   return (
     <div className="flex flex-col gap-12">
@@ -66,15 +63,15 @@ export default function FlatgroundTricksPage() {
                 Any
               </option>
               <hr />
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
             </select>
           </label>
         </Filters>
 
         <TransitionScroll hiddenStyle={hiddenStyle} baseStyle={baseStyle} className="flex flex-col">
           <GenericTable
-            objArray={filteredFlatgroundTricks}
+            objArray={flatgroundTricks}
             columns={['stance', 'direction', 'rotation', 'name', trickCol, landedAtCol]}
             actions={getCommonActions('flatgroundtricks')}
             onAction={handleAction}
