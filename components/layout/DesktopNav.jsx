@@ -34,6 +34,7 @@ function DesktopNav() {
           <NavButton label={<Icon icon={stats.icon} label={stats.label} />} href={stats.href} />
           <NavButton label={<Icon icon={profile.icon} label={profile.label} />} href={profile.href} />
           <NavButton
+            as="a"
             className="mt-auto"
             onClick={() => signOut({ callbackUrl: '/' })}
             label={<Icon icon={signOutNav.icon} label={signOutNav.label} />}
@@ -41,6 +42,7 @@ function DesktopNav() {
         </>
       ) : (
         <NavButton
+          as="a"
           className="mt-auto"
           onClick={() => signIn()}
           label={<Icon icon={signInNav.icon} label={signInNav.label} />}
