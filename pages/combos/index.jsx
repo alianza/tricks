@@ -28,10 +28,10 @@ export default function CombosPage() {
     try {
       triggerLoader(router);
       const searchParams = new URLSearchParams(stringifyValues(filters));
-      const { data } = await apiCall(`combos`, { method: 'GET', searchParams });
+      const { data = [] } = await apiCall(`combos`, { method: 'GET', searchParams });
       setCombos(data);
 
-      if (router.isReady) {
+      if (router.isReady && combos) {
         router.push({ query: { ...router.query, ...filters } }, undefined, { shallow: true }); // set new url params with filters including current params E.g. page number
       }
     } catch (error) {
