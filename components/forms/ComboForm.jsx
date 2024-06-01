@@ -1,23 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import formStyles from './form.module.scss';
-import {
-  capitalize,
-  fuzzy,
-  getFullComboName,
-  stanceSelectOptions,
-  directionSelectOptions,
-  VN,
-  getDate,
-} from '../../lib/commonUtils';
-import utilStyles from '../../styles/utils.module.scss';
+import { capitalize, fuzzy, getDate, getFullComboName, VN } from '../../lib/commonUtils';
 import { ArrowPathIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam, useTabActive } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
-import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
+import {
+  apiCall,
+  baseStyle,
+  directionSelectOptions,
+  getEventKeyValue,
+  hiddenStyle,
+  stanceSelectOptions,
+} from '../../lib/clientUtils';
 import Link from 'next/link';
 import TransitionScroll from 'react-transition-scroll';
 import { newComboObj } from '../../pages/new-combo';

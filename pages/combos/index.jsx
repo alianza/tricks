@@ -1,8 +1,15 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol } from '../../lib/clientUtils';
-import { stanceSelectOptions } from '../../lib/commonUtils';
+import {
+  apiCall,
+  baseStyle,
+  getCommonActions,
+  hiddenStyle,
+  landedAtCol,
+  stanceSelectOptions,
+} from '../../lib/clientUtils';
+import { stringifyValues } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
