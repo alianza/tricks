@@ -1,20 +1,31 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCol } from '../../lib/clientUtils';
+import {
+  apiCall,
+  baseStyle,
+  getCommonActions,
+  hiddenStyle,
+  landedAtCol,
+  trickCol,
+  triggerLoader,
+} from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
 import { stringifyValues } from '../../lib/commonUtils';
+import { useRouter } from 'next/router';
 
 const defaultFilters = { landed: 'any' };
 
 export default function GrindsPage() {
   const [grinds, setGrinds] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
+  const router = useRouter();
 
   useAsyncEffect(async () => {
     try {
+      triggerLoader(router);
       const searchParams = new URLSearchParams(stringifyValues(filters));
       const { data } = await apiCall('grinds', { method: 'GET', searchParams });
       setGrinds(data);

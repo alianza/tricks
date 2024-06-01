@@ -8,20 +8,24 @@ import {
   hiddenStyle,
   landedAtCol,
   stanceSelectOptions,
+  triggerLoader,
 } from '../../lib/clientUtils';
 import { stringifyValues } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
+import { useRouter } from 'next/router';
 
 const defaultFilters = { grind: false, manual: false, stance: 'all', landed: 'any' };
 
 export default function CombosPage() {
   const [combos, setCombos] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
+  const router = useRouter();
 
   useAsyncEffect(async () => {
     try {
+      triggerLoader(router);
       const params = new URLSearchParams(stringifyValues(filters));
       const { data } = await apiCall(`combos?${params}`, { method: 'GET' });
       setCombos(data);

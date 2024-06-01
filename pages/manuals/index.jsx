@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
-import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol } from '../../lib/clientUtils';
+import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, triggerLoader } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
 import TransitionScroll from 'react-transition-scroll';
 import Filters from '../../components/common/Filters';
 import { stringifyValues } from '../../lib/commonUtils';
+import { useRouter } from 'next/router';
 
 const defaultFilters = { landed: 'any' };
 
 export default function ManualsPage() {
   const [manuals, setManuals] = useState(null);
   const [filters, setFilters] = useState(defaultFilters);
+  const router = useRouter();
 
   useAsyncEffect(async () => {
     try {
+      triggerLoader(router);
       const searchParams = new URLSearchParams(stringifyValues(filters));
       const { data } = await apiCall('manuals', { method: 'GET', searchParams });
       setManuals(data);
