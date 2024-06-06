@@ -3,6 +3,10 @@ import { DEFAULT_FLATGROUND_TRICK, DIRECTIONS } from '../models/constants/flatgr
 import { DEFAULT_STANCE } from '../models/constants/stances';
 import { getDateString } from '../lib/commonUtils';
 
+/**
+ * The default Flatground Trick object
+ * @type {FlatgroundTrick}
+ */
 export const newFlatgroundTrickObj = {
   name: DEFAULT_FLATGROUND_TRICK,
   stance: DEFAULT_STANCE,

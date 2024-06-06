@@ -6,6 +6,7 @@ import Loader from '../../../components/common/Loader';
 const EditCombo = () => {
   const router = useRouter();
   const { _id } = router.query;
+
   const { data, error, isLoading: loading } = useApiCall(_id && 'combos', { method: 'GET', _id });
   const { data: combo, error: serverError } = data || {};
 

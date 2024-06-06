@@ -11,6 +11,12 @@ import TransitionScroll from 'react-transition-scroll';
 import Show from '../common/Show';
 import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
 
+/**
+ * @param manual {Manual} - The Manual to edit or create
+ * @param newManual {boolean} - Whether the form is for a new Manual or an existing one
+ * @returns {JSX.Element} - The Manual form
+ * @constructor
+ */
 const ManualForm = ({ manual, newManual = true }) => {
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');

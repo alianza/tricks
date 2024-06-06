@@ -4,6 +4,10 @@ import { DEFAULT_STANCE } from '../models/constants/stances';
 import { DIRECTIONS } from '../models/constants/flatgroundTricks';
 import { getDateString } from '../lib/commonUtils';
 
+/**
+ * The default Grind object
+ * @type {Grind}
+ */
 export const newGrindObj = {
   name: DEFAULT_GRIND,
   stance: DEFAULT_STANCE,

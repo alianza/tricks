@@ -63,6 +63,14 @@ const trickTypeHasStance = (trickType) =>
 const trickTypeHasDirection = (trickType) =>
   trickType === TRICK_TYPES_MAP.grind || trickType === TRICK_TYPES_MAP.flatground || trickType === TRICK_TYPES_MAP.all;
 
+/**
+ *
+ * @param combo {Combo}
+ * @param newCombo {boolean} - Whether the form is for a new Combo or an existing one
+ * @returns {JSX.Element} - The Combo form
+ * @constructor
+ */
+
 const ComboForm = ({ combo, newCombo = true }) => {
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');

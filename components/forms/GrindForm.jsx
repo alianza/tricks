@@ -14,6 +14,12 @@ import { newGrindObj } from '../../pages/new-grind';
 import Show from '../common/Show';
 import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
 
+/**
+ * @param grind {Grind} - The Grind to edit or create
+ * @param newGrind {boolean} - Whether the form is for a new Grind or an existing one
+ * @returns {JSX.Element} - The Grind form
+ */
+
 function GrindForm({ grind, newGrind = true }) {
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
