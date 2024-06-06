@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getDate, getFullTrickName, VN } from '../../lib/commonUtils';
+import { capitalize, getDateString, getFullTrickName, VN } from '../../lib/commonUtils';
 import { DIRECTIONS, FLATGROUND_TRICKS_ENUM } from '../../models/constants/flatgroundTricks';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
@@ -13,10 +13,19 @@ import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
 import Show from '../common/Show';
 import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
+import '../../lib/Types';
+
+/**
+ * @param flatgroundTrick {FlatgroundTrick} - The Flatground Trick to edit or create
+ * @param newFlatgroundTrick {boolean} - Whether the form is for a new Flatground Trick or an existing one
+ * @returns {JSX.Element} - The Flatground Trick form
+ */
 
 const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => {
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
+
+  console.log(`flatgroundTrick`, flatgroundTrick);
 
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
@@ -28,7 +37,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
     direction: flatgroundTrick.direction,
     rotation: flatgroundTrick.rotation,
     landed: flatgroundTrick.landed,
-    landedAt: getDate(flatgroundTrick.landedAt) || getDate(),
+    landedAt: getDateString(flatgroundTrick.landedAt) || getDateString(),
   });
 
   const { name, preferred_stance, stance, direction, rotation, landed, landedAt } = form;
@@ -161,7 +170,7 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
         <Show if={landed}>
           <label>
             Date Landed
-            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+            <input type="date" max={getDateString()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
           </label>
         </Show>
 

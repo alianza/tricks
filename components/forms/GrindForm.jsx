@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getDate, getFullGrindName, VN } from '../../lib/commonUtils';
+import { capitalize, getDateString, getFullGrindName, VN } from '../../lib/commonUtils';
 import { GRINDS_ENUM } from '../../models/constants/grinds';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { toast } from 'react-toastify';
@@ -27,7 +27,7 @@ function GrindForm({ grind, newGrind = true }) {
     stance: grind.stance,
     direction: grind.direction,
     landed: grind.landed,
-    landedAt: getDate(grind.landedAt) || getDate(),
+    landedAt: getDateString(grind.landedAt) || getDateString(),
   });
 
   const { name, preferred_stance, stance, direction, landed, landedAt } = form;
@@ -141,7 +141,7 @@ function GrindForm({ grind, newGrind = true }) {
         <Show if={landed}>
           <label>
             Date Landed
-            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+            <input type="date" max={getDateString()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
           </label>
         </Show>
 

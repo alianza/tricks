@@ -1,10 +1,10 @@
 import ComboForm from '../components/forms/ComboForm';
-import { getDate } from '../lib/commonUtils';
+import { getDateString } from '../lib/commonUtils';
 
 export const newComboObj = {
   trickArray: [],
   landed: true,
-  landedAt: getDate(),
+  landedAt: getDateString(),
 };
 
 export default function NewCombo() {

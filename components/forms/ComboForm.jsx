@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import formStyles from './form.module.scss';
-import { capitalize, fuzzy, getDate, getFullComboName, VN } from '../../lib/commonUtils';
+import { capitalize, fuzzy, getDateString, getFullComboName, VN } from '../../lib/commonUtils';
 import { ArrowPathIcon, ArrowUturnLeftIcon, MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/solid';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { useAutoAnimate } from '@formkit/auto-animate/react';
@@ -76,7 +76,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
   const [form, setForm] = useState({
     trickArray: combo.trickArray,
     landed: combo.landed,
-    landedAt: getDate(combo.landedAt) || getDate(),
+    landedAt: getDateString(combo.landedAt) || getDateString(),
   });
   const [searchString, setSearchString] = useState('');
   const [searchActive, setSearchActive] = useState(false);
@@ -316,7 +316,7 @@ const ComboForm = ({ combo, newCombo = true }) => {
         <Show if={landed}>
           <label>
             Date Landed
-            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+            <input type="date" max={getDateString()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
           </label>
         </Show>
 

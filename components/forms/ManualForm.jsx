@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styles from './form.module.scss';
-import { capitalize, getDate, VN } from '../../lib/commonUtils';
+import { capitalize, getDateString, VN } from '../../lib/commonUtils';
 import { MANUALS_ENUM } from '../../models/constants/manuals';
 import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
@@ -19,7 +19,7 @@ const ManualForm = ({ manual, newManual = true }) => {
   const [form, setForm] = useState({
     type: manual.type,
     landed: manual.landed,
-    landedAt: getDate(manual.landedAt) || getDate(),
+    landedAt: getDateString(manual.landedAt) || getDateString(),
   });
 
   const { preferred_stance, type, landed, landedAt } = form;
@@ -94,7 +94,7 @@ const ManualForm = ({ manual, newManual = true }) => {
         <Show if={landed}>
           <label>
             Date Landed
-            <input type="date" max={getDate()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
+            <input type="date" max={getDateString()} name={VN({ landedAt })} value={landedAt} onChange={handleChange} />
           </label>
         </Show>
 

@@ -3,6 +3,11 @@ import { DIRECTIONS, FLATGROUND_TRICKS_ENUM } from './constants/flatgroundTricks
 import { PREFFERED_STANCES_ENUM, STANCES_ENUM } from './constants/stances';
 import { landedAtValidators } from './modelUtils';
 
+/**
+ * FlatgroundTrick
+ * @constructor FlatgroundTrickSchema
+ */
+
 const FlatgroundTrickSchema = new mongoose.Schema(
   {
     name: {
