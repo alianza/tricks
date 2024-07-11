@@ -87,6 +87,14 @@ function GenericTable({
 
   useEffect(() => {
     sort(getColumnProp(columns[defaultSortColumnIndex]), defaultSortDirection); // Default ascending sort on first column
+
+    const handleRouteChange = (url) => {
+      const regex = /page=(\d+)/; // page=1
+      const page = parseInt(url.split('?')[1]?.match(regex)?.[1]);
+      if (page) deAnimate(() => setCurrentPage(page));
+    };
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => router.events.off('routeChangeComplete', handleRouteChange);
   }, []);
 
   useEffect(() => {
