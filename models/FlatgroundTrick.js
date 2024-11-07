@@ -48,12 +48,12 @@ const FlatgroundTrickSchema = new mongoose.Schema(
         values: [0, 180, 360, 540, 720],
         message: '"{VALUE}" is not a valid rotation',
       },
-      validate: {
-        validator: function (value) {
-          if (value === 0 && this.direction !== DIRECTIONS.none) return false;
-        },
-        message: 'Must specify a rotation if there is a direction',
-      },
+      // validate: {
+      //   validator: function (value) {
+      //     if (value === 0 && this.direction !== DIRECTIONS.none) return false;
+      //   },
+      //   message: 'Must specify a rotation if there is a direction',
+      // },
     },
     landed: {
       type: Boolean,
