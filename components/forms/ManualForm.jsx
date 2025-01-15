@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../common/transitionScroll/TransitionScroll';
 import Show from '../common/Show';
 import { PreferredStanceSelect } from './elements/PreferredStanceSelect';
 

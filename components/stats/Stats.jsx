@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../common/transitionScroll/TransitionScroll';
 import { capitalize, VN } from '../../lib/commonUtils';
 import { TRICK_TYPES_ENUM } from '../../models/constants/trickTypes';
 

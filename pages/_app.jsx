@@ -2,7 +2,6 @@ import '../styles/globals.scss';
 import Layout from '../components/layout/Layout';
 import dynamic from 'next/dynamic';
 import { SessionProvider } from 'next-auth/react';
-import 'react-transition-scroll/dist/index.css';
 
 const NextNProgress = dynamic(() => import('nextjs-progressbar'), { loading: () => <div />, ssr: false });
 const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.ToastContainer), {

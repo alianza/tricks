@@ -17,7 +17,7 @@ import {
   stanceSelectOptions,
 } from '../../lib/clientUtils';
 import Link from 'next/link';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../common/transitionScroll/TransitionScroll';
 import { newComboObj } from '../../pages/new-combo';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import GenerateComboName from './GenerateComboName';

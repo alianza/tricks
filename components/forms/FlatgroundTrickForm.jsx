@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { useAsyncEffect, useCloseOnUrlParam } from '../../lib/customHooks';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventNameValue, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../common/transitionScroll/TransitionScroll';
 import AddAnotherCheckBox from '../common/AddAnotherCheckBox';
 import { newFlatgroundTrickObj } from '../../pages/new-flatground-trick';
 import Show from '../common/Show';

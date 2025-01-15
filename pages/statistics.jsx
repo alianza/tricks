@@ -6,7 +6,7 @@ import { Line } from 'react-chartjs-2';
 import { requireAuth } from '../lib/serverUtils';
 import { capitalize } from '../lib/commonUtils';
 import { baseStyle, hiddenStyle } from '../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../components/common/transitionScroll/TransitionScroll';
 import { CategoryScale, Chart as ChartJS, LinearScale, LineElement, PointElement, Tooltip } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);

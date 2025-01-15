@@ -1,0 +1,11 @@
+.baseStyle {
+    transition: all;
+    transition-duration: 1000ms;
+    transition-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion) {
+    .baseStyle {
+        transition: none;
+    }
+}

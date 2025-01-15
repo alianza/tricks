@@ -13,7 +13,7 @@ import {
 } from '../../lib/clientUtils';
 import { pick, stringifyValues } from '../../lib/commonUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../../components/common/transitionScroll/TransitionScroll';
 import Filters from '../../components/common/Filters';
 import { useRouter } from 'next/router';
 

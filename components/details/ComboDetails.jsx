@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import TRICK_TYPES, { TRICK_TYPES_MODELS } from '../../models/constants/trickTypes';
 import { apiCall, baseStyle, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../common/transitionScroll/TransitionScroll';
 import RenderSafeDate from '../common/RenderSafeDate';
 
 export default function ComboDetails({ combo }) {

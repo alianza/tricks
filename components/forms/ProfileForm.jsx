@@ -7,7 +7,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Loader from '../common/Loader';
 import LoaderButton from '../common/LoaderButton';
 import { apiCall, baseStyle, getEventKeyValue, hiddenStyle } from '../../lib/clientUtils';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../common/transitionScroll/TransitionScroll';
 
 const ProfileForm = ({ profileForm }) => {
   const { data: session } = useSession();

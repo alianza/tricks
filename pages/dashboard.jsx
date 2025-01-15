@@ -4,7 +4,7 @@ import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, trickCo
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useAsyncEffect } from '../lib/customHooks';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../components/common/transitionScroll/TransitionScroll';
 
 // export async function getServerSideProps(context) {
 //   await dbConnect();

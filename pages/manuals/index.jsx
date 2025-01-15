@@ -3,7 +3,7 @@ import { useAsyncEffect } from '../../lib/customHooks';
 import { toast } from 'react-toastify';
 import { apiCall, baseStyle, getCommonActions, hiddenStyle, landedAtCol, triggerLoader } from '../../lib/clientUtils';
 import GenericTable from '../../components/common/genericTable/GenericTable';
-import TransitionScroll from 'react-transition-scroll';
+import TransitionScroll from '../../components/common/transitionScroll/TransitionScroll';
 import Filters from '../../components/common/Filters';
 import { stringifyValues } from '../../lib/commonUtils';
 import { useRouter } from 'next/router';
