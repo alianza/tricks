@@ -41,6 +41,7 @@ const chevronClassName = 'size-6 shrink-0 cursor-pointer';
  *     @param [options.itemsPerPage=10] {Number} - Number of items to display per page
  *     @param [options.enablePagination=false] {Boolean} - Whether to enable pagination
  *     @param [options.flipCollapsedActionsFromRowToLast=2] {Number} - Position from last row to flip collapsed actions to above actions button instead of below (to prevent overflow)
+ *     @param [options.pageParam='page'] {String} - Query parameter for page number (Must be unique to each table on the page)
  * @returns {JSX.Element} - Generic table component
  * @constructor - GenericTable
  */
@@ -76,10 +77,16 @@ function GenericTable({
     noValuePlaceHolder = '-',
     additionalInfo = '',
     additionalInfoLink = '',
-    itemsPerPage = 10,
+    itemsPerPage = 1,
     enablePagination = false,
     flipCollapsedActionsFromRowToLast = 2,
   } = options;
+
+  let { pageParam = 'page' } = options;
+
+  if (pageParam !== 'page') {
+    pageParam += 'page';
+  }
 
   const totalPages = Math.ceil(objArrayState.length / itemsPerPage);
 
@@ -89,8 +96,9 @@ function GenericTable({
     sort(getColumnProp(columns[defaultSortColumnIndex]), defaultSortDirection); // Default ascending sort on first column
 
     const handleRouteChange = (url) => {
-      const regex = /page=(\d+)/; // page=1
+      const regex = new RegExp(`${pageParam}=(\\d+)`);
       const page = parseInt(url.split('?')[1]?.match(regex)?.[1]);
+      console.log(`page`, page);
       if (page) deAnimate(() => setCurrentPage(page));
     };
     router.events.on('routeChangeComplete', handleRouteChange);
@@ -98,8 +106,8 @@ function GenericTable({
   }, []);
 
   useEffect(() => {
-    if (router.query.page) setCurrentPage(parseInt(router.query.page));
-  }, [router.query]);
+    if (router.query[pageParam]) setCurrentPage(parseInt(router.query[pageParam]));
+  }, [router.query[pageParam]]);
 
   useEffect(() => {
     setMaxPaginationWidth(tableRef.current?.clientWidth);
@@ -151,14 +159,14 @@ function GenericTable({
     deAnimate(async () => {
       const page = Math.max(currentPage - 1, 1);
       setCurrentPage(page);
-      await router.push({ query: { ...router.query, page } });
+      await router.push({ query: { ...router.query, [pageParam]: page } });
     });
 
   const handleNext = () =>
     deAnimate(async () => {
       const page = Math.min(currentPage + 1, totalPages);
       setCurrentPage(page);
-      await router.push({ query: { ...router.query, page } });
+      await router.push({ query: { ...router.query, [pageParam]: page } });
     });
 
   const hasItems = !!objArrayState.length;
