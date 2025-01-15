@@ -20,7 +20,7 @@ function DesktopNav() {
           <details
             onToggle={() => setOpen((wasOpen) => !wasOpen)}
             open={open}
-            className="flex items-center gap-2 p-2 marker:content-none"
+            className={`flex flex-col items-start p-2 marker:content-none ${open ? 'gap-2' : ''}`}
           >
             <summary className="flex cursor-pointer items-center gap-2 hover:font-semibold">
               {open ? <MinusIcon className="size-6" /> : newNav.icon} {newNav.label}
