@@ -123,6 +123,7 @@ export default function Index() {
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(flatgroundTricks.count, flatgroundTricks.data)}
           additionalInfoLink="/flatgroundtricks"
+          pageParam="flatgroundtricks"
           enablePagination
         />
       </TransitionScroll>
@@ -142,6 +143,7 @@ export default function Index() {
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(grinds.count, grinds.data)}
           additionalInfoLink="/grinds"
+          pageParam="grinds"
           enablePagination
         />
       </TransitionScroll>
@@ -161,6 +163,7 @@ export default function Index() {
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(manuals.count, manuals.data)}
           additionalInfoLink="/manuals"
+          pageParam="manuals"
           enablePagination
         />
       </TransitionScroll>
@@ -180,6 +183,7 @@ export default function Index() {
           defaultSortDirection="desc"
           additionalInfo={formatAdditionalInfo(combos.count, combos.data)}
           additionalInfoLink="/combos"
+          pageParam="combos"
           enablePagination
         />
       </TransitionScroll>
