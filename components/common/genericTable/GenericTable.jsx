@@ -77,7 +77,7 @@ function GenericTable({
     noValuePlaceHolder = '-',
     additionalInfo = '',
     additionalInfoLink = '',
-    itemsPerPage = 1,
+    itemsPerPage = 10,
     enablePagination = false,
     flipCollapsedActionsFromRowToLast = 2,
   } = options;
@@ -98,7 +98,6 @@ function GenericTable({
     const handleRouteChange = (url) => {
       const regex = new RegExp(`${pageParam}=(\\d+)`);
       const page = parseInt(url.split('?')[1]?.match(regex)?.[1]);
-      console.log(`page`, page);
       if (page) deAnimate(() => setCurrentPage(page));
     };
     router.events.on('routeChangeComplete', handleRouteChange);
@@ -114,7 +113,7 @@ function GenericTable({
 
     if (enablePagination && currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
-      router.push({ query: { ...router.query, page: totalPages } }); // Update url params if page is out of bounds
+      router.push({ query: { ...router.query, page: totalPages } }, undefined, { shallow: true, scroll: false }); // Update url params if page is out of bounds
     }
   }, [currentPage, objArrayState]);
 
@@ -159,14 +158,18 @@ function GenericTable({
     deAnimate(async () => {
       const page = Math.max(currentPage - 1, 1);
       setCurrentPage(page);
-      await router.push({ query: { ...router.query, [pageParam]: page } });
+      await router.push({ query: { ...router.query, [pageParam]: page } }, undefined, {
+        shallow: true,
+      });
     });
 
   const handleNext = () =>
     deAnimate(async () => {
       const page = Math.min(currentPage + 1, totalPages);
       setCurrentPage(page);
-      await router.push({ query: { ...router.query, [pageParam]: page } });
+      await router.push({ query: { ...router.query, [pageParam]: page } }, undefined, {
+        shallow: true,
+      });
     });
 
   const hasItems = !!objArrayState.length;
