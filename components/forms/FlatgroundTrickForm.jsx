@@ -25,8 +25,6 @@ const FlatgroundTrickForm = ({ flatgroundTrick, newFlatgroundTrick = true }) => 
   const router = useRouter();
   const closeAfterAdd = useCloseOnUrlParam('closeAfterAdd');
 
-  console.log(`flatgroundTrick`, flatgroundTrick);
-
   const [fullTrickName, setFullTrickName] = useState(null);
   const [trickNameRef] = useAutoAnimate();
   const [loading, setLoading] = useState(false);
