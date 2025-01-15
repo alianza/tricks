@@ -3,6 +3,7 @@ import utilStyles from '../styles/utils.module.scss';
 import Link from 'next/link';
 import Stats from '../components/stats/Stats';
 import { baseStyle, hiddenStyle } from '../lib/clientUtils';
+import TransitionScroll from '../components/common/transitionScroll/TransitionScroll';
 
 export const statsDef = {
   'Flatground Tricks': { endpoint: '/mine/flatgroundtricks', value: '...' },
