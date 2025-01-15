@@ -2,19 +2,15 @@ import '../styles/globals.scss';
 import Layout from '../components/layout/Layout';
 import dynamic from 'next/dynamic';
 import { SessionProvider } from 'next-auth/react';
-import { useEffect } from 'react';
+import 'react-transition-scroll/dist/index.css';
+
 const NextNProgress = dynamic(() => import('nextjs-progressbar'), { loading: () => <div />, ssr: false });
 const ToastContainer = dynamic(() => import('react-toastify').then((mod) => mod.ToastContainer), {
   loading: () => <div />,
   ssr: false,
 });
-import 'react-transition-scroll/dist/index.css';
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
-  useEffect(() => {
-    import('react-toastify/dist/ReactToastify.min.css');
-  }, []);
-
   return (
     <SessionProvider session={session}>
       <Layout>
